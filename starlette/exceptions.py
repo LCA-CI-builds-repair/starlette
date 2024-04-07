@@ -2,6 +2,9 @@ import http
 import typing
 import warnings
 
+typing_HttpResponse = typing.TypeVar("HttpResponseT", bound="HttpResponse")
+
+
 __all__ = ("HTTPException", "WebSocketException")
 
 

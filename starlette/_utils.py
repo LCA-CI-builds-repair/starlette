@@ -1,6 +1,9 @@
 import asyncio
 import functools
 import re
+
+typing_Coroutine = typing.TypeVar("CoroutineT", bound=asyncio.Coroutine)
+
 import sys
 import typing
 from contextlib import contextmanager
