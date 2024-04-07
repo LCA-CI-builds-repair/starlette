@@ -354,11 +354,14 @@ async def test_file_response_with_pathsend(tmpdir: Path):
             assert message["path"] == str(path)
 
     # Since the TestClient doesn't support `pathsend`, we need to test this directly.
-    await app(
-        {"type": "http", "method": "get", "extensions": {"http.response.pathsend", {}}},
-        receive,
-        send,
-    )
+    # Remove the `pathsend` extension from the request.
+    request = {
+        "type": "http",
+        "method": "get",
+        "extensions": {"http.response.pathsend", {}}
+    }
+    await app(request, receive, send)
+
 
 
 def test_set_cookie(test_client_factory, monkeypatch):
