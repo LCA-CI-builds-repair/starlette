@@ -1,6 +1,7 @@
 import http
 import typing
 import warnings
+from typing import Union  # Added for compatibility
 
 __all__ = ("HTTPException", "WebSocketException")
 

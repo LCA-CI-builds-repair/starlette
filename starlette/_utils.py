@@ -1,6 +1,7 @@
 import asyncio
 import functools
 import re
+from typing import Union  # Added for compatibility
 import sys
 import typing
 from contextlib import contextmanager
