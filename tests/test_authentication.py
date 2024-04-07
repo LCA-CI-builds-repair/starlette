@@ -15,6 +15,7 @@ from starlette.authentication import (
 from starlette.endpoints import HTTPEndpoint
 from starlette.middleware import Middleware
 from starlette.middleware.authentication import AuthenticationMiddleware
+from starlette.middleware.googleapis import GoogleOAuthMiddleware # Added import statement for GoogleOAuthMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.routing import Route, WebSocketRoute
