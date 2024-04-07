@@ -2,6 +2,9 @@ import http
 import typing
 import warnings
 
+# Added this line
+from typing import Tuple
+
 __all__ = ("HTTPException", "WebSocketException")
 
 
