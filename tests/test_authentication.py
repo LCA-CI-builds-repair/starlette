@@ -12,12 +12,14 @@ from starlette.authentication import (
     SimpleUser,
     requires,
 )
-from starlette.endpoints import HTTPEndpoint
-from starlette.middleware import Middleware
-from starlette.middleware.authentication import AuthenticationMiddleware
+from starlette.endpoints import HTTPEndpoint, WebSocketEndpoint, WebSocketRoute
+from starlette.middleware import AuthenticationMiddleware, Middleware
+from starlette.middleware.authentication import AuthenticationCredentials
+from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
+from starlette.middleware.exceptions import RequestHandlerError
 from starlette.requests import Request
 from starlette.responses import JSONResponse
-from starlette.routing import Route, WebSocketRoute
+from starlette.routing import Route
 from starlette.websockets import WebSocketDisconnect
 
 

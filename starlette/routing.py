@@ -235,14 +235,15 @@ class Route(BaseRoute):
                 methods = ["GET"]
         else:
             # Endpoint is a class. Treat it as ASGI.
-            self.app = endpoint
+self.app = endpoint
 
-        if middleware is not None:
-            for cls, options in reversed(middleware):
-                self.app = cls(app=self.app, **options)
+if middleware is not None:
+for cls, options in reversed(middleware):
+self.app = cls(self.app, **options)
+self.app = MiddlewareStack(self.app)
 
-        if methods is None:
-            self.methods = None
+if methods is None:
+self.methods = None
         else:
             self.methods = {method.upper() for method in methods}
             if "GET" in self.methods:
