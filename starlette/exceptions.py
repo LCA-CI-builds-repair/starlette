@@ -2,6 +2,7 @@ import http
 import typing
 import warnings
 
+
 __all__ = ("HTTPException", "WebSocketException")
 
 

@@ -13,10 +13,11 @@ else:  # pragma: no cover
     from typing_extensions import ParamSpec
 
 P = ParamSpec("P")
-T = typing.TypeVar("T")
+import typing
+import warnings
 
 
-async def run_until_first_complete(*args: tuple[typing.Callable | dict]) -> None:  # type: ignore[type-arg]  # noqa: E501
+async def run_until_first_complete(*args: typing.Union[typing.Callable, dict]) -> None:
     warnings.warn(
         "run_until_first_complete is deprecated "
         "and will be removed in a future version.",
