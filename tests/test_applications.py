@@ -1,6 +1,6 @@
 import os
 from contextlib import asynccontextmanager
-from typing import Any, AsyncIterator, Callable
+from typing import AsyncIterator, Callable
 
 import anyio
 import httpx
