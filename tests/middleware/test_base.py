@@ -11,6 +11,52 @@ from starlette.middleware import Middleware
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import PlainTextResponse, Response, StreamingResponse
+
+async def test_middleware_request(app: Starlette, client: Any) -> None:
+    class CustomMiddleware:
+        def __init__(self, app: Starlette, foo: str = "bar") -> None:
+            self.app = app
+            self.foo = foo
+
+        async def __call__(self, scope: "Scope", receive: "Receive", send: "Send") -> None:
+            request = Request(scope, receive=receive)
+
+            # Do something with the request
+            assert request.headers.get("foo") == "bar"
+
+            response = PlainTextResponse("Hello, world!")
+            await response(scope, receive, send)
+
+    async def test_middleware_response(app: Starlette, client: Any) -> None:
+        class CustomMiddleware:
+            def __init__(self, app: Starlette, foo: str = "bar") -> None:
+                self.app = app
+                self.foo = foo
+
+            async def __call__(self, scope: "Scope", receive: "Receive", send: "Send") -> None:
+                request = Request(scope, receive=receive)
+
+                response = await self.app(scope, receive, send)
+
+                # Do something with the response
+                assert response.headers.get("foo") == "bar"
+
+                return response
+
+    async def test_middleware_exception(app: Starlette, client: Any) -> None:
+        class CustomMiddleware:
+            def __init__(self, app: Starlette, foo: str = "bar") -> None:
+                self.app = app
+                self.foo = foo
+
+            async def __call__(self, scope: "Scope", receive: "Receive", send: "Send") -> None:
+                request = Request(scope, receive=receive)
+
+                # Raise an exception
+                raise RuntimeError("Hello, world!")
+
+                response = PlainTextResponse("Hello, world!")
+                await response(scope, receive, send)
 from starlette.routing import Route, WebSocketRoute
 from starlette.testclient import TestClient
 from starlette.types import ASGIApp, Message, Receive, Scope, Send

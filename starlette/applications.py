@@ -8,6 +8,20 @@ from starlette.middleware import Middleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.middleware.exceptions import ExceptionMiddleware
+
+async def handle(self, scope: "Scope", receive: "Receive", send: "Send") -> None:
+    middleware_stack = self.middleware_stack
+    if self._state.load_state:
+        middleware_stack = self.make_middleware_stack()
+        self._state.load_state = False
+
+    for middleware_class in middleware_stack:
+        middleware = middleware_class(self)
+        await middleware.resolve(request)
+
+    for middleware_class in reversed(middleware_stack):
+        middleware = middleware_class(self)
+        await middleware.dispatch(request, response)
 from starlette.requests import Request
 from starlette.responses import Response
 from starlette.routing import BaseRoute, Router

@@ -4,6 +4,13 @@ from typing import Any, AsyncIterator, Callable
 
 import anyio
 import httpx
+
+async def test_app_startup():
+    async def startup() -> None:
+        print("Hello, world!")
+
+    app = Starlette(on_startup=[startup])
+    await app.startup()
 import pytest
 
 from starlette import status

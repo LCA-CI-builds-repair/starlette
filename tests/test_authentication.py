@@ -20,6 +20,61 @@ from starlette.responses import JSONResponse
 from starlette.routing import Route, WebSocketRoute
 from starlette.websockets import WebSocketDisconnect
 
+async def test_authentication_middleware_request():
+    class CustomAuthenticationMiddleware:
+        def __init__(self, app: Callable) -> None:
+            self.app = app
+
+        async def __call__(self, request: Request) -> None:
+            # Do something with the request
+            assert request.headers.get("Authorization") == "123456"
+
+            response = JSONResponse({"message": "Hello, world!"})
+            return response
+
+    class CustomRoute:
+        path = "/test"
+
+        def __init__(self, app: Callable) -> None:
+            self.app = app
+
+        async def __call__(self, request: Request) -> JSONResponse:
+            # Do something with the request
+            assert request.headers.get("Authorization") == "123456"
+
+            return JSONResponse({"message": "Hello, world!"})
+
+    app = Starlette(on_startup=[AuthenticationMiddleware(HTTPEndpoint)])
+    app.add_route(CustomRoute, "/")
+    app.add_websocket_route(CustomRoute, "/ws")
+
+    client = TestClient(app)
+
+    response = await client.get("/test", headers={"Authorization": "123456"})
+    assert response.status_code == 200
+    assert response.json() == {"message": "Hello, world!"}
+
+    response = await client.get("/test", headers={"Authorization": "7890"})
+    assert response.status_code == 403
+
+    response = await client.get("/test", headers={"Authorization": None})
+    assert response.status_code == 403
+
+    response = await client.get("/test")
+    assert response.status_code == 403
+
+    response = await client.ws_connect("/ws", headers={"Authorization": "123456"})
+    assert response.extra["headers"]["authorization"] == "123456"
+
+    response = await client.ws_connect("/ws", headers={"Authorization": "7890"})
+    assert response.extra["headers"]["authorization"] == "7890"
+
+    response = await client.ws_connect("/ws", headers={"Authorization": None})
+    assert response.extra["headers"]["authorization"] == "None"
+
+    response = await client.ws_connect("/ws")
+    assert response.extra["headers"]["authorization"] == "None"
+
 
 class BasicAuth(AuthenticationBackend):
     async def authenticate(self, request):
