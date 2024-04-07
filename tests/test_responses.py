@@ -353,12 +353,41 @@ async def test_file_response_with_pathsend(tmpdir: Path):
         elif message["type"] == "http.response.pathsend":
             assert message["path"] == str(path)
 
-    # Since the TestClient doesn't support `pathsend`, we need to test this directly.
-    await app(
-        {"type": "http", "method": "get", "extensions": {"http.response.pathsend", {}}},
-        receive,
-        send,
-    )
+```python
+from urllib.parse import urlparse
+import json
+import pytest
+from starlette.testclient import TestClient
+from starlette.responses import HTMLResponse, JSONResponse
+from myapp.middleware import MyMiddleware
+from myapp import app
+
+class CustomTestClient(TestClient):
+    async def pathsend(self, response, path):
+        response.body = b""
+        self.app = app
+        response.charset = "utf-8"
+        await self.request(method="GET", url=urlparse(path).path, headers={"Accept": "text/plain"})
+        return await response.text()
+
+@pytest.fixture
+def test_client():
+    return CustomTestClient()
+
+# Since the TestClient doesn't support `pathsend`, we need to test this directly with CustomTestClient.
+async def test_pathsend(test_client, caplog):
+    with caplog.at_level("INFO"):
+        response = await test_client.request("GET", "/pathsend", headers={"Accept": "text/plain"})
+        assert response.status_code == 200
+        assert response.text == "Hello, world!"
+        middleware = MyMiddleware(app)
+        await middleware(
+            {"type": "http", "method": "get", "extensions": {"http.response.pathsend", {}}},
+            response,
+        )
+        assert " pathsend" in caplog.text
+```
+
 
 
 def test_set_cookie(test_client_factory, monkeypatch):
