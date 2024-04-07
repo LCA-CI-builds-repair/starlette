@@ -15,11 +15,21 @@ else:  # pragma: no cover
 P = ParamSpec("P")
 T = typing.TypeVar("T")
 
-
-async def run_until_first_complete(*args: tuple[typing.Callable | dict]) -> None:  # type: ignore[type-arg]  # noqa: E501
+async def run_until_first_complete(
+    *args: typing.Tuple[typing.Callable | dict[str, typing.Any]]
+) -> None:
     warnings.warn(
         "run_until_first_complete is deprecated "
         "and will be removed in a future version.",
+        DeprecationWarning,
+    )
+    if not args:
+        return
+    completed, pending = await asyncio.wait(args, return_when=asyncio.ALL_COMPLETED)
+    for task in completed:
+        exception = task.exception()
+        if exception is not None:
+            raise exception
         DeprecationWarning,
     )
 
