@@ -1,6 +1,11 @@
 import asyncio
 import functools
 import re
+
+async def run_until_first_complete(*args: list[typing.Callable | dict]) -> None:  # type: ignore[type-arg]  # noqa: E501
+    warnings.warn(
+        "run_until_first_complete is deprecated "
+        "and will be removed in a future version.",
 import sys
 import typing
 from contextlib import contextmanager
