@@ -235,14 +235,11 @@ class Route(BaseRoute):
                 methods = ["GET"]
         else:
             # Endpoint is a class. Treat it as ASGI.
-            self.app = endpoint
+```python
+from starlette.endpoints import HTTPEndpoint
+from starlette.middleware import Middleware as StarletteMiddleware
+```
 
-        if middleware is not None:
-            for cls, options in reversed(middleware):
-                self.app = cls(app=self.app, **options)
-
-        if methods is None:
-            self.methods = None
         else:
             self.methods = {method.upper() for method in methods}
             if "GET" in self.methods:
