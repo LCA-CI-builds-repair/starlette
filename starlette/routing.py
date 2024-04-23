@@ -4,8 +4,14 @@ import contextlib
 import functools
 import inspect
 import re
-import traceback
-import types
+import traceb    path: str,
+    param_convertors: dict[str, Convertor[typing.Any]],
+    path_params: dict[str, str],
+) -> tuple[str, dict[str, str]]:
+    for key, value in list(path_params.items()):
+        if "{" + key + "}" in path:
+            convertor = param_convertors[key]
+            value = convertor.to_string(value)rt types
 import typing
 import warnings
 from contextlib import asynccontextmanager

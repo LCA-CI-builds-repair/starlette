@@ -3,7 +3,43 @@ Starlette has a rapidly growing community of developers, building tools that int
 
 Here are some of those third party packages:
 
-## Plugins
+## <a href="https://github.com/greppo-io/greppo" target="_blank">GitHub</a> |
+<a <a href="https://github.com/greppo-io/greppo" target="_blank">GitHub</a> |
+<a href="https://docs.greppo.io/" target="_blank">Documentation</a>
+
+Greppo is an open-source Python framework designed for developing geospatial dashboards and web applications efficiently. It offers a versatile toolkit for integrating data, algorithms, visualizations, and interactive UI components seamlessly. With Greppo, developers can enhance backend functionality, recalculate logic, and update frontend elements with ease.
+
+Key Features of Greppo:
+- Simplifies geospatial dashboard creation
+- Provides tools for data integration and visualization
+- Supports interactive user interfaces
+- Enables efficient backend data management
+
+Use Cases for Greppo:
+- Building interactive maps with dynamic data layers
+- Visualizing geospatial information effectively
+- Implementing location-based services and applications
+- Developing custom geospatial analytics platforms
+
+Benefits of Using Greppo:
+- Accelerated development of geospatial projects
+- Enhanced user experience with interactive features
+- Seamless integration of data and visual elements
+- Flexible backend data mutation capabilitiesef="https://docs.greppo.io/" target="_blank">Documentation</a>
+
+Greppo is an open-source Python framework that simplifies the development of geospatial dashboards and web applications. It offers a comprehensive toolkit for integrating data, algorithms, visualizations, and user interface components with ease. Developers can leverage Greppo's APIs to efficiently update backend variables, recalculate logic, and seamlessly reflect changes in the frontend, enhancing data mutation capabilities.
+
+Key Features:
+- Simplifies geospatial dashboard development
+- Provides tools for data integration and visualization
+- Enables interactive user interfaces
+- Supports efficient backend data mutation
+
+Use Cases:
+- Creating interactive maps with dynamic data layers
+- Visualizing geospatial information in a user-friendly manner
+- Implementing location-based services and applications
+- Building custom geospatial analytics platforms
 
 ### Apitally
 

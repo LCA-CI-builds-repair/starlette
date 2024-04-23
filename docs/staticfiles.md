@@ -1,5 +1,7 @@
 
-Starlette also includes a `StaticFiles` class for serving files in a given directory:
+Starlette also includes a `StaticFiles` class for serving filRather than using Python packaging to include static files, it can be more advantageous to utilize this method for bundling up reusable components.
+
+For more information on [pathlike], refer to the official documentation.n a given directory:
 
 ### StaticFiles
 

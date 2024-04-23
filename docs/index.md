@@ -1,5 +1,8 @@
 <p align="center">
-  <img width="420px" src="/img/starlette.png" alt='starlette'>
+  <img width="420px"Python 3.8+
+
+## Installation
+/starlette.png" alt='starlette'>
 </p>
 <p align="center">
     <em>✨ The little ASGI framework that shines. ✨</em>

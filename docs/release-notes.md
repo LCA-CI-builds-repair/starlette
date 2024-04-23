@@ -5,7 +5,14 @@ January 11, 2024
 #### Fixed
 
 * Stop using the deprecated "method" parameter in `FileResponse` inside of `StaticFiles` [#2406](https://github.com/encode/starlette/pull/2406).
-* Make `typing-extensions` optional again [#2409](https://github.com/encode/starlette/pull/2409).
+* Make `typing-extensions` optional again [#2409](https://github.com/encod* Implement `__repr__` for route classes [#1864](https://github.com/encode/### Fixed
+- Resolved issue with unpacking values in `concurrency.py`
+- Updated union syntax for Pytho* The compression level used in `GZipMiddleware` is now adjustable - [#1128](https://github.com/encode/starlette/pull/1128).
+
+### Fixed10 compatibility in `_utils.py`
+- Fixed union syntax errors in `exceptions.py`arlette/pull/1864).
+
+### Fixedtarlette/pull/2409).
 
 ## 0.35.0
 
