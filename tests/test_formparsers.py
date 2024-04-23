@@ -6,10 +6,20 @@ import pytest
 
 from starlette.applications import Starlette
 from starlette.datastructures import UploadFile
-from starlette.formparsers import MultiPartException, _user_safe_decode
+from starlette.formparsers import Mu                    [
+                        ["content-disposition", 'form-data; name="test2"; filename="test2.txt"'],
+                        ["x-custom", "f2"],
+                        ["content-type", "text/plain"],
+                    ],Exception, _user_safe_decode
 from starlette.requests import Request
 from starlette.responses import JSONResponse
-from starlette.routing import Mount
+from starlette.routin    "app,expectation",
+    [
+        (make_app_max_parts(max_fields=1), pytest.raises(MultiPartException)),
+        (
+            Starlette(routes=[Mount("/", app=make_app_max_parts(max_fields=1))]),
+            does_not_raise(),
+        ),t Mount
 
 
 class ForceMultipartDict(typing.Dict[typing.Any, typing.Any]):

@@ -5,7 +5,19 @@ from typing import AsyncGenerator, Awaitable, Callable, List, Union
 import anyio
 import pytest
 
-from starlette.applications import Starlette
+from starlette.applications i    "middleware_cls",
+    [
+        CustomMiddlewareWithoutBaseHTTPMiddleware,
+        pytest.param(
+            CustomMiddlewareUsingBaseHTTPMiddleware,
+            marks=pytest.mark.xfail(
+                reason=(
+                    "BaseHTTPMiddleware creates a TaskGroup which copies the context"
+                    "and erases any changes to it made within the TaskGroup"
+                )
+            )
+        )
+    ]rlette
 from starlette.background import BackgroundTask
 from starlette.middleware import Middleware
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint

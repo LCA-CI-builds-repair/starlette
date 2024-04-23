@@ -3,7 +3,19 @@ from __future__ import annotations
 import typing
 import warnings
 
-from starlette.datastructures import State, URLPath
+from starlette.datastructu                Middleware(
+                    ExceptionMiddleware, handlers=exception_handlers, debug=debug
+                )
+            ]
+        )
+        
+        self.middleware = [
+            Middleware(
+                ExceptionMiddleware, handlers=exception_handlers, debug=debug
+            )
+        ]
+        
+        app = self.routerort State, URLPath
 from starlette.middleware import Middleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.errors import ServerErrorMiddleware

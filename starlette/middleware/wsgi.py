@@ -5,7 +5,14 @@ import typing
 import warnings
 
 import anyio
-from anyio.abc import ObjectReceiveStream, ObjectSendStream
+from anyio.abc import ObjectReceiveStream, Ob                [
+                    (name.strip().encode("ascii").lower(), value.strip().encode("ascii"))
+                    for name, value in response_headers
+                ]
+            anyio.from_thread.run(
+                self.stream_send.send,
+                {
+                    "type": "http.response.start",dStream
 
 from starlette.types import Receive, Scope, Send
 

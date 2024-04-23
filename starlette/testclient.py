@@ -12,7 +12,12 @@ from urllib.parse import unquote, urljoin
 
 import anyio
 import anyio.from_thread
-from anyio.abc import ObjectReceiveStream, ObjectSendStream
+from anyio.abc import ObjectReceiveStream, ObjectSend                raw_kwargs["headers"] = [
+                    (key.decode(), value.decode())
+                    for key, value in message.get("headers", [])
+                ]
+                response_started = True
+            elif message["type"] == "http.response.body":
 from anyio.streams.stapled import StapledObjectStream
 
 from starlette._utils import is_async_callable

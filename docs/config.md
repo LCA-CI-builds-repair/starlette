@@ -1,7 +1,26 @@
 Starlette encourages a strict separation of configuration from code,
 following [the twelve-factor pattern][twelve-factor].
 
-Configuration should be stored in environment variables, or in a `.env` file
+Configuration should be stored in envirofrom starlette.applications import Starlette
+from starlette.middleware import Middleware
+from starlette.middleware.sessions import SessionMiddleware
+from starlette.routing import Route
+
+async def homepage(request):
+    ...
+
+routes = [
+    Route("/", endpoint=homepage)
+]
+
+middleware = [
+    Middleware(
+        SessionMiddleware,
+        secret_key=settings.SECRET_KEY,
+    )
+]
+
+app = Starlette(debug=settings.DEBUG, routes=routes, middleware=middleware)or in a `.env` file
 that is not committed to source control.
 
 ```python title="main.py"
