@@ -1,6 +1,32 @@
 import itertools
 import sys
-from asyncio import current_task as asyncio_current_task
+from asyncio import currentdef test_homepage_endpoint():
+    """
+    Test the homepage endpoint using the test client factory.
+    """
+
+    def homepage(request):
+        client = test_client_factory(mock_service)
+        response = client.get("/")
+        return JSONResponse(response.json())
+
+    app = Starlette(routes=[Route("/", endpoint=homepage)])
+
+    client = test_client_factory(app)
+    response = client.get("/")
+    assert response.json() == {"mock": "example"}
+
+
+def test_testclient_custom_headers():
+    """
+    Test the behavior of test client with user-defined headers.
+    """
+
+    client = test_client_factory(mock_service)
+    assert client.headers.get("user-agent") == "testclient"
+
+    client = test_client_factory(mock_service, headers={"user-agent": "non-default-agent"})
+    assert client.headers.get("user-agent") == "non-default-agent"k
 from contextlib import asynccontextmanager
 from typing import Callable
 

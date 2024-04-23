@@ -1,9 +1,23 @@
 # Contributing
 
 Thank you for being interested in contributing to Starlette.
-There are many ways you can contribute to the project:
+There are many ways you can contribute to the pro## Troubleshooting Unit Tests and Code Coverage
 
-- Try Starlette and [report bugs/issues you find](https://github.com/encode/starlette/issues/new)
+<p align="center" style="margin: 0 0 10px">
+  <img src="https://example.com/new-image.png" alt='Failing Test Job'>
+</p>
+
+When a job fails, it indicates that the unit tests have failed or not all code paths are covered by unit tests.
+
+If the tests fail, you will see this message in the coverage report:
+
+`=== 1 failed, 435 passed, 1 skipped, 1 xfailed in 11.09s ===`
+
+If the tests succeed but the coverage does not meet our threshold, you will see this message in the coverage report:
+
+`FAIL Required test coverage of 100% not reached. Total coverage: 99.00%`
+
+## Releasinglette and [report bugs/issues you find](https://github.com/encode/starlette/issues/new)
 - [Implement new features](https://github.com/encode/starlette/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 - [Review Pull Requests of others](https://github.com/encode/starlette/pulls)
 - Write documentation

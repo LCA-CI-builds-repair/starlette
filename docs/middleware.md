@@ -10,7 +10,17 @@ in a way that ensures that it remains wrapped by the exception handler.
 
 ```python
 from starlette.applications import Starlette
-from starlette.middleware import Middleware
+from ## Middleware for Inspecting and Modifying Requests
+
+#### Ins## Middleware for Manipulating Responses and WebSocket Data
+fying the Request
+
+Request information can be accessed or changed by manipulating the `scope`. For a full example of this pattern, see Uvicorn's [`ProxyHeadersMiddleware`](https://github.com/encode/uvicorn/blob/fd4386fefb8fe8a4568831a7d8b2930d5fb61455/uvicorn/middleware/proxy_headers.py) which inspects and tweaks the `scope` when serving behind a frontend proxy.
+
+Furthermore, wrapping the `receive` ASGI callable allows you to access or modify the HTTP request body by manipulating [`http.request`](https://asgi.readthedocs.io/en/latest/specs/www.html#request-receive-event) ASGI event messages.
+
+As an example, the following middleware computes and logs the size of the incoming request body:
+iddleware import Middleware
 from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
