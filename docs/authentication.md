@@ -1,4 +1,21 @@
-Starlette offers a simple but powerful interface for handling authentication
+Starlette offers a simple but powerful interfrom starlette.applications import Starlette
+from starlette.middleware import Middleware
+from starlette.routing import Route
+from app.middlewares import AuthenticationMiddleware
+from app.backends import BasicAuthBackend
+
+async def homepage(request):
+    ...
+
+routes = [
+    Route("/", endpoint=homepage)
+]
+
+middleware = [
+    Middleware(AuthenticationMiddleware, backend=BasicAuthBackend())
+]
+
+app = Starlette(debug=False, routes=routes, middleware=middleware)ling authentication
 and permissions. Once you've installed `AuthenticationMiddleware` with an
 appropriate authentication backend the `request.user` and `request.auth`
 interfaces will be available in your endpoints.

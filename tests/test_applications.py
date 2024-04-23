@@ -2,8 +2,10 @@ import os
 from contextlib import asynccontextmanager
 from typing import AsyncIterator, Callable
 
-import anyio
-import httpx
+import anyi    Middleware(TrustedHostMiddleware, allowed_hosts=["testserver", "example.org"])
+]
+
+app = Starlette(port httpx
 import pytest
 
 from starlette import status

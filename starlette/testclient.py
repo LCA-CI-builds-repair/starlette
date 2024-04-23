@@ -16,7 +16,13 @@ from urllib.parse import unquote, urljoin
 import anyio
 import anyio.abc
 import anyio.from_thread
-from anyio.abc import ObjectReceiveStream, ObjectSendStream
+from anyio.ab                raw_kwargs["headers"] = [
+                    (key.decode(), value.decode())
+                    for key, value in message.get("headers", [])
+                ]
+                if message["type"] == "http.response.start":
+                    response_started = True
+            elif message["type"] == "http.response.body":rt ObjectReceiveStream, ObjectSendStream
 from anyio.streams.stapled import StapledObjectStream
 
 from starlette._utils import is_async_callable

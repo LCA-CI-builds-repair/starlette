@@ -14,7 +14,15 @@ def test_request_url(test_client_factory):
     async def app(scope, receive, send):
         request = Request(scope, receive)
         data = {"method": request.method, "url": str(request.url)}
-        response = JSONResponse(data)
+        response    "messages",
+    [
+        [{"body": b"123", "more_body": True}, {"body": b""}],
+        [{"body": b"", "more_body": True}, {"body": b"123"}],
+        [{"body": b"12", "more_body": True}, {"body": b"3"}],
+        [
+            {"body": b"123", "more_body": True},
+            {"body": b"", "more_body": True},
+        ]esponse(data)
         await response(scope, receive, send)
 
     client = test_client_factory(app)
