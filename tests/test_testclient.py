@@ -1,6 +1,42 @@
 import itertools
 import sys
-from asyncio import current_task as asyncio_current_task
+from asyncio import current_tasfrom starlette.applications import Starlette
+from starlette.responses import JSONResponse
+from starlette.routing import Route
+
+dfrom starlette.applications import Starlette
+from starlette.middleware import Middleware
+from starlette.testclient import TestClient
+import pytest
+
+class MiddlewareException(Exception):
+    pass
+
+class BrokenMiddleware:
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        raise MiddlewareException()
+
+broken_middleware = Starlette(middleware=[Middleware(BrokenMiddleware)])
+
+with pytest.raises(MiddlewareException):
+    with TestClient(broken_middleware):
+        pass  # Add any necessary test client actions herequest):
+    return JSONResponse({"mock": "example"})
+
+mock_service = ...
+
+client = test_client_factory(mock_service)
+response = client.get("/")
+assert response.json() == {"mock": "example"}
+
+app = Starlette(routes=[Route("/", endpoint=homepage)])
+
+client = test_client_factory(app)
+response = client.get("/")
+assert response.json() == {"mock": "example"}io_current_task
 from contextlib import asynccontextmanager
 from typing import Callable
 
