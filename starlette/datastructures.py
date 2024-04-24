@@ -17,7 +17,10 @@ _KeyType = typing.TypeVar("_KeyType")
 # Mapping keys are invariant but their values are covariant since
 # you can only read them
 # that is, you can't do `Mapping[str, Animal]()["fido"] = Dog()`
-_CovariantValueType = typing.TypeVar("_CovariantValueType", covariant=True)
+_        self,
+        *args: typing.Union[FormData, typing.Mapping[str, typing.Union[str, UploadFile]], list[tuple[str, typing.Union[str, UploadFile]]]],
+        **kwargs: typing.Union[str, UploadFile],
+    ) -> None:antValueType = typing.TypeVar("_CovariantValueType", covariant=True)
 
 
 class URL:

@@ -1,9 +1,20 @@
 # Contributing
 
 Thank you for being interested in contributing to Starlette.
-There are many ways you can contribute to the project:
+There are many ways you can contribute to the pro<p align="center" style="margin: 0 0 10px">
+  <img src="https://raw.githubusercontent.com/encode/starlette/master/docs/img/gh-actions-fail-test.png" alt='Failing GitHub action test job'>
+</p>
 
-- Try Starlette and [report bugs/issues you find](https://github.com/encode/starlette/issues/new)
+This job failing means the unit tests failed or not all code paths are covered by unit tests.
+
+If tests are failing you will see this message under the coverage report:
+
+`=== 1 failed, 435 passed, 1 skipped, 1 xfailed in 11.09s ===`
+
+If tests succeed but coverage doesn't reach our current threshold, you will see this
+message under the coverage report:
+
+`FAIL Required test coverage of 100% not reached. Total coverage: 99.00%`bugs/issues you find](https://github.com/encode/starlette/issues/new)
 - [Implement new features](https://github.com/encode/starlette/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 - [Review Pull Requests of others](https://github.com/encode/starlette/pulls)
 - Write documentation

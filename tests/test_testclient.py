@@ -1,6 +1,15 @@
 import itertools
 import sys
-from asyncio import current_task as asyncio_current_task
+from asyncio import currentdef homepage(request):
+    client = test_client_factory(mock_service)
+    response = client.get("/")
+    return JSONResponse(response.json())
+
+app = Starlette(routes=[Route("/", endpoint=homepage)])
+
+client = test_client_factory(app)
+response = client.get("/")
+assert response.json() == {"mock": "example"}k
 from contextlib import asynccontextmanager
 from typing import Callable
 

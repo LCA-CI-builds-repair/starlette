@@ -1,6 +1,31 @@
-import http
-import typing
-import warnings
+import h    def __init__(
+                return f"Code: {self.code}, Reason: {self.reason}"
+
+    def __repr__(self) -> str:
+        class_name = self.__class__.__name__
+        return f"{class_name}(code={self.code!r}, reason={self.reason!r})"
+        status_code: int,
+        detail: typing.Optional[str] = None,
+        headers: typing.Optional[dict[str, str]] = None,
+    ) -> None:
+        if detail is None:
+            detail = http.HTTPStatus(status_code).phrase
+        self.status_code = status_code
+        self.detail = detail
+        self.headers = headers
+
+    def __str__(self) -> str:
+        return f"{self.status_code}: {self.detail}"
+
+    def __repr__(self) -> str:
+        class_name = self.__class__.__name__
+        return f"{class_name}(status_code={self.status_code!r}, detail={self.detail!r})"
+
+
+class WebSocketException(Exception):
+    def __init__(self, code: int, reason: typing.Optional[str] = None) -> None:
+        self.code = code
+        self.reason = reason or "" warnings
 
 __all__ = ("HTTPException", "WebSocketException")
 

@@ -1,4 +1,4 @@
-Starlette offers a simple but powerful interface for handling authentication
+Starlette offers a simple but powerful interface foapp = Starlette(routes=routes, middleware=middleware)ndling authentication
 and permissions. Once you've installed `AuthenticationMiddleware` with an
 appropriate authentication backend the `request.user` and `request.auth`
 interfaces will be available in your endpoints.

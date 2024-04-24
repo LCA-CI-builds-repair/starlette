@@ -1,7 +1,10 @@
-from __future__ import annotations
-
-import functools
-import sys
+from __future__ import annotatioasync def run_in_threadpool(
+    func: typing.Callable[..., T], *args: typing.Any, **kwargs: typing.Any
+) -> T:
+    if kwargs:  # pragma: no cover
+        # run_sync doesn't accept 'kwargs', so bind them in here
+        func = functools.partial(func, **kwargs)
+    return await anyio.to_thread.run_sync(func, *args)ort sys
 import typing
 import warnings
 

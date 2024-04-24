@@ -4,7 +4,11 @@ import enum
 import json
 import typing
 
-from starlette.requests import HTTPConnection
+from starlette.requests import HTT        if self.application_state != WebSocketState.CONNECTED:
+            raise InvalidState('WebSocket is not connected. Need to call "accept" first.')
+        message = await self.receive()
+        self._raise_on_disconnect(message)
+        return typing.cast(str, message["text"])ion
 from starlette.types import Message, Receive, Scope, Send
 
 

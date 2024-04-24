@@ -1,4 +1,38 @@
-from __future__ import annotations
+from __futureimport jinja2
+
+timport typing
+from        request = se    @typing.overloadcontext.get("request", {})
+        extensions = request.get("extensions", {})
+        if "http.response.debug" in extensions:
+            await send(
+                {
+                    "type": "http.response.debug",
+                    "info": {
+                        "template": self.template,  # Add type hint
+                        "context": self.context,    # Add type hint
+                    },
+                }
+            )
+        await super().__call__(scope, receive, send)ckground import BackgroundTask
+
+def __init__(
+    self,
+    template: typing.Any,
+    context: dict[str, typing.Any],
+    status_code: int = 200,
+    headers: typing.Mapping[str, str] | None = None,
+    media_type: typing.Optional[str] = None,
+    background: BackgroundTask | None = None,
+): @contextfunction was renamed to @pass_context in Jinja 3.0, and was removed in 3.1
+    # hence we try to get pass_context (most installs will be >=3.1)
+    # and fall back to contextfunction,
+    # adding a type ignore for mypy to let us access an attribute that may not exist
+    if hasattr(jinja2, "pass_context"):
+        pass_context = jinja2.pass_context
+    else:  # pragma: nocover
+        pass_context = jinja2.contextfunction  # type: ignore[attr-defined]
+except ModuleNotFoundError:  # pragma: nocover
+    jinja2 = None  # type: ignore[assignment]notations
 
 import typing
 import warnings

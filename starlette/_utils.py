@@ -1,9 +1,7 @@
 import asyncio
 import functools
-import re
-import sys
-import typing
-from contextlib import contextmanager
+impo    def __await__(self) -> typing.Generator[typing.Any, None, SupportsAsyncCloseType]:
+        return self.aw.__await__()m contextlib import contextmanager
 
 from starlette.types import Scope
 

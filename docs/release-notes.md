@@ -13,7 +13,11 @@ January 11, 2024
 
 #### Added
 
-* Add `*args` to `Middleware` and improve its type hints [#2381](https://github.com/encode/starlette/pull/2381).
+* Add * Display missing route details on debug page [#1363](https://github.com/encode/starlette/pull/1363).
+* Change `anyio` requir* Built-in GraphQL support via the `GraphQLApp` class has been deprecated and will be removed in a future release. Please see [#619](https://github.com/encode/starlette/issues/619). GraphQL is not supported on Python 3.10.
+* The `executor` parameter to `GraphQLApp` was removed. Use `executor_class` instead.
+* The `workers` parameter to `WSGIMiddleware` was removed. This hasn't had any effect since Starlette v0.6.3.ion range to `>=3.4.0,<5.0` [#1421](https://github.com/encode/starlette/pull/1421) and [#1460](https://github.com/encode/starlette/pull/1460).
+* Add `typing-extensions>=3.10` requirement - used only on lower versions than Python 3.10 [#1475](https://github.com/encode/starlette/pull/1475).rgs` to `Middleware` and improve its type hints [#2381](https://github.com/encode/starlette/pull/2381).
 
 #### Fixed
 
