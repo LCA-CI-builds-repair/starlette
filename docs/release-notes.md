@@ -17,7 +17,38 @@ January 11, 2024
 
 #### Fixed
 
-* Use `Iterable` instead `Iterator` on `iterate_in_threadpool` [#2362](https://github.com/encode/starlette/pull/2362).
+* Use `Iterable` instead `Iterator` on `iterate_in_threa## Release Notes
+
+### 0.13.8
+
+* Revert `Queue(maxsize=1)` fix for `BaseHTTPMiddleware` middleware classes and streaming responses.
+* The `StaticFiles` constructor now allows `pathlib.Path` in addition to strings for its `directory` argument.
+
+### 0.13.7
+
+* Fix high memory usage when using `BaseHTTPMiddleware` middleware classes and streaming responses.
+
+### 0.13.6
+
+* Fix 404 errors with `StaticFiles`.
+
+### 0.13.5
+
+* Add support for `Starlette(lifespan=...)` functions.
+* More robust path-traversal check in StaticFiles app.
+* Fix WSGI PATH_INFO encoding.
+* RedirectResponse now accepts optional background parameter.
+* Allow path routes to contain regex meta characters.
+* Treat ASGI HTTP 'body' as an optional key.
+* Don't use thread pooling for writing to in-memory upload files.
+
+### 0.13.0
+
+* Switch to promoting application configuration on init style everywhere. This means dropping the decorator style in favour of declarative routing tables and middleware definitions.
+
+### 0.12.12
+
+* Fix `request.url_for()` for the Mount-within-a-Mount case.m/encode/starlette/pull/2362).
 
 #### Changes
 

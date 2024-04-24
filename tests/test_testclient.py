@@ -1,6 +1,25 @@
 import itertools
 import sys
-from asyncio import current_task as asyncio_current_task
+from asyncio import curredef homepage(request: Request):
+    client = test_client_factory(mock_service)
+    response = client.get("/")
+    return JSONResponse(response.json())
+
+app = Starlette(routes=[Route("/", endpoint=homepage)])
+
+def test_testclient_headers_behavior():
+    """
+    We should be able to use the test client with user defined headers.
+
+    This is useful if we need to set custom headers for authentication
+    during tests or in development.
+    """
+
+    client = test_client_factory(mock_service)
+    assert client.headers.get("user-agent") == "testclient"
+
+    client = test_client_factory(mock_service, headers={"user-agent": "non-default-agent"})
+    assert client.headers.get("user-agent") == "non-default-agent"ask
 from contextlib import asynccontextmanager
 from typing import Callable
 

@@ -1,7 +1,14 @@
 # Contributing
 
-Thank you for being interested in contributing to Starlette.
-There are many ways you can contribute to the project:
+Thank you for being interested in contribu```shell
+$ scripts/test you can <p align="center" style="margin: 0 0 10px">
+  <img src="https://raw.githubusercontent.com/encode/starlette/master/docs/img/gh-actions-fail-test.png" alt='Failing GitHub action test job'>
+</p>
+
+This job failing means the unit tests failed or not all code paths are covered by unit tests.
+
+If tests are failing you will see this message under the coverage report:
+ject:
 
 - Try Starlette and [report bugs/issues you find](https://github.com/encode/starlette/issues/new)
 - [Implement new features](https://github.com/encode/starlette/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)

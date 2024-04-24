@@ -1,6 +1,27 @@
-import gzip
-import io
+iimport io
 import typing
+
+from starlette.datastructures import Headers, MutableHeaders
+from starlette.types import ASGIApp, Message, Receive, Scope, Send
+from starlette.responses import GZipResponder  # Added import for GZipResponder
+
+class GZipMiddleware:
+    def __init__(
+        self, app: ASGIApp, minimum_size: int = 500, compresslevel: int = 9
+    ) -> None:
+        self.app = app
+        self.minimum_size = minimum_size
+        self.compresslevel = compresslevel
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] == "http":
+            headers = Headers(scope=scope)
+            if "gzip" in headers.get("Accept-Encoding", ""):
+                responder = GZipResponder(
+                    self.app, self.minimum_size, compresslevel=self.compresslevel
+                )
+                await responder(scope, receive, send)
+                returnort typing
 
 from starlette.datastructures import Headers, MutableHeaders
 from starlette.types import ASGIApp, Message, Receive, Scope, Send

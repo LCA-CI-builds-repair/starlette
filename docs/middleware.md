@@ -1,5 +1,44 @@
 
-Starlette includes several middleware classes for adding behavior that is applied across
+Syour entire application. TEvery Starlette application automatically includes two pieces of middleware by dfrom starlette.applications import Starlette
+from starlette```python
+from starlette.applications import Starlette
+from starlette.middleware import Middleware
+from starl* `scope` is a dict holding information about the connection, where `scope["type"]` may be:
+    * [`"http"`](https://asgi.readthedocs.io/en/latest/specs/www.html#http-connection-scope): for HTTP requests.
+    * [`"websocket"`](https://asgi.readthedocs.io/en/latest/specs/www.html#websocket-connection-scope): for WebSocket connections.
+    * [`"lifespan"`](https://asgi.readthedoc- [Introduction to ASGI: Emergence of an Async Python Web Ecosystem](https://florimond.dev/en/posts/2019/08/introduction-to-asgi-async-python-web/)
+- [How to write ASGI middleware](https://pgjones.dev/blog/how-to-write-asgi-middleware-2021/)
+
+## Using middleware in other frameworks
+
+To wrap ASGI middleware around other ASGI applications, you should use the
+more general pattern of wrapping the application instance:latest/specs/lifespan.html#scope): for ASGI lifespan messages.
+* `receive` and `send` can be used to exchange ASGI event messages with the ASGI server — more on this below. The type and contents of these messages depend on the scope type. Learn more in the [ASGI specification](https://asgi.readthedocs.io/en/latest/specs/index.html).iddleware.gzip import GZipMiddleware
+
+routes = ...
+
+middleware = [
+    Middleware(GZipMiddleware, minimum_size=1000)
+]
+
+app = Starlette(routes=routes, middleware=middleware)rom starlette.middleware.sessions import SessionMiddleware
+
+routes = ...
+
+middleware = [
+    Middleware(SessionMiddleware, secret_key=..., https_only=True)
+]
+
+app = Starlette(routes=routes, middleware=middleware)ErrorMiddleware` - Ensures that application exceptions may return a custom 500 page, or display an application traceback in DEBUG mode. This is *always* the outermost middleware layer.
+* `ExceptionMiddleware` - Adds exception handlers, so that particular types of expected exception cases can be associated with handler functions. For example raising `HTTPException(status_code=404)` within an endpoint will end up rendering a custom 404 page.
+
+Middleware is evaluated from top-to-bottom, so the flow of execution in our example all implemented as standard `ASGI`
+middleware classes, and can be applied either to `Starlette` or to any other ASGI application.
+
+## Using middleware
+
+The `Starlette` application class allows you to include the `ASGI` middleware
+in a way that ensures that it remains wrapped by the exception handler. includes several middleware classes for adding behavior that is applied across
 your entire application. These are all implemented as standard ASGI
 middleware classes, and can be applied either to Starlette or to any other ASGI application.
 

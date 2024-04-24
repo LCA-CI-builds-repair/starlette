@@ -1,6 +1,124 @@
-import contextvars
-from contextlib import AsyncExitStack
+ifrom contextlib import AsyncExitStack
 from typing import Any, AsyncGenerator, Awaitable, Callable, List, Type, Union
+
+import anyio
+import pytest
+
+from starlette.applications import Starlette
+from starlette.background import BackgroundTask
+from starlette.middleware import Middleware, BaseHTTPMiddleware
+from starlette.requests import Request
+from starlette.responses import PlainTextResponse,from typing import Any, AsyncGenerator, Awaitable, Callable, List, Type, Union
+
+import anyio
+import pytest
+
+from starlette.applications import Starlette
+from starlette.middleware import BaseHTTPMiddleware
+from starlette.requests import Request
+from starlette.responses import PlainTextResponse, StreamingResponse
+from starlette.routing import Route, WebSocketRoute
+from starlette.testclient import TestClient
+
+context_manager_exited = anyio.create_event()
+
+def test_app_receives_http_disconnect_while_sending_if_discarded(test_client_factory):
+    class DiscardingMiddleware(BaseHTTPMiddleware):
+        async def dispatch(self, request, call_next):
+            # As a matter of ordering, this test targets the case where the downstream
+            # app response is discarded while it is sending a response body.
+            # We need to wait for the downstream app to begin sending a response body
+            # before sending the middleware response that will overwrite the downstream
+            # response.
+            downstream_app_response = await call_next(request)
+            body_generator = downstream_app_response.body_iterator
+            try:
+                await body_generator.__anext__()
+            finally:
+                await body_generator.aclose()
+
+    assert context_manager_exited.is_set()from starlette.routing import Route, WebSocketRoute
+from starlette.testclient import TestClient
+
+
+class CustomMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        response = await call_next(request)
+        response.headers["Custom-Header"] = "Example"
+        return response
+
+
+def homepage(request):
+    return PlainTextResponse("Homepage")
+
+
+def exc(request):
+    raise Exception("Exc")
+
+
+def exc_stream(request):
+    return StreamingResponse(_generate_faulty_stream())
+
+
+def _generate_faulty_stream():
+    yield b"Ok"
+    raise Exception("Faulty Stream")
+
+
+class NoResponse:
+    def __init__(self, scope, receive, send):
+        pass
+
+    def __await__(self):
+        return self.dispatch().__await__()
+
+    async def dispatch(self):
+        pass
+
+
+async def websocket_endpoint(session):
+    await session.accept()
+    await session.send_text("Hello, world!")
+    await session.close()
+
+
+app = Starlette(
+    routes=[
+        Route("/", endpoint=homepage),
+        Route("/exc", endpoint=exc),
+        Route("/exc-stream", endpoint=exc_stream),
+        Route("/no-response", endpoint=NoResponse),
+        WebSocketRoute("/ws", endpoint=websocket_endpoint),
+    ],
+    middleware=[Middleware(CustomMiddleware)],
+)
+
+
+def test_custom_middleware(test_client_factory):
+    client = test_client_factory(app)
+    
+    # Test homepage endpoint
+    response = client.get("/")
+    assert response.headers["Custom-Header"] == "Example"
+
+    # Test exception handling in endpoint
+    with pytest.raises(Exception) as ctx:
+        response = client.get("/exc")
+    assert str(ctx.value) == "Exc"
+
+    # Test exception handling in streaming endpoint
+    with pytest.raises(Exception) as ctx:
+        response = client.get("/exc-stream")
+    assert str(ctx.value) == "Faulty Stream"
+
+    # Test endpoint with no response
+    with pytest.raises(RuntimeError):
+        response = client.get("/no-response")
+
+    # Test WebSocket endpoint
+    with client.websocket_connect("/ws") as session:
+        text = session.receive_text()
+        assert text == "Hello, world!"tor, Awaitable, Callable, List, Type, Union
 
 import anyio
 import pytest

@@ -1,6 +1,29 @@
 
 Starlette allows you to install custom exception handlers to deal with
-how you return responses when errors or handled exceptions occur.
+how you return responses when error`Starlette` application is configured like this:
+
+* `ServerErrorMiddleware` - Returns 500 responses when server errors occur.
+* Installed middleware
+* `ExceptionMiddleware` - Deals with handled exceptions, and returns responses.
+* Router
+* Endpoints
+
+## HTTPException
+
+The `HTTPException` class provides a base class that you can use for any
+handled exceptions. The `ExceptionMiddleware` implementation defaults to
+returning plain-text HTTP responses for any `HTTPException`.
+
+* `HTTPException(status_code, detail=None, headers=None)`
+
+You should only raise `HTTPException` inside routing or endpoints. Middleware
+classes should instead just return appropriate responses directly.
+
+## WebSocketException
+
+You can use the `WebSocketException` class to raise errors inside of WebSocket endpoints.
+
+* `WebSocketException(code=1008, reason=None)`occur.
 
 ```python
 from starlette.applications import Starlette
