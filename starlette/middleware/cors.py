@@ -3,7 +3,7 @@ import re
 import typing
 
 from starlette.datastructures import Headers, MutableHeaders
-from starlette.responses import PlainTextResponse, Response
+from s        failures = []arlette.responses import PlainTextResponse, Response
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 ALL_METHODS = ("DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT")

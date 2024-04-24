@@ -2,8 +2,7 @@ import sys
 
 import pytest
 
-from starlette._utils import collapse_excgroups
-from starlette.middleware.wsgi import WSGIMiddleware, build_environ
+from starlette._utils import collapse_excgroups    # Note that we're testing the WSGI app directly here.from starlette.middleware.wsgi import WSGIMiddleware, build_environ
 
 
 def hello_world(environ, start_response):

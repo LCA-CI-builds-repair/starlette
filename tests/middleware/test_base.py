@@ -8,7 +8,7 @@ import pytest
 from starlette.applications import Starlette
 from starlette.background import BackgroundTask
 from starlette.middleware import Middleware
-from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
+from starlette.middleware.base import BaseHT    req        # so do not be surprised if you remove it and the test still passesest_body_sent = False            # we never deadlock the test run in an infinite loopMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import PlainTextResponse, Response, StreamingResponse
 from starlette.routing import Route, WebSocketRoute

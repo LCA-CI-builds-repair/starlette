@@ -4,7 +4,7 @@ using the `httpx` library.
 
 ```python
 from starlette.responses import HTMLResponse
-from starlette.testclient import TestClient
+from s<!-- Add content related to test client here -->arlette.testclient import TestClient
 
 
 async def app(scope, receive, send):

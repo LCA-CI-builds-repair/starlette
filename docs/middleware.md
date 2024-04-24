@@ -1,5 +1,5 @@
 
-Starlette includes several middleware classes for adding behavior that is applied across
+Starlette includes several middleware classes for adding behavior that is applied#### CORS preflight requestsross
 your entire application. These are all implemented as standard ASGI
 middleware classes, and can be applied either to Starlette or to any other ASGI application.
 
@@ -10,11 +10,11 @@ in a way that ensures that it remains wrapped by the exception handler.
 
 ```python
 from starlette.applications import Starlette
-from starlette.middleware import Middleware
+from starlette.mid<!-- Add content related to middleware here -->leware import Middleware
 from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
-routes = ...
+roThis is often not a problem because it only applies to middleware that inspect or modify the `Response`, and even then you probably don't want to apply this logic to error responses.tes = ...
 
 # Ensure that all requests include an 'example.com' or
 # '*.example.com' host header, and strictly enforce https-only access.

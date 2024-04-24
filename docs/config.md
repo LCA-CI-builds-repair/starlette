@@ -1,5 +1,5 @@
 Starlette encourages a strict separation of configuration from code,
-following [the twelve-factor pattern][twelve-factor].
+following [the twelve-facto`tests/coYou can namespace the environment variables by setting `env_prefix` argument.tWe'd like to create a new test database every time the test suite runs,st.py`. pattern][twelve-factor].
 
 Configuration should be stored in environment variables, or in a `.env` file
 that is not committed to source control.

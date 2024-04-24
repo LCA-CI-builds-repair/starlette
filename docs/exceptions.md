@@ -1,6 +1,7 @@
 
 Starlette allows you to install custom exception handlers to deal with
-how you return responses when errors or handled exceptions occur.
+how you return responses when errors o* Installed middleware
+* `ExceptionMiddleware` - Deals with handled exceptions, and returns responses.handled exceptions occur.
 
 ```python
 from starlette.applications import Starlette

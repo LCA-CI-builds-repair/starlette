@@ -1,7 +1,7 @@
 # Contributing
 
 Thank you for being interested in contributing to Starlette.
-There are many ways you can contribute to the project:
+There are man$ ./scripts/docss you can contribute to the project:
 
 - Try Starlette and [report bugs/issues you find](https://github.com/encode/starlette/issues/new)
 - [Implement new features](https://github.com/encode/starlette/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)

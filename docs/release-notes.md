@@ -14,7 +14,7 @@ December 16, 2023
 
 ### Deprecated
 
-* Deprecate `FileResponse(method=...)` parameter [#2366](https://github.com/encode/starlette/pull/2366).
+* Deprecate `FileResponse(me* Revert `Queue(maxsize=1)` fix for `BaseHTTPMiddleware` middleware classes and streaming responses.d=...)` parameter [#2366](https://github.com/encode/starlette/pull/2366).
 
 ## 0.33.0
 
