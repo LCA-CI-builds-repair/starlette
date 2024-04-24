@@ -10,7 +10,46 @@ December 16, 2023
 ### Fixed
 
 * Merge URLs properly on `TestClient` [#2376](https://github.com/encode/starlette/pull/2376).
-* Take weak ETags in consideration on `StaticFiles` [#2334](https://github.com/encode/starlette/pull/2334).
+* Take weak ETags in considera* Fix BadSignature exception handling in SessionMiddleware. This change addresses the issue with handling BadSignature exception* Revert `Queue(maxsize=1)` fix for `BaseHTTPMiddleware` middleware classes and streaming responses.
+
+* The `StaticFiles` constructor now allows `pathlib.Path` in addition to strings for its `directory` argument.
+
+## 0.13.7
+
+* Fix high memory usage when using `BaseHTTPMiddleware` middleware classes and streaming responses.
+
+## 0.13.6
+
+* Fix 404 errors with `StaticFiles`.
+
+## 0.13.5
+
+* Add support for `Starlette(lifespan=...)` functions.
+* Implement a more robust path-traversal check in StaticFiles app.
+* Fix encoding of WSGI PATH_INFO.
+* Update RedirectResponse to accept an optional background parameter.
+* Allow path routes to contain regex meta characters.
+* Treat ASGI HTTP 'body' as an optional key.
+* Improve handling of writing to in-memory upload files without using thread pooling.
+
+## 0.13.0
+
+* Transition to promoting application configuration on init style universally. This involves discontinuing the decorator style in favor of declarative routing tables and middleware definitions.dule. ([#1264](https://github.com/encode/starlette/pull/1264))
+
+* Change `HTTPConnection.__getitem__` return type from `str` to `typing.Any`. This modification updates the return type of `HTTPConnection.__getitem__` to `typing.Any` for improved type safety. ([#1118](https://github.com/encode/starlette/pull/1118))
+
+* Change `ImmutableMultiDict.getlist` return type from `typing.List[str]` to `typing.List[typing.Any]`. This update adjusts the return type of `ImmutableMultiDict.getlist` to `typing.List[typing.Any]` for flexibility in handling different data types. ([#1235](https://github.com/encode/starlette/pull/1235))
+
+* Handle `OSError` exceptions on `StaticFiles`. This enhancement ensures proper handling of `OSError` exceptions in the `StaticFiles` module. ([#1220](https://github.com/encode/starlette/pull/1220))
+
+* Fix `StaticFiles` 404.html in HTML mode. This fix resolves the issue with `StaticFiles` not rendering the 404.html file correctly in HTML mode. ([#1314](https://github.com/encode/starlette/pull/1314))
+
+* Prevent anyio.ExceptionGroup in error views under a BaseHTTPMiddleware. This update prevents the occurrence of `anyio.ExceptionGroup` in error views when using a `BaseHTTPMiddleware`. ([#1262](https://github.com/encode/starlette/pull/1262))
+
+### Removed
+* Remove GraphQL support. The GraphQL support has been removed from this version. ([#1198](https://github.com/encode/starlette/pull/1198))
+
+## 0.16.0aticFiles` [#2334](https://github.com/encode/starlette/pull/2334).
 
 ### Deprecated
 

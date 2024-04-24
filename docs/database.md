@@ -1,6 +1,18 @@
 Starlette is not strictly tied to any particular database implementation.
 
-You can use it with an asynchronous ORM, such as [GINO](https://python-gino.org/),
+You can use it with an asynchronous ORM, such as [GINO](http```python
+async def populate_note(request):
+    transaction = await database.transaction()
+    try:
+        # This database insert occurs within a transaction.
+        query = notes.insert().values(text="you won't see me", completed=True)
+        await database.execute(query)
+    except:
+        await transaction.rollback()
+        raise
+    else:
+        await transaction.commit()
+        raise RuntimeError()g/),
 or use regular non-async endpoints, and integrate with [SQLAlchemy](https://www.sqlalchemy.org/).
 
 In this documentation we'll demonstrate how to integrate against [the `databases` package](https://github.com/encode/databases),

@@ -1,7 +1,32 @@
 # Contributing
 
 Thank you for being interested in contributing to Starlette.
-There are many ways you can contribute to the project:
+There are many waOnce you've submitted your pull reque<p align="center" style="margin: 0 0 10px">
+  <img src="https://raw.githubusercontent.com/encode/starlette/master/docs/img/gh-actions-fail-test.png" alt='Failing GitHub action test job'>
+</p>
+
+This job failing means the unit tests failed or not all code paths are covered by unit tests.
+
+If tests are failing, you will see this message under the coverage report:
+
+`=== 1 failed, 435 passed, 1 skipped, 1 xfailed in 11.09s ===`
+
+If tests succeed but coverage doesn't reach our current threshold, you will see this
+message under the coverage report:
+
+`FAIL Required test coverage of 100% not reached. Total coverage: 99.00%`
+
+## Releasing
+
+*This section is targeted at Starlette maintainers.*
+
+Before releasing a new version, create a pull request that includes:ll automatically run, and the results will show up in GitHub.
+
+Before submitting your pull request, it is recommended to run the test suite locally to ensure that your changes do not introduce any regressions. You can do this by following these steps:
+1. Clone the repository to your local machine.
+2. Install any necessary dependencies for running the tests.
+3. Run the test suite locally to verify that your changes pass all the tests.
+4. Once you have confirmed that the tests pass locally, you can proceed to submit your pull request. you can contribute to the project:
 
 - Try Starlette and [report bugs/issues you find](https://github.com/encode/starlette/issues/new)
 - [Implement new features](https://github.com/encode/starlette/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)

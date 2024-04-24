@@ -1,5 +1,49 @@
 
-Starlette includes several middleware classes for adding behavior that is applied across
+Syour entire application. These are all imple    Middleware(CORSMiddleware, allow_origins=['*'], allow_methods=['GET'])
+]
+
+app = Starlette(rou```python
+from starlette.applications import Starlette
+from starlette.middleware import Middleware
+from starlette.middleware.gzip import GZipMiddleware
+
+
+routes = ...
+
+middleware = [
+    Middleware(GZipMiddleware, minimum_size=1000)
+]
+
+app = Starlette(routes=routes, middleware=middleware)are)ASGI
+middleware classes, and can be applied either to Starlette or to anIf you need to share information with the underlying app or endpoints, you may store it into the `scope` dictionary. Note that this is from starlette.applications import Starlette
+from starlette.middleware import Middleware
+from starlette.middleware.gzip import GZipMiddleware
+from starlette.routing import Mount, Route
+
+
+routes = [
+    Mount(
+        "/",
+        routes=[
+            Route(
+                "/example",
+                endpoint=...,
+            )
+        ],
+        middleware=[Middleware(GZipMiddleware)]
+    )
+]
+
+app = Starlette(routes=routes)ple, Starlette uses this to share routing information with endpoints -- but it is not part of the ASGI specification. If you do so, be sure to avoid conflicts by using keys that have low chances of being used by other middleware or applications.
+
+For example, when including the middleware below, endpoints would be able to access `request.scope["asgi_transaction_id"]`.
+tion.
+
+## Using middleware
+
+The Starlette application class allows you to include the ASGI middleware
+in a way that ensures that it remains wrapped by the exception handler.
+iddleware classes for adding behavior that is applied across
 your entire application. These are all implemented as standard ASGI
 middleware classes, and can be applied either to Starlette or to any other ASGI application.
 

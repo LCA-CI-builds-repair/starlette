@@ -1,6 +1,111 @@
-import contextvars
-from contextlib import AsyncExitStack
+ifrom contextlib import AsyncExitStack
 from typing import AsyncGenerator, Awaitable, Callable, List, Union
+
+import anyio
+import pyfrom contextlib import AsyncExitStack
+from typing import AsyncGenerator, Awaitable, Callable, List, Union
+
+import anyio
+import pytest
+
+from starlette.applications import Starlette
+from starlette.background import BackgroundTask
+from starlette.middleware import Middleware
+from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
+from starlette.requests import Request
+from starlette.responses import PlainTextResponse, Response, StreamingResponse
+from starlette.routing import Route, WebSocketRoute
+from starlette.testclient import TestClient
+from starlette.types import ASGIApp, Message, Receive, Scope, Send
+
+from tests.middleware.test_base import CustomMiddleware
+
+
+def test_app_middleware_argument(test_client_factory):
+    def homepage(request):
+        return PlainTextResponse("Homepage")
+
+    app = Starlette(
+        routes=[Route("/", homepage)], middleware=[Middleware(CustomMiddleware)]
+    )
+
+    client = test_client_factory(app)
+    response = client.get("/")
+    assert response.headers["Custom-Header"] == "Example"
+
+
+def test_fully_evaluated_response(test_client_factory):
+    # Test for https://github.com/encode/starlette/issues/1022
+    class CustomMiddleware(BaseHTTPMiddleware):
+        async def dispatch(self, request, call_next):
+            response = await call_next(request)
+            return response
+
+    app = Starlette(middleware=[Middleware(CustomMiddleware)])ations import Starlette
+from starlette.background import BackgroundTask
+from starlette.middleware import Middleware
+from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
+from starlette.requests import Request
+from starlette.responses import PlainTextResponse, Response, StreamingResponse
+from starlette.routing import Route, WebSocketRoute
+from starlette.testclient import TestClient
+from starlette.types import ASGIApp, Message, Receive, Scope, Send
+
+
+class CustomMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        response = await call_next(request)
+        response.headers["Custom-Header"] = "Example"
+        return response
+
+
+def homepage(request):
+    return PlainTextResponse("Homepage")
+
+
+def exc(request):
+    raise Exception("Exc")
+
+
+def exc_stream(request):
+    try:
+        return StreamingResponse(_generate_faulty_stream())
+    except Exception as e:
+        return PlainTextResponse("Error in streaming: {}".format(str(e)))
+
+
+def _generate_faulty_stream():
+    yield b"Ok"
+    raise Exception("Faulty Stream")
+
+
+class NoResponse:
+    def __init__(self, scope, receive, send):
+        pass
+
+    def __await__(self):
+        return self.dispatch().__await__()
+
+    async def dispatch(self):
+        return PlainTextResponse("No Response")
+
+
+async def websocket_endpoint(session):
+    await session.accept()
+    await session.send_text("Hello, world!")
+    await session.close()
+
+
+app = Starlette(
+    routes=[
+        Route("/", endpoint=homepage),
+        Route("/exc", endpoint=exc),
+        Route("/exc-stream", endpoint=exc_stream),
+        Route("/no-response", endpoint=NoResponse),
+        WebSocketRoute("/ws", endpoint=websocket_endpoint),
+    ],
+    middleware=[Middleware(CustomMiddleware)],
+)mport AsyncGenerator, Awaitable, Callable, List, Union
 
 import anyio
 import pytest

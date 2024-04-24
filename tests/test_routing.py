@@ -24,8 +24,19 @@ def users(request):
     return Response("All users", media_type="text/plain")
 
 
-def user(request):
-    content = "User " + request.path_params["username"]
+def user(req        count: int
+        items: typing.List[int]
+
+    async def hello_world(request: Request) -> Response:
+        # modifications to the state should not leak across requests
+        state = request.state.copy()  # Create a copy of the state to prevent leaks
+        assert state.get('count', 0) == 0
+        # modify the state, this should not leak to the lifespan or other requests
+        state['count'] += 1
+        # since state.items is a mutable object this modification will NOT leak across
+        # requests and to the lifespan, as we are working with a copy
+        state['items'] = state.get('items', []) + [1]
+        return PlainTextResponse("hello, world")ontent = "User " + request.path_params["username"]
     return Response(content, media_type="text/plain")
 
 
