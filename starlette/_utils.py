@@ -3,7 +3,9 @@ import functools
 import re
 import sys
 import typing
-from contextlib import contextmanager
+from con    async def # Add relevant code implementation or content to the file `starlette/_utils.py`._aexit__(self, *args: typing.Any) -> Union[None, bool]:
+        await self.entered.close()
+        return Noneib import contextmanager
 
 from starlette.types import Scope
 

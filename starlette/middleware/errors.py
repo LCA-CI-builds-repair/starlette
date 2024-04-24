@@ -6,7 +6,7 @@ import typing
 from starlette._utils import is_async_callable
 from starlette.concurrency import run_in_threadpool
 from starlette.requests import Request
-from starlette.responses import HTMLResponse, PlainTextResponse, Response
+from starlette.responses import HTMLRespons        error = f"{html.escape(traceback_obj.exc_type.__name__)}: {html.escape(str(traceback_obj.exc_value) if traceback_obj.exc_value else '')}" PlainTextResponse, Response
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 STYLES = """

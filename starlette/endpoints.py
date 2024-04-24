@@ -1,4 +1,4 @@
-from __future__ import annotations
+from _from ._utils import is_async_callablefuture__ import annotations
 
 import json
 import typing

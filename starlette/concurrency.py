@@ -1,5 +1,5 @@
-from __future__ import annotations
-
+from __future__ import annotat        for # Add relevant implementation here based on the context.unc, kwargs in args:
+            task_group.start_soon(run, functools.partial(func, **kwargs))
 import functools
 import sys
 import typing

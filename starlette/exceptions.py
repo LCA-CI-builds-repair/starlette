@@ -1,5 +1,16 @@
-import http
-import typing
+import htt        detai        class_name = self._            f"Import it from `starlette.middleware.errors` instead.",
+            category=DeprecationWarning,
+            stacklevel=3,
+        )
+        return ExceptionMiddlewares__.__name__
+        return f"{class_name}(status_code={self.status_code!r}, detail={self.detail!r})"
+
+
+class WebSocketException(Exception):
+    # Add relevant implementation for the WebSocketException class here.ion[str, None] = None,
+        headers: Union[Dict[str, str], None] = None,
+    ) -> None:
+        if detail is None:ort typing
 import warnings
 
 __all__ = ("HTTPException", "WebSocketException")

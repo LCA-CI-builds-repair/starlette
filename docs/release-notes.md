@@ -13,7 +13,7 @@ January 11, 2024
 
 #### Added
 
-* Add `*args` to `Middleware` and improve its type hints [#2381](https://github.com/encode/starlette/pull/2381).
+* Add `*args` to `Middleware` and improve its type hints [#2381](https://github.com/encode/starlette/pull/23* The compression level used in `GZipMiddleware` is now adjustable - The compression level can be configured using the new setting in the middleware configuration.1).
 
 #### Fixed
 

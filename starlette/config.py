@@ -1,4 +1,7 @@
-from __future__ import annotations
+from __f    # Add relevant implementation here based on the context.
+
+class EnvironError(Exception):
+    pass__ import annotations
 
 import os
 import typing
