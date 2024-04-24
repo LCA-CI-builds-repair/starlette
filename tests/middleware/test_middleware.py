@@ -1,4 +1,5 @@
-from starlette.middleware import Middleware
+from starlette.    middleware = Middleware(CustomMiddleware, "foo", bar=123)
+    assert repr(middleware) == "Middleware(CustomMiddleware, 'foo', bar=123)"ddleware import Middleware
 from starlette.types import ASGIApp, Receive, Scope, Send
 
 

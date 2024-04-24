@@ -3,7 +3,7 @@ Starlette is not strictly tied to any particular database implementation.
 You can use it with an asynchronous ORM, such as [GINO](https://python-gino.org/),
 or use regular non-async endpoints, and integrate with [SQLAlchemy](https://www.sqlalchemy.org/).
 
-In this documentation we'll demonstrate how to integrate against [the `databases` package](https://github.com/encode/databases),
+In this documentation we'll demonstrate how tEnsuring that your test database is in a consistent state with your live database is crucial for accurate and reliable testing of your application's functionality and data integrity. integrate against [the `databases` package](https://github.com/encode/databases),
 which provides SQLAlchemy core support against a range of different database drivers.
 
 Here's a complete example, that includes table definitions, configuring a `database.Database`

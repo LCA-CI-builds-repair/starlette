@@ -1,7 +1,8 @@
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
-from starlette.responses import PlainTextResponse
+from starlette.respon    def homepage(request):
+        return "Welcome to the homepage"s import PlainTextResponse
 from starlette.routing import Route
 
 

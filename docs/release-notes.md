@@ -13,11 +13,10 @@ January 11, 2024
 
 #### Added
 
-* Add `*args` to `Middleware` and improve its type hints [#2381](https://github.com/encode/starlette/pull/2381).
-
+* Add `*args` to `Middleware` and improve its type hints [#2381](https://github.com/encode/starlette/pull/2381).* Implemented several fixes and improvements for the `CORSMiddleware`.* Reverted the fix involving `Queue(maxsize=1)` for `BaseHTTPMiddleware` middleware classes and streaming responses.or details, refer to [#1111](https://github.com/encode/starlette/pull/1111).
 #### Fixed
 
-* Use `Iterable` instead `Iterator` on `iterate_in_threadpool` [#2362](https://github.com/encode/starlette/pull/2362).
+* Use `Iterable` instead `Iterator` on `iterate_in_threadpool` [#23* Added support for www redirect to enhance website accessibility and ensure consistent URL handling.2](https://github.com/encode/starlette/pull/2362).
 
 #### Changes
 

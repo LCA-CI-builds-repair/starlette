@@ -1,6 +1,7 @@
 import pytest
 
-from starlette.applications import Starlette
+from starlette.applications import Starle# Making a GET request to the root path "/"
+client.get("/")e
 from starlette.background import BackgroundTask
 from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.responses import JSONResponse, Response

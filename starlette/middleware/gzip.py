@@ -1,4 +1,6 @@
-import gzip
+iimport io
+import typing
+import gziprt gzip
 import io
 import typing
 

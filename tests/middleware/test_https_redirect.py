@@ -1,4 +1,15 @@
-from starlette.applications import Starlette
+from stafrom starlette.applications import Starlette
+from starlette.responses import PlainTextResponse
+from starlette.routing import Route
+from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
+
+def homepage(request):
+    return PlainTextResponse("OK", status_code=200)
+
+app = Starlette(
+    routes=[Route("/", endpoint=homepage)],
+    middleware=[HTTPSRedirectMiddleware],
+)applications import Starlette
 from starlette.middleware import Middleware
 from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 from starlette.responses import PlainTextResponse

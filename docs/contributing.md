@@ -1,9 +1,22 @@
 # Contributing
 
 Thank you for being interested in contributing to Starlette.
-There are many ways you can contribute to the project:
+There are man$ scripts/docs
 
-- Try Starlette and [report bugs/issues you find](https://github.com/encode/starlette/issues/new)
+## Resolving Build / CI Failures
+
+Once you've submitted your pull request, the test suite will automatically run, and the results will show up in GitHub. If the test suite fails, you'll want to click through to the "Details" link, and try to identify why the test suite failed.
+
+![Failing PR commit status](https://raw.githubusercontent.com/encode/starlette/master/docs/img/gh-actions-fail.png)
+
+Here are some common ways the test suite can fail:
+
+### Check Job Failed
+
+![Failing GitHub action lint job](https://raw.githubusercontent.com/encode/starlette/master/docs/img/gh-actions-fail-check.png)
+
+This job failing means there is either a code formatting issue or type-annotation issue. You can look at the job output to figure out why it's failed or within a shell run:
+ Try Starlette and [report bugs/issues you find](https://github.com/encode/starlette/issues/new)
 - [Implement new features](https://github.com/encode/starlette/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 - [Review Pull Requests of others](https://github.com/encode/starlette/pulls)
 - Write documentation

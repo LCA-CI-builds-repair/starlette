@@ -20,7 +20,8 @@ class CustomMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
         response = await call_next(request)
         response.headers["Custom-Header"] = "Example"
-        return response
+                async def dispatch(self, request: Request, call_next: CallNext) -> Response:
+            return await call_next(request)eturn response
 
 
 def homepage(request):
