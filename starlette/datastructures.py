@@ -377,7 +377,7 @@ class MultiDict(ImmutableMultiDict[typing.Any, typing.Any]):
         **kwargs: typing.Any,
     ) -> None:
         value = MultiDict(*args, **kwargs)
-        existing_items = [(k, v) for (k, v) in self._list if k not in value.keys()]
+        existing_items = [(k, v) for (k, v) in self._list.items() if k not in value.keys()]
         self._list = existing_items + value.multi_items()
         self._dict.update(value)
 
@@ -387,7 +387,7 @@ class QueryParams(ImmutableMultiDict[str, str]):
     An immutable multidict.
     """
 
-    def __init__(
+    def __init(
         self,
         *args: ImmutableMultiDict[typing.Any, typing.Any]
         | typing.Mapping[typing.Any, typing.Any]
@@ -501,8 +501,6 @@ class FormData(ImmutableMultiDict[str, typing.Union[UploadFile, str]]):
         for key, value in self.multi_items():
             if isinstance(value, UploadFile):
                 await value.close()
-
-
 class Headers(typing.Mapping[str, str]):
     """
     An immutable, case-insensitive multidict.
