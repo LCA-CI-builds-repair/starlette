@@ -230,7 +230,6 @@ def test_multipart_request_multiple_files_with_headers(tmpdir, test_client_facto
             },
         }
 
-
 def test_multi_items(tmpdir, test_client_factory):
     path1 = os.path.join(tmpdir, "test1.txt")
     with open(path1, "wb") as file:

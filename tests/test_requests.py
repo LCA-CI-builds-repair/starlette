@@ -509,6 +509,8 @@ def test_request_send_push_promise_without_setting_send(test_client_factory):
 
 
 @pytest.mark.parametrize(
+from typing import List
+
     "messages",
     [
         [{"body": b"123", "more_body": True}, {"body": b""}],
@@ -522,8 +524,8 @@ def test_request_send_push_promise_without_setting_send(test_client_factory):
     ],
 )
 @pytest.mark.anyio
-async def test_request_rcv(messages: List[Message]) -> None:
-    messages = messages.copy()
+async def test_request_rcv(received_messages: List[Message]) -> None:
+    received_messages = received_messages.copy()
 
     async def rcv() -> Message:
         return {"type": "http.request", **messages.pop(0)}

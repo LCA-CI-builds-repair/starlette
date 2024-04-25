@@ -224,12 +224,16 @@ class _TestClientTransport(httpx.BaseTransport):
             headers = [(b"host", (f"{host}:{port}").encode())]
 
         # Include other request headers.
+import typing
+
         headers += [
             (key.lower().encode(), value.encode())
             for key, value in request.headers.multi_items()
         ]
 
         scope: typing.Dict[str, typing.Any]
+
+        scheme = scope.get("scheme", "")
 
         if scheme in {"ws", "wss"}:
             subprotocol = request.headers.get("sec-websocket-protocol", None)

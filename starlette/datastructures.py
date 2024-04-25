@@ -551,6 +551,8 @@ class Headers(typing.Mapping[str, str]):
         return [value.decode("latin-1") for key, value in self._list]
 
     def items(self) -> typing.List[typing.Tuple[str, str]]:  # type: ignore[override]
+import typing
+
         return [
             (key.decode("latin-1"), value.decode("latin-1"))
             for key, value in self._list

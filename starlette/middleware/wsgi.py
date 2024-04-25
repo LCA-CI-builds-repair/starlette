@@ -120,6 +120,8 @@ class WSGIResponder:
             status_code_string, _ = status.split(" ", 1)
             status_code = int(status_code_string)
             headers = [
+import anyio
+
                 (name.strip().encode("ascii").lower(), value.strip().encode("ascii"))
                 for name, value in response_headers
             ]
