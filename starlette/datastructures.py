@@ -541,20 +541,8 @@ class Headers(typing.Mapping[str, str]):
         return [value.decode("latin-1") for key, value in self._list]
 
     def items(self) -> list[tuple[str, str]]:  # type: ignore[override]
-        return [
-            (key.decode("latin-1"), value.decode("latin-1"))
-            for key, value in self._list
-        ]
-
-    def getlist(self, key: str) -> list[str]:
-        get_header_key = key.lower().encode("latin-1")
-        return [
-            item_value.decode("latin-1")
-            for item_key, item_value in self._list
-            if item_key == get_header_key
-        ]
-
     def mutablecopy(self) -> MutableHeaders:
+        return MutableHeaders(self._list[:])
         return MutableHeaders(raw=self._list[:])
 
     def __getitem__(self, key: str) -> str:

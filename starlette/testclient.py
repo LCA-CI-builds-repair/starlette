@@ -248,14 +248,14 @@ class _TestClientTransport(httpx.BaseTransport):
             headers = [(b"host", (f"{host}:{port}").encode())]
 
         # Include other request headers.
-        headers += [
+        headers = [
             (key.lower().encode(), value.encode())
             for key, value in request.headers.multi_items()
         ]
 
-        scope: dict[str, typing.Any]
+        scope: dict[str, typing.Any] = {}
 
-        if scheme in {"ws", "wss"}:
+        if scheme in {"ws", "wss", request.url.scheme}:
             subprotocol = request.headers.get("sec-websocket-protocol", None)
             if subprotocol is None:
                 subprotocols: typing.Sequence[str] = []
