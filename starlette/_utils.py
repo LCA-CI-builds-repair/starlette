@@ -34,13 +34,12 @@ def is_async_callable(obj: typing.Any) -> TypeGuard[AwaitableCallable[typing.Any
 
 
 def is_async_callable(obj: typing.Any) -> typing.Any:
+    # Unwrap functools.partial to get the original function
     while isinstance(obj, functools.partial):
         obj = obj.func
 
-    return asyncio.iscoroutinefunction(obj) or (
-        callable(obj) and asyncio.iscoroutinefunction(obj.__call__)
-    )
-
+    # Check if the function is a coroutine function or a callable with a coroutine __call__ method
+    return asyncio.iscoroutinefunction(obj) or (callable(obj) and asyncio.iscoroutinefunction(obj.__call__))
 
 T_co = typing.TypeVar("T_co", covariant=True)
 
@@ -75,7 +74,7 @@ class AwaitableOrContextManagerWrapper(typing.Generic[SupportsAsyncCloseType]):
         return self.entered
 
     async def __aexit__(self, *args: typing.Any) -> None | bool:
-        await self.entered.close()
+    async def __aexit__(self, *args: typing.Any) -> typing.Union[None, bool]:
         return None
 
 

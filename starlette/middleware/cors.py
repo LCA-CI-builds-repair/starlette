@@ -131,13 +131,12 @@ class CORSMiddleware:
                     break
 
         # We don't strictly need to use 400 responses here, since its up to
-        # the browser to enforce the CORS policy, but its more informative
-        # if we do.
+        # Return the appropriate response based on the CORS policy enforcement
         if failures:
             failure_text = "Disallowed CORS " + ", ".join(failures)
-            return PlainTextResponse(failure_text, status_code=400, headers=headers)
+            return JSONResponse({"message": failure_text}, status_code=400, headers=headers)
 
-        return PlainTextResponse("OK", status_code=200, headers=headers)
+        return JSONResponse({"message": "OK"}, status_code=200, headers=headers)
 
     async def simple_response(
         self, scope: Scope, receive: Receive, send: Send, request_headers: Headers

@@ -14,13 +14,12 @@ try:
     import jinja2
 
     # @contextfunction was renamed to @pass_context in Jinja 3.0, and was removed in 3.1
-    # hence we try to get pass_context (most installs will be >=3.1)
-    # and fall back to contextfunction,
-    # adding a type ignore for mypy to let us access an attribute that may not exist
+    # Check for Jinja2 attribute 'pass_context' and fallback to 'contextfunction'
+    # Adding a type ignore for mypy to access an attribute that may not exist
     if hasattr(jinja2, "pass_context"):
         pass_context = jinja2.pass_context
     else:  # pragma: nocover
-        pass_context = jinja2.contextfunction  # type: ignore[attr-defined]
+        pass_context = jinja2.contextfunction  # type: ignore[attr-defined]  # Fallback to contextfunction
 except ModuleNotFoundError:  # pragma: nocover
     jinja2 = None  # type: ignore[assignment]
 
@@ -87,20 +86,16 @@ class Jinja2Templates:
         ...
 
     def __init__(
+    def __init__(
         self,
-        directory: str
-        | PathLike[typing.AnyStr]
-        | typing.Sequence[str | PathLike[typing.AnyStr]]
-        | None = None,
+        directory: typing.Union[str, PathLike[typing.AnyStr], typing.Sequence[typing.Union[str, PathLike[typing.AnyStr]]], None] = None,
         *,
-        context_processors: list[typing.Callable[[Request], dict[str, typing.Any]]]
-        | None = None,
-        env: jinja2.Environment | None = None,
+        context_processors: typing.Optional[list[typing.Callable[[Request], dict[str, typing.Any]]]] = None,
+        env: typing.Optional[jinja2.Environment] = None,
         **env_options: typing.Any,
     ) -> None:
         if env_options:
             warnings.warn(
-                "Extra environment options are deprecated. Use a preconfigured jinja2.Environment instead.",  # noqa: E501
                 DeprecationWarning,
             )
         assert jinja2 is not None, "jinja2 must be installed to use Jinja2Templates"

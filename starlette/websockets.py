@@ -107,14 +107,16 @@ class WebSocket(HTTPConnection):
             raise WebSocketDisconnect(message["code"], message.get("reason"))
 
     async def receive_text(self) -> str:
+        # Check if the WebSocket is connected
         if self.application_state != WebSocketState.CONNECTED:
             raise RuntimeError(
-                'WebSocket is not connected. Need to call "accept" first.'
+                'WebSocket is not connected. Please ensure that the connection is established by calling "accept" first.'
             )
+        # Receive a message from the WebSocket
         message = await self.receive()
+        # Check for disconnection during message reception
         self._raise_on_disconnect(message)
         return typing.cast(str, message["text"])
-
     async def receive_bytes(self) -> bytes:
         if self.application_state != WebSocketState.CONNECTED:
             raise RuntimeError(

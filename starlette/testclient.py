@@ -240,7 +240,7 @@ class _TestClientTransport(httpx.BaseTransport):
             for key, value in request.headers.multi_items()
         ]
 
-        scope: dict[str, typing.Any]
+        scope: dict[str, typing.Any] = {}
 
         if scheme in {"ws", "wss"}:
             subprotocol = request.headers.get("sec-websocket-protocol", None)

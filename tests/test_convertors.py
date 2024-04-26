@@ -14,13 +14,13 @@ def refresh_convertor_types():
     yield
     convertors.CONVERTOR_TYPES = convert_types
 
-
 class DateTimeConvertor(Convertor[datetime]):
+    # Regular expression pattern for datetime format including milliseconds
     regex = "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(.[0-9]+)?"
 
     def convert(self, value: str) -> datetime:
+        # Convert the string value to a datetime object
         return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
-
     def to_string(self, value: datetime) -> str:
         return value.strftime("%Y-%m-%dT%H:%M:%S")
 

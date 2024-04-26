@@ -489,11 +489,10 @@ class FormData(ImmutableMultiDict[str, typing.Union[UploadFile, str]]):
     """
 
     def __init__(
-        self,
-        *args: FormData
-        | typing.Mapping[str, str | UploadFile]
-        | list[tuple[str, str | UploadFile]],
-        **kwargs: str | UploadFile,
+    def __init__(
+        self: 'FormData',
+        *args: typing.Union[FormData, typing.Mapping[str, typing.Union[str, UploadFile], list[tuple[str, typing.Union[str, UploadFile]]]],
+        **kwargs: typing.Dict[str, typing.Union[str, UploadFile]],
     ) -> None:
         super().__init__(*args, **kwargs)
 
@@ -501,7 +500,6 @@ class FormData(ImmutableMultiDict[str, typing.Union[UploadFile, str]]):
         for key, value in self.multi_items():
             if isinstance(value, UploadFile):
                 await value.close()
-
 
 class Headers(typing.Mapping[str, str]):
     """

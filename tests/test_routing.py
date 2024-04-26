@@ -788,10 +788,10 @@ def test_lifespan_state_async_cm(test_client_factory):
         yield state
         shutdown_complete = True
         # modifications made to the state from a request do not leak to the lifespan
-        assert state["count"] == 0
+        assert state.count == 0
         # unless of course the request mutates a mutable object that is referenced
         # via state
-        assert state["items"] == [1, 1]
+        assert state.items == [1, 1]
 
     app = Router(
         lifespan=lifespan,
