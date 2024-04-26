@@ -279,23 +279,26 @@ def test_query_params(test_client_factory, param: str):
 
 
 @pytest.mark.parametrize(
-    "domain, ok",
-    [
-        pytest.param(
-            "testserver",
-            True,
-            marks=[
-                pytest.mark.xfail(
-                    sys.version_info < (3, 11),
-                    reason="Fails due to domain handling in http.cookiejar module (see "
-                    "#2152)",
-                ),
-            ],
-        ),
-        ("testserver.local", True),
-        ("localhost", False),
-        ("example.com", False),
-    ],
+# Add missing imports if necessary
+
+# Check for any missing implementations or corrections required within the code snippet provided
+"domain, ok",
+[
+    pytest.param(
+        "testserver",
+        True,
+        marks=[
+            pytest.mark.xfail(
+                sys.version_info < (3, 11),
+                reason="Fails due to domain handling in http.cookiejar module (see "
+                "#2152)",
+            ),
+        ],
+    ),
+    ("testserver.local", True),
+    ("localhost", False),
+    ("example.com", False),
+],
 )
 def test_domain_restricted_cookies(test_client_factory, domain, ok):
     """

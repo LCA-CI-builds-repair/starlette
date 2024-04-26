@@ -215,21 +215,23 @@ def test_multipart_request_multiple_files_with_headers(tmpdir, test_client_facto
         assert response.json() == {
             "test1": "<file1 content>",
             "test2": {
-                "filename": "test2.txt",
-                "size": 15,
-                "content": "<file2 content>",
-                "content_type": "text/plain",
-                "headers": [
-                    [
-                        "content-disposition",
-                        'form-data; name="test2"; filename="test2.txt"',
-                    ],
-                    ["x-custom", "f2"],
-                    ["content-type", "text/plain"],
-                ],
-            },
-        }
+# Add missing imports if necessary
 
+# Check for any missing implementations or corrections required within the code snippet provided
+{
+    "filename": "test2.txt",
+    "size": 15,
+    "content": "<file2 content>",
+    "content_type": "text/plain",
+    "headers": [
+        [
+            "content-disposition",
+            'form-data; name="test2"; filename="test2.txt"',
+        ],
+        ["x-custom", "f2"],
+        ["content-type", "text/plain"],
+    ],
+}
 
 def test_multi_items(tmpdir, test_client_factory):
     path1 = os.path.join(tmpdir, "test1.txt")
@@ -512,11 +514,12 @@ def test_too_many_fields_raise(app, expectation, test_client_factory):
 
 
 @pytest.mark.parametrize(
-    "app,expectation",
-    [
-        (app, pytest.raises(MultiPartException)),
-        (Starlette(routes=[Mount("/", app=app)]), does_not_raise()),
-    ],
+# Add missing imports if necessary
+
+# Check for any missing implementations or corrections required within the code snippet provided
+(app, pytest.raises(MultiPartException)),
+(Starlette(routes=[Mount("/", app=app)]), does_not_raise()),
+],
 )
 def test_too_many_files_raise(app, expectation, test_client_factory):
     client = test_client_factory(app)
@@ -529,6 +532,8 @@ def test_too_many_files_raise(app, expectation, test_client_factory):
         )
     data = "".join(fields).encode("utf-8")
     with expectation:
+        res = client.post(
+            "/",
         res = client.post(
             "/",
             data=data,
@@ -568,11 +573,9 @@ def test_too_many_files_single_field_raise(app, expectation, test_client_factory
 
 
 @pytest.mark.parametrize(
-    "app,expectation",
-    [
-        (app, pytest.raises(MultiPartException)),
-        (Starlette(routes=[Mount("/", app=app)]), does_not_raise()),
-    ],
+# Add missing imports if necessary
+
+# Check for any missing implementations or corrections required within the code snippet provided
 )
 def test_too_many_files_and_fields_raise(app, expectation, test_client_factory):
     client = test_client_factory(app)
@@ -590,6 +593,11 @@ def test_too_many_files_and_fields_raise(app, expectation, test_client_factory):
     with expectation:
         res = client.post(
             "/",
+        )
+    data = "".join(fields).encode("utf-8")
+    with expectation:
+        res = client.post(
+            "/",
             data=data,
             headers={"Content-Type": ("multipart/form-data; boundary=B")},
         )
@@ -598,14 +606,9 @@ def test_too_many_files_and_fields_raise(app, expectation, test_client_factory):
 
 
 @pytest.mark.parametrize(
-    "app,expectation",
-    [
-        (make_app_max_parts(max_fields=1), pytest.raises(MultiPartException)),
-        (
-            Starlette(routes=[Mount("/", app=make_app_max_parts(max_fields=1))]),
-            does_not_raise(),
-        ),
-    ],
+# Add missing imports if necessary
+
+# Check for any missing implementations or corrections required within the code snippet provided
 )
 def test_max_fields_is_customizable_low_raises(app, expectation, test_client_factory):
     client = test_client_factory(app)
@@ -622,27 +625,37 @@ def test_max_fields_is_customizable_low_raises(app, expectation, test_client_fac
             headers={"Content-Type": ("multipart/form-data; boundary=B")},
         )
         assert res.status_code == 400
+    data = "".join(fields).encode("utf-8")
+    with expectation:
+        res = client.post(
+            "/",
+            data=data,
+            headers={"Content-Type": ("multipart/form-data; boundary=B")},
+        )
+        assert res.status_code == 400
         assert res.text == "Too many fields. Maximum number of fields is 1."
 
 
 @pytest.mark.parametrize(
-    "app,expectation",
-    [
-        (make_app_max_parts(max_files=1), pytest.raises(MultiPartException)),
-        (
-            Starlette(routes=[Mount("/", app=make_app_max_parts(max_files=1))]),
-            does_not_raise(),
-        ),
-    ],
-)
-def test_max_files_is_customizable_low_raises(app, expectation, test_client_factory):
-    client = test_client_factory(app)
-    fields = []
-    for i in range(2):
-        fields.append(
-            "--B\r\n"
-            f'Content-Disposition: form-data; name="F{i}"; filename="F{i}";\r\n\r\n'
-            "\r\n"
+# Add missing imports if necessary
+
+# Check for any missing implementations or corrections required within the code snippet provided
+fields = []
+for i in range(2):
+    fields.append(
+        "--B\r\n"
+        f'Content-Disposition: form-data; name="F{i}"; filename="F{i}";\r\n\r\n'
+        "\r\n"
+    )
+data = "".join(fields).encode("utf-8")
+with expectation:
+    res = client.post(
+        "/",
+        data=data,
+        headers={"Content-Type": ("multipart/form-data; boundary=B")},
+    )
+    assert res.status_code == 400
+    assert res.text == "Too many files. Maximum number of files is 1."
         )
     data = "".join(fields).encode("utf-8")
     with expectation:

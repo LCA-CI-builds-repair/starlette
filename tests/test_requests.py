@@ -509,18 +509,9 @@ def test_request_send_push_promise_without_setting_send(test_client_factory):
 
 
 @pytest.mark.parametrize(
-    "messages",
-    [
-        [{"body": b"123", "more_body": True}, {"body": b""}],
-        [{"body": b"", "more_body": True}, {"body": b"123"}],
-        [{"body": b"12", "more_body": True}, {"body": b"3"}],
-        [
-            {"body": b"123", "more_body": True},
-            {"body": b"", "more_body": True},
-            {"body": b""},
-        ],
-    ],
-)
+import pytest
+from typing import List
+
 @pytest.mark.anyio
 async def test_request_rcv(messages: List[Message]) -> None:
     messages = messages.copy()

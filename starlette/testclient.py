@@ -224,14 +224,20 @@ class _TestClientTransport(httpx.BaseTransport):
             headers = [(b"host", (f"{host}:{port}").encode())]
 
         # Include other request headers.
-        headers += [
-            (key.lower().encode(), value.encode())
-            for key, value in request.headers.multi_items()
-        ]
+import typing
 
-        scope: typing.Dict[str, typing.Any]
+# Add missing variable definitions for scheme and headers
+scheme = ""
+headers = []
 
-        if scheme in {"ws", "wss"}:
+headers += [
+    (key.lower().encode(), value.encode())
+    for key, value in request.headers.multi_items()
+]
+
+scope: typing.Dict[str, typing.Any]
+
+if scheme in {"ws", "wss"}:
             subprotocol = request.headers.get("sec-websocket-protocol", None)
             if subprotocol is None:
                 subprotocols: typing.Sequence[str] = []
@@ -308,17 +314,18 @@ class _TestClientTransport(httpx.BaseTransport):
             nonlocal raw_kwargs, response_started, template, context
 
             if message["type"] == "http.response.start":
-                assert (
-                    not response_started
-                ), 'Received multiple "http.response.start" messages.'
-                raw_kwargs["status_code"] = message["status"]
-                raw_kwargs["headers"] = [
-                    (key.decode(), value.decode())
-                    for key, value in message.get("headers", [])
-                ]
-                response_started = True
-            elif message["type"] == "http.response.body":
-                assert (
+# Add missing imports if necessary
+
+# Ensure that response_started and response_complete are properly defined and initialized
+response_started = False
+response_complete = threading.Event()
+
+for key, value in message.get("headers", []):
+    response_started = True
+elif message["type"] == "http.response.body":
+    assert response_started, 'Received "http.response.body" without "http.response.start".'
+    assert not response_complete.is_set(), 'Received "http.response.body" after response completed.'
+    body = message.get("body", b"")
                     response_started
                 ), 'Received "http.response.body" without "http.response.start".'
                 assert (

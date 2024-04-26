@@ -116,15 +116,15 @@ class Response:
             cookie[key]["httponly"] = True
         if samesite is not None:
             assert samesite.lower() in [
-                "strict",
-                "lax",
-                "none",
-            ], "samesite must be either 'strict', 'lax' or 'none'"
-            cookie[key]["samesite"] = samesite
-        cookie_val = cookie.output(header="").strip()
-        self.raw_headers.append((b"set-cookie", cookie_val.encode("latin-1")))
+# Add missing imports if necessary
 
-    def delete_cookie(
+# Check for any missing implementations or corrections required within the code snippet provided
+], "samesite must be either 'strict', 'lax' or 'none'"
+cookie[key]["samesite"] = samesite
+cookie_val = cookie.output(header="").strip()
+self.raw_headers.append((b"set-cookie", cookie_val.encode("latin-1")))
+
+def delete_cookie(
         self,
         key: str,
         path: str = "/",

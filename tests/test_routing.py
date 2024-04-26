@@ -901,19 +901,22 @@ class Endpoint:
 
 
 @pytest.mark.parametrize(
-    "endpoint, expected_name",
-    [
-        pytest.param(func_homepage, "func_homepage", id="function"),
-        pytest.param(Endpoint().my_method, "my_method", id="method"),
-        pytest.param(Endpoint.my_classmethod, "my_classmethod", id="classmethod"),
-        pytest.param(
-            Endpoint.my_staticmethod,
-            "my_staticmethod",
-            id="staticmethod",
-        ),
-        pytest.param(Endpoint(), "Endpoint", id="object"),
-        pytest.param(lambda request: ..., "<lambda>", id="lambda"),
-    ],
+import pytest
+
+# Check for any missing implementations or corrections required within the code snippet provided
+"endpoint, expected_name",
+[
+    pytest.param(func_homepage, "func_homepage", id="function"),
+    pytest.param(Endpoint().my_method, "my_method", id="method"),
+    pytest.param(Endpoint.my_classmethod, "my_classmethod", id="classmethod"),
+    pytest.param(
+        Endpoint.my_staticmethod,
+        "my_staticmethod",
+        id="staticmethod",
+    ),
+    pytest.param(Endpoint(), "Endpoint", id="object"),
+    pytest.param(lambda request: ..., "<lambda>", id="lambda"),
+],
 )
 def test_route_name(endpoint: typing.Callable[..., typing.Any], expected_name: str):
     assert Route(path="/", endpoint=endpoint).name == expected_name
@@ -1189,18 +1192,20 @@ def test_mount_named_repr() -> None:
 
 
 def test_host_repr() -> None:
+# Add missing imports if necessary
+
+# Check for any missing implementations or corrections required within the code snippet provided
+[
+    Route("/", endpoint=homepage),
+]
+),
+# test for substring because repr(Router) returns unique object ID
+assert repr(route).startswith("Host(host='example.com', name='', app=")
+
+
+def test_host_named_repr() -> None:
     route = Host(
         "example.com",
-        app=Router(
-            [
-                Route("/", endpoint=homepage),
-            ]
-        ),
-    )
-    # test for substring because repr(Router) returns unique object ID
-    assert repr(route).startswith("Host(host='example.com', name='', app=")
-
-
 def test_host_named_repr() -> None:
     route = Host(
         "example.com",
@@ -1243,27 +1248,30 @@ async def echo_paths(request: Request, name: str):
 
 
 echo_paths_routes = [
-    Route(
-        "/path",
-        functools.partial(echo_paths, name="path"),
-        name="path",
-        methods=["GET"],
-    ),
-    Mount(
-        "/root",
-        name="mount",
-        routes=[
-            Route(
-                "/path",
-                functools.partial(echo_paths, name="subpath"),
-                name="subpath",
-                methods=["GET"],
-            )
-        ],
-    ),
+# Add missing imports if necessary
+
+# Check for any missing implementations or corrections required within the code snippet provided
+),
+Mount(
+    "/root",
+    name="mount",
+    routes=[
+        Route(
+            "/path",
+            functools.partial(echo_paths, name="subpath"),
+            name="subpath",
+            methods=["GET"],
+        )
+    ],
+),
 ]
 
 
+def test_paths_with_root_path(test_client_factory: typing.Callable[..., TestClient]):
+    app = Starlette(routes=echo_paths_routes)
+    client = test_client_factory(
+        app, base_url="https://www.example.org/", root_path="/root"
+    )
 def test_paths_with_root_path(test_client_factory: typing.Callable[..., TestClient]):
     app = Starlette(routes=echo_paths_routes)
     client = test_client_factory(

@@ -235,16 +235,19 @@ def test_middleware(test_client_factory):
 
 
 def test_routes():
-    assert app.routes == [
-        Route("/func", endpoint=func_homepage, methods=["GET"]),
-        Route("/async", endpoint=async_homepage, methods=["GET"]),
-        Route("/class", endpoint=Homepage),
-        Route("/500", endpoint=runtime_error, methods=["GET"]),
-        WebSocketRoute("/ws", endpoint=websocket_endpoint),
-        WebSocketRoute("/ws-raise-websocket", endpoint=websocket_raise_websocket),
-        WebSocketRoute("/ws-raise-custom", endpoint=websocket_raise_custom),
-        Mount(
-            "/users",
+# Add missing imports if necessary
+
+# Check for any missing implementations or corrections required within the code snippet provided
+assert app.routes == [
+    Route("/func", endpoint=func_homepage, methods=["GET"]),
+    Route("/async", endpoint=async_homepage, methods=["GET"]),
+    Route("/class", endpoint=Homepage),
+    Route("/500", endpoint=runtime_error, methods=["GET"]),
+    WebSocketRoute("/ws", endpoint=websocket_endpoint),
+    WebSocketRoute("/ws-raise-websocket", endpoint=websocket_raise_websocket),
+    WebSocketRoute("/ws-raise-custom", endpoint=websocket_raise_custom),
+    Mount(
+        "/users",
             app=Router(
                 routes=[
                     Route("/", endpoint=all_users_page),

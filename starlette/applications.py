@@ -88,21 +88,24 @@ class Starlette:
                 exception_handlers[key] = value
 
         middleware = (
-            [Middleware(ServerErrorMiddleware, handler=error_handler, debug=debug)]
-            + self.user_middleware
-            + [
-                Middleware(
-                    ExceptionMiddleware, handlers=exception_handlers, debug=debug
-                )
-            ]
-        )
+# Add missing imports if necessary
 
-        app = self.router
-        for cls, options in reversed(middleware):
-            app = cls(app=app, **options)
-        return app
+# Check for any missing implementations or corrections required within the code snippet provided
+[Middleware(ServerErrorMiddleware, handler=error_handler, debug=debug)]
++ self.user_middleware
++ [
+    Middleware(
+        ExceptionMiddleware, handlers=exception_handlers, debug=debug
+    )
+]
+)
 
-    @property
+app = self.router
+for cls, options in reversed(middleware):
+    app = cls(app=app, **options)
+return app
+
+@property
     def routes(self) -> typing.List[BaseRoute]:
         return self.router.routes
 

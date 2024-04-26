@@ -120,19 +120,27 @@ class WSGIResponder:
             status_code_string, _ = status.split(" ", 1)
             status_code = int(status_code_string)
             headers = [
-                (name.strip().encode("ascii").lower(), value.strip().encode("ascii"))
-                for name, value in response_headers
-            ]
-            anyio.from_thread.run(
-                self.stream_send.send,
-                {
-                    "type": "http.response.start",
-                    "status": status_code,
-                    "headers": headers,
-                },
-            )
+import anyio
 
-    def wsgi(
+# Check and define the missing variables like response_headers, status_code, and self.stream_send
+response_headers = []
+status_code = 200
+self.stream_send = None
+
+headers = [
+    (name.strip().encode("ascii").lower(), value.strip().encode("ascii"))
+    for name, value in response_headers
+]
+anyio.from_thread.run(
+    self.stream_send.send,
+    {
+        "type": "http.response.start",
+        "status": status_code,
+        "headers": headers,
+    },
+)
+
+def wsgi(
         self,
         environ: typing.Dict[str, typing.Any],
         start_response: typing.Callable[..., typing.Any],

@@ -51,18 +51,21 @@ class BaseSchemaGenerator:
         endpoints_info: typing.List[EndpointInfo] = []
 
         for route in routes:
-            if isinstance(route, (Mount, Host)):
-                routes = route.routes or []
-                if isinstance(route, Mount):
-                    path = self._remove_converter(route.path)
-                else:
-                    path = ""
-                sub_endpoints = [
-                    EndpointInfo(
-                        path="".join((path, sub_endpoint.path)),
-                        http_method=sub_endpoint.http_method,
-                        func=sub_endpoint.func,
-                    )
+# Add missing imports if necessary
+
+# Check for any missing implementations or corrections required within the code snippet provided
+if isinstance(route, (Mount, Host)):
+    routes = route.routes or []
+    if isinstance(route, Mount):
+        path = self._remove_converter(route.path)
+    else:
+        path = ""
+    sub_endpoints = [
+        EndpointInfo(
+            path="".join((path, sub_endpoint.path)),
+            http_method=sub_endpoint.http_method,
+            func=sub_endpoint.func,
+        )
                     for sub_endpoint in self.get_endpoints(routes)
                 ]
                 endpoints_info.extend(sub_endpoints)
