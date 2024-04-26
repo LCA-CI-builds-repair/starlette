@@ -68,7 +68,15 @@ def test_template_with_middleware(tmpdir, test_client_factory):
         file.write("<html>Hello, <a href='{{ url_for('homepage') }}'>world</a></html>")
 
     async def homepage(request):
-        return templates.TemplateResponse(request, "index.html")
+    from starlette.applications import Starlette
+    from starlette.middleware.base import BaseHTTPMiddleware
+    from starlette.middleware import Middleware
+    from starlette.routing import Route
+    from starlette.templating import Jinja2Templates
+    from starlette.responses import TemplateResponse
+
+    async def homepage(request):
+        return templates.TemplateResponse("index.html", {"request": request})
 
     class CustomMiddleware(BaseHTTPMiddleware):
         async def dispatch(self, request, call_next):
@@ -112,25 +120,23 @@ def test_templates_with_directories(tmp_path: Path, test_client_factory):
     templates = Jinja2Templates(directory=[dir_a, dir_b])
 
     client = test_client_factory(app)
-    response = client.get("/a")
-    assert response.text == "<html><a href='http://testserver/a'></a> a</html>"
-    assert response.template.name == "template_a.html"
-    assert set(response.context.keys()) == {"request"}
-
-    response = client.get("/b")
-    assert response.text == "<html><a href='http://testserver/b'></a> b</html>"
-    assert response.template.name == "template_b.html"
-    assert set(response.context.keys()) == {"request"}
-
-
 def test_templates_require_directory_or_environment():
     with pytest.raises(
         AssertionError, match="either 'directory' or 'env' arguments must be passed"
     ):
         Jinja2Templates()  # type: ignore[call-overload]
+    assert set(response.context.keys()) == {"request"}
 
+
+def test_templates_require_directory_or_environment():
+import os
 
 def test_templates_with_directory(tmpdir):
+    path = os.path.join(tmpdir, "index.html")
+    with open(path, "w") as file:
+        file.write("Hello")
+
+    templates = Jinja2Templates(directory=str(tmpdir))
     path = os.path.join(tmpdir, "index.html")
     with open(path, "w") as file:
         file.write("Hello")

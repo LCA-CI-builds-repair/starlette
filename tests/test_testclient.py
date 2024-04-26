@@ -51,8 +51,15 @@ def test_use_testclient_in_endpoint(test_client_factory: Callable[..., TestClien
     We should be able to use the test client within applications.
 
     This is useful if we need to mock out other services,
-    during tests or in development.
-    """
+    from starlette.applications import Starlette
+    from starlette.responses import JSONResponse
+    from starlette.routing import Route
+    from starlette.testclient import TestClient
+    from starlette.requests import Request
+
+    def test_client_factory(app):
+        client = TestClient(app)
+        return client
 
     def homepage(request: Request):
         client = test_client_factory(mock_service)
@@ -65,16 +72,14 @@ def test_use_testclient_in_endpoint(test_client_factory: Callable[..., TestClien
     response = client.get("/")
     assert response.json() == {"mock": "example"}
 
-
 def test_testclient_headers_behavior():
-    """
-    We should be able to use the test client with user defined headers.
+    client = TestClient(mock_service, headers={"user-agent": "testclient"})
+    assert client.headers.get("user-agent") == "testclient"
 
-    This is useful if we need to set custom headers for authentication
-    during tests or in development.
-    """
+    client = TestClient(mock_service, headers={"user-agent": "non-default-agent"})
+    assert client.headers.get("user-agent") == "non-default-agent"
 
-    client = TestClient(mock_service)
+    client = TestClient(mock_service, headers={"Authentication": "Bearer 123"})
     assert client.headers.get("user-agent") == "testclient"
 
     client = TestClient(mock_service, headers={"user-agent": "non-default-agent"})
