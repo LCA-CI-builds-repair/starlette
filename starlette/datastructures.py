@@ -541,20 +541,10 @@ class Headers(typing.Mapping[str, str]):
         return [value.decode("latin-1") for key, value in self._list]
 
     def items(self) -> list[tuple[str, str]]:  # type: ignore[override]
-        return [
-            (key.decode("latin-1"), value.decode("latin-1"))
-            for key, value in self._list
-        ]
-
-    def getlist(self, key: str) -> list[str]:
-        get_header_key = key.lower().encode("latin-1")
-        return [
-            item_value.decode("latin-1")
-            for item_key, item_value in self._list
-            if item_key == get_header_key
-        ]
-
-    def mutablecopy(self) -> MutableHeaders:
+### Summary of Changes:
+- Ensure that the `key.decode("latin-1")` and `value.decode("latin-1")` calls handle the decoding correctly.
+- Verify that the `getlist` function correctly filters the items based on the `key`.
+- Check for any missing or incorrect indentation in the provided code snippet.
         return MutableHeaders(raw=self._list[:])
 
     def __getitem__(self, key: str) -> str:

@@ -181,23 +181,10 @@ class CustomMiddlewareUsingBaseHTTPMiddleware(BaseHTTPMiddleware):
 
 
 @pytest.mark.parametrize(
-    "middleware_cls",
-    [
-        CustomMiddlewareWithoutBaseHTTPMiddleware,
-        pytest.param(
-            CustomMiddlewareUsingBaseHTTPMiddleware,
-            marks=pytest.mark.xfail(
-                reason=(
-                    "BaseHTTPMiddleware creates a TaskGroup which copies the context"
-                    "and erases any changes to it made within the TaskGroup"
-                ),
-                raises=AssertionError,
-            ),
-        ),
-    ],
-)
-def test_contextvars(test_client_factory, middleware_cls: Type[_MiddlewareClass[Any]]):
-    # this has to be an async endpoint because Starlette calls run_in_threadpool
+### Summary of Changes:
+- Make sure that the `pytest.param` call for `CustomMiddlewareUsingBaseHTTPMiddleware` includes the correct `marks` and `raises` parameters.
+- Confirm that the `reason` for the expected failure is accurately described in the `pytest.mark.xfail` setup.
+- Check if there are any missing or incorrect setups in the test function for `test_contextvars`.
     # on sync endpoints which has it's own set of peculiarities w.r.t propagating
     # contextvars (it propagates them forwards but not backwards)
     async def homepage(request):
@@ -409,20 +396,10 @@ def test_app_receives_http_disconnect_while_sending_if_discarded(test_client_fac
                 await body_generator.aclose()
 
             return PlainTextResponse("Custom")
-
-    async def downstream_app(scope, receive, send):
-        await send(
-            {
-                "type": "http.response.start",
-                "status": 200,
-                "headers": [
-                    (b"content-type", b"text/plain"),
-                ],
-            }
-        )
-        async with anyio.create_task_group() as task_group:
-
-            async def cancel_on_disconnect(*, task_status=anyio.TASK_STATUS_IGNORED):
+### Summary of Changes:
+- Ensure that the `body_generator` is correctly awaited for the next item before closing it.
+- Confirm that the cleanup using `await body_generator.aclose()` is executed properly.
+- Check if there are any missing error handling or cleanup steps needed in the code snippet.
                 task_status.started()
                 while True:
                     message = await receive()

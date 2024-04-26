@@ -49,18 +49,10 @@ class BaseSchemaGenerator:
         endpoints_info: list[EndpointInfo] = []
 
         for route in routes:
-            if isinstance(route, (Mount, Host)):
-                routes = route.routes or []
-                if isinstance(route, Mount):
-                    path = self._remove_converter(route.path)
-                else:
-                    path = ""
-                sub_endpoints = [
-                    EndpointInfo(
-                        path="".join((path, sub_endpoint.path)),
-                        http_method=sub_endpoint.http_method,
-                        func=sub_endpoint.func,
-                    )
+### Summary of Changes:
+- Ensure that the `sub_endpoints` list comprehension correctly constructs the `EndpointInfo` objects with the combined paths.
+- Check if there are any missing or incorrect assignments within the `sub_endpoints` list comprehension.
+- Verify that the logic for constructing `EndpointInfo` objects aligns with the expected behavior based on the `Mount` and `Host` instances.
                     for sub_endpoint in self.get_endpoints(routes)
                 ]
                 endpoints_info.extend(sub_endpoints)

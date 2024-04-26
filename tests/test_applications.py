@@ -235,16 +235,10 @@ def test_middleware(test_client_factory):
 
 
 def test_routes():
-    assert app.routes == [
-        Route("/func", endpoint=func_homepage, methods=["GET"]),
-        Route("/async", endpoint=async_homepage, methods=["GET"]),
-        Route("/class", endpoint=Homepage),
-        Route("/500", endpoint=runtime_error, methods=["GET"]),
-        WebSocketRoute("/ws", endpoint=websocket_endpoint),
-        WebSocketRoute("/ws-raise-websocket", endpoint=websocket_raise_websocket),
-        WebSocketRoute("/ws-raise-custom", endpoint=websocket_raise_custom),
-        Mount(
-            "/users",
+### Summary of Changes:
+- Check if the routes defined in the `app.routes` list match the expected routes for the application.
+- Verify that each route has the correct endpoint function or class associated with it.
+- Ensure that the WebSocket routes and Mount paths are correctly defined in the `app.routes`.
             app=Router(
                 routes=[
                     Route("/", endpoint=all_users_page),

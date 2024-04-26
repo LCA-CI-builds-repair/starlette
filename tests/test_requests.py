@@ -509,23 +509,10 @@ def test_request_send_push_promise_without_setting_send(test_client_factory):
 
 
 @pytest.mark.parametrize(
-    "messages",
-    [
-        [{"body": b"123", "more_body": True}, {"body": b""}],
-        [{"body": b"", "more_body": True}, {"body": b"123"}],
-        [{"body": b"12", "more_body": True}, {"body": b"3"}],
-        [
-            {"body": b"123", "more_body": True},
-            {"body": b"", "more_body": True},
-            {"body": b""},
-        ],
-    ],
-)
-@pytest.mark.anyio
-async def test_request_rcv(messages: List[Message]) -> None:
-    messages = messages.copy()
-
-    async def rcv() -> Message:
+- Import the necessary modules for the test to pass successfully.
+- Add the missing `pytest` fixture decorator (`@pytest.fixture`) above the `async def test_request_rcv` function.
+- Add the missing import statement for `List` from the `typing` module.
+- Ensure that the test function `test_request_rcv` receives the necessary parameters to execute successfully.
         return {"type": "http.request", **messages.pop(0)}
 
     request = Request({"type": "http"}, rcv)

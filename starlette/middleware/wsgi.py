@@ -126,19 +126,10 @@ class WSGIResponder:
             status_code_string, _ = status.split(" ", 1)
             status_code = int(status_code_string)
             headers = [
-                (name.strip().encode("ascii").lower(), value.strip().encode("ascii"))
-                for name, value in response_headers
-            ]
-            anyio.from_thread.run(
-                self.stream_send.send,
-                {
-                    "type": "http.response.start",
-                    "status": status_code,
-                    "headers": headers,
-                },
-            )
-
-    def wsgi(
+### Summary of Changes:
+- Ensure that the list comprehension for `headers` includes proper encoding for both key and value.
+- Check if there are any missing closing brackets or parentheses in the provided code snippet.
+- Verify the correct usage of the `anyio.from_thread.run` function to send the HTTP response start message.
         self,
         environ: typing.Dict[str, typing.Any],
         start_response: typing.Callable[..., typing.Any],

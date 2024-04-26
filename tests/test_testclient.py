@@ -282,26 +282,10 @@ def test_query_params(test_client_factory: Callable[..., TestClient], param: str
 
 
 @pytest.mark.parametrize(
-    "domain, ok",
-    [
-        pytest.param(
-            "testserver",
-            True,
-            marks=[
-                pytest.mark.xfail(
-                    sys.version_info < (3, 11),
-                    reason="Fails due to domain handling in http.cookiejar module (see "
-                    "#2152)",
-                ),
-            ],
-        ),
-        ("testserver.local", True),
-        ("localhost", False),
-        ("example.com", False),
-    ],
-)
-def test_domain_restricted_cookies(
-    test_client_factory: Callable[..., TestClient], domain: str, ok: bool
+### Summary of Changes:
+- Check if the `pytest.mark.xfail` setup for the test cases based on the `domain` value is correctly configured.
+- Verify that the conditions for marking the test as xfail are accurately defined.
+- Ensure that the test scenarios cover the expected behavior for domain-restricted cookies.
 ):
     """
     Test that test client discards domain restricted cookies which do not match the

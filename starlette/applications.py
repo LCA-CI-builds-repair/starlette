@@ -95,21 +95,10 @@ class Starlette:
                 exception_handlers[key] = value
 
         middleware = (
-            [Middleware(ServerErrorMiddleware, handler=error_handler, debug=debug)]
-            + self.user_middleware
-            + [
-                Middleware(
-                    ExceptionMiddleware, handlers=exception_handlers, debug=debug
-                )
-            ]
-        )
-
-        app = self.router
-        for cls, args, kwargs in reversed(middleware):
-            app = cls(app=app, *args, **kwargs)
-        return app
-
-    @property
+### Summary of Changes:
+- Ensure that the `Middleware` classes are correctly initialized with the `app` parameter.
+- Check if the ordering and application of middleware classes are done in the correct sequence.
+- Verify that the `app` is properly updated with the applied middleware classes in the loop.
     def routes(self) -> list[BaseRoute]:
         return self.router.routes
 
