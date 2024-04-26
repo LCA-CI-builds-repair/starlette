@@ -3,7 +3,7 @@ from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import PlainTextResponse
 from starlette.routing import Route
-
+from starlette.applications import Starlette
 
 def test_cors_allow_all(test_client_factory):
     def homepage(request):

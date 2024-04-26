@@ -22,7 +22,6 @@ class CustomMiddleware(BaseHTTPMiddleware):
         response.headers["Custom-Header"] = "Example"
         return response
 
-
 def homepage(request):
     return PlainTextResponse("Homepage")
 

@@ -3,7 +3,7 @@ from starlette.middleware import Middleware
 from starlette.middleware.gzip import GZipMiddleware
 from starlette.responses import PlainTextResponse, StreamingResponse
 from starlette.routing import Route
-
+from starlette.applications import Starlette
 
 def test_gzip_responses(test_client_factory):
     def homepage(request):
@@ -20,8 +20,6 @@ def test_gzip_responses(test_client_factory):
     assert response.text == "x" * 4000
     assert response.headers["Content-Encoding"] == "gzip"
     assert int(response.headers["Content-Length"]) < 4000
-
-
 def test_gzip_not_in_accept_encoding(test_client_factory):
     def homepage(request):
         return PlainTextResponse("x" * 4000, status_code=200)
