@@ -1,13 +1,19 @@
 from starlette.applications import Starlette
-from starlette.middleware import Middleware
-from starlette.middleware.gzip import GZipMiddleware
-from starlette.responses import PlainTextResponse, StreamingResponse
-from starlette.routing import Route
+import gzip
+from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
 
+app = FastAPI()
 
-def test_gzip_responses(test_client_factory):
-    def homepage(request):
-        return PlainTextResponse("x" * 4000, status_code=200)
+def homepage(test_client_factory=None):
+    html_content = b"<!html><body><h1>Welcome to the homepage!</h1></body></html>"
+    zipped_content = gzip.compress(html_content)
+    return StreamingResponse(content=zipped_content, media_type="application/octet-stream")
+
+def test_homepage():
+    response = homepage()
+    assert response.status_code == 200
+    assert response.headers["content-encoding"] == "gzip"
 
     app = Starlette(
         routes=[Route("/", endpoint=homepage)],

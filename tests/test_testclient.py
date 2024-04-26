@@ -53,20 +53,23 @@ def test_use_testclient_in_endpoint(test_client_factory):
     We should be able to use the test client within applications.
 
     This is useful if we need to mock out other services,
-    during tests or in development.
-    """
+from starlette.applications import Starlette
+from starlette.responses import JSONResponse
+from starlette.routing import Route
 
-    def homepage(request):
-        client = test_client_factory(mock_service)
-        response = client.get("/")
-        return JSONResponse(response.json())
+def mock_service(request):
+    # Add implementation for mock_service if needed
 
-    app = Starlette(routes=[Route("/", endpoint=homepage)])
-
-    client = test_client_factory(app)
+def homepage(request):
+    client = test_client_factory(mock_service)
     response = client.get("/")
-    assert response.json() == {"mock": "example"}
+    return JSONResponse(response.json())
 
+app = Starlette(routes=[Route("/", endpoint=homepage)])
+
+client = test_client_factory(app)
+response = client.get("/")
+assert response.json() == {"mock": "example"}
 
 def test_testclient_headers_behavior():
     """

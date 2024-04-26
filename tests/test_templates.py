@@ -149,16 +149,22 @@ def test_templates_with_environment(tmpdir, test_client_factory):
         return templates.TemplateResponse(request, "index.html")
 
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(str(tmpdir)))
-    app = Starlette(
-        debug=True,
-        routes=[Route("/", endpoint=homepage)],
-    )
-    templates = Jinja2Templates(env=env)
-    client = test_client_factory(app)
-    response = client.get("/")
-    assert response.text == "<html>Hello, <a href='http://testserver/'>world</a></html>"
-    assert response.template.name == "index.html"
-    assert set(response.context.keys()) == {"request"}
+from starlette.applications import Starlette
+from starlette.routing import Route
+from starlette.templating import Jinja2Templates
+
+env = # Define and setup the Jinja environment here
+
+app = Starlette(
+    debug=True,
+    routes=[Route("/", endpoint=homepage)],
+)
+templates = Jinja2Templates(env=env)
+client = test_client_factory(app)
+response = client.get("/")
+assert response.text == "<html>Hello, <a href='http://testserver/'>world</a></html>"
+assert response.template.name == "index.html"
+assert set(response.context.keys()) == {"request"}
 
 
 def test_templates_with_environment_options_emit_warning(tmpdir):

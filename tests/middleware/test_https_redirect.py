@@ -4,10 +4,11 @@ from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 from starlette.responses import PlainTextResponse
 from starlette.routing import Route
 
-
 def test_https_redirect_middleware(test_client_factory):
     def homepage(request):
         return PlainTextResponse("OK", status_code=200)
+
+    app = Starlette(routes=[Route("/", homepage)])
 
     app = Starlette(
         routes=[Route("/", endpoint=homepage)],

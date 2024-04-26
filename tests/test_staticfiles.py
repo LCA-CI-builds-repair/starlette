@@ -540,7 +540,7 @@ def test_staticfiles_avoids_path_traversal(tmp_path: Path):
     app = StaticFiles(directory=statics_path)
 
     # We can't test this with 'httpx', so we test the app directly here.
-    path = app.get_path({"path": "/../static1.txt"})
+    path = app.get_path("/static1.txt")
     with pytest.raises(HTTPException) as exc_info:
         anyio.run(app.get_response, path, {"method": "GET"})
 

@@ -4,10 +4,12 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import PlainTextResponse
 from starlette.routing import Route
 
-
 def test_cors_allow_all(test_client_factory):
     def homepage(request):
         return PlainTextResponse("Homepage", status_code=200)
+
+    app = Starlette(routes=[Route("/", endpoint=homepage)])
+    app.add_middleware(CORSMiddleware, allow_origins=["*"])
 
     app = Starlette(
         routes=[Route("/", endpoint=homepage)],
