@@ -33,7 +33,7 @@ class Middleware:
         self.kwargs = kwargs
 
     def __iter__(self) -> Iterator[Any]:
-        as_tuple = (self.cls, self.args, self.kwargs)
+        as_tuple = (self.cls, *self.args, **self.kwargs)
         return iter(as_tuple)
 
     def __repr__(self) -> str:

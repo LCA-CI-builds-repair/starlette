@@ -107,6 +107,7 @@ def get_name(endpoint: typing.Callable[..., typing.Any]) -> str:
 
 
 def replace_params(
+def process_path_params(
     path: str,
     param_convertors: dict[str, Convertor[typing.Any]],
     path_params: dict[str, str],
@@ -118,8 +119,6 @@ def replace_params(
             path = path.replace("{" + key + "}", value)
             path_params.pop(key)
     return path, path_params
-
-
 # Match parameters in URL paths, eg. '{param}', and '{param:int}'
 PARAM_REGEX = re.compile("{([a-zA-Z_][a-zA-Z0-9_]*)(:[a-zA-Z_][a-zA-Z0-9_]*)?}")
 
@@ -425,6 +424,7 @@ class Mount(BaseRoute):
             match = self.path_regex.match(route_path)
             if match:
                 matched_params = match.groupdict()
+                matched_params = match.groupdict()
                 for key, value in matched_params.items():
                     matched_params[key] = self.param_convertors[key].convert(value)
                 remaining_path = "/" + matched_params.pop("path")
@@ -433,7 +433,6 @@ class Mount(BaseRoute):
                 path_params.update(matched_params)
                 child_scope = {
                     "path_params": path_params,
-                    # app_root_path will only be set at the top level scope,
                     # initialized with the (optional) value of a root_path
                     # set above/before Starlette. And even though any
                     # mount will have its own child scope with its own respective
@@ -542,6 +541,7 @@ class Host(BaseRoute):
             else:
                 # 'name' matches "<mount_name>:<child_name>".
                 remaining_name = name[len(self.name) + 1 :]
+                remaining_name = name[len(self.name) + 1 :]
             host, remaining_params = replace_params(
                 self.host_format, self.param_convertors, path_params
             )
@@ -552,7 +552,6 @@ class Host(BaseRoute):
                 except NoMatchFound:
                     pass
         raise NoMatchFound(name, path_params)
-
     async def handle(self, scope: Scope, receive: Receive, send: Send) -> None:
         await self.app(scope, receive, send)
 

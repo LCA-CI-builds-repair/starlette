@@ -32,12 +32,9 @@ class Starlette:
 
     * **debug** - Boolean indicating if debug tracebacks should be returned on errors.
     * **routes** - A list of routes to serve incoming HTTP and WebSocket requests.
-    * **middleware** - A list of middleware to run for every request. A starlette
-    application will always automatically include two middleware classes.
-    `ServerErrorMiddleware` is added as the very outermost middleware, to handle
-    any uncaught errors occurring anywhere in the entire stack.
-    `ExceptionMiddleware` is added as the very innermost middleware, to deal
-    with handled exception cases occurring in the routing or endpoints.
+    * **middleware** - A list of middleware to run for every request. A Starlette application will always automatically include two middleware classes:
+      - `ServerErrorMiddleware` is added as the very outermost middleware to handle any uncaught errors occurring anywhere in the entire stack.
+      - `ExceptionMiddleware` is added as the very innermost middleware to deal with handled exception cases occurring in the routing or endpoints.
     * **exception_handlers** - A mapping of either integer status codes,
     or exception class types onto callables which handle the exceptions.
     Exception handler callables should be of the form

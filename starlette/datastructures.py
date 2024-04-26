@@ -356,8 +356,7 @@ class MultiDict(ImmutableMultiDict[typing.Any, typing.Any]):
             self._list.append((key, default))
 
         return self[key]
-
-    def setlist(self, key: typing.Any, values: list[typing.Any]) -> None:
+    def setlist(self, key: typing.Any, values: List[typing.Any]) -> None:
         if not values:
             self.pop(key, None)
         else:
@@ -371,9 +370,7 @@ class MultiDict(ImmutableMultiDict[typing.Any, typing.Any]):
 
     def update(
         self,
-        *args: MultiDict
-        | typing.Mapping[typing.Any, typing.Any]
-        | list[tuple[typing.Any, typing.Any]],
+        *args: typing.Union[MultiDict, typing.Mapping[typing.Any, typing.Any], List[tuple[typing.Any, typing.Any]]],
         **kwargs: typing.Any,
     ) -> None:
         value = MultiDict(*args, **kwargs)
@@ -387,7 +384,7 @@ class QueryParams(ImmutableMultiDict[str, str]):
     An immutable multidict.
     """
 
-    def __init__(
+    def __init(
         self,
         *args: ImmutableMultiDict[typing.Any, typing.Any]
         | typing.Mapping[typing.Any, typing.Any]
@@ -489,20 +486,18 @@ class FormData(ImmutableMultiDict[str, typing.Union[UploadFile, str]]):
     """
 
     def __init__(
+    """
+
+    def __init__(
         self,
-        *args: FormData
-        | typing.Mapping[str, str | UploadFile]
-        | list[tuple[str, str | UploadFile]],
-        **kwargs: str | UploadFile,
+        *args: typing.Union[FormData, typing.Mapping[str, typing.Union[str, UploadFile], List[tuple[str, typing.Union[str, UploadFile]]]],
+        **kwargs: typing.Dict[str, typing.Union[str, UploadFile]],
     ) -> None:
         super().__init__(*args, **kwargs)
 
     async def close(self) -> None:
         for key, value in self.multi_items():
             if isinstance(value, UploadFile):
-                await value.close()
-
-
 class Headers(typing.Mapping[str, str]):
     """
     An immutable, case-insensitive multidict.

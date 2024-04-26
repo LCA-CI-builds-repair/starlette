@@ -212,7 +212,6 @@ def test_file_response(tmpdir, test_client_factory):
         file.write(content)
 
     filled_by_bg_task = ""
-
     async def numbers(minimum, maximum):
         for i in range(minimum, maximum + 1):
             yield str(i)

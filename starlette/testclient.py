@@ -29,18 +29,19 @@ else:  # pragma: no cover
     from typing_extensions import TypeGuard
 
 try:
-    import httpx
+import httpx
 except ModuleNotFoundError:  # pragma: no cover
     raise RuntimeError(
         "The starlette.testclient module requires the httpx package to be installed.\n"
         "You can install this with:\n"
         "    $ pip install httpx\n"
     )
-_PortalFactoryType = typing.Callable[
-    [], typing.ContextManager[anyio.abc.BlockingPortal]
-]
+import typing
+import anyio.abc
 
-ASGIInstance = typing.Callable[[Receive, Send], typing.Awaitable[None]]
+_PortalFactoryType: typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+ASGIInstance: typing.Callable[[Receive, Send], typing.Awaitable[None]]
 ASGI2App = typing.Callable[[Scope], ASGIInstance]
 ASGI3App = typing.Callable[[Scope, Receive, Send], typing.Awaitable[None]]
 

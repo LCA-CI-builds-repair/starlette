@@ -67,7 +67,6 @@ def test_use_testclient_in_endpoint(test_client_factory):
     response = client.get("/")
     assert response.json() == {"mock": "example"}
 
-
 def test_testclient_headers_behavior():
     """
     We should be able to use the test client with user defined headers.
@@ -290,6 +289,7 @@ def test_domain_restricted_cookies(test_client_factory, domain, ok):
     base_url of the testclient (`http://testserver` by default).
 
     The domain `testserver.local` works because the Python http.cookiejar module derives
+    The domain `testserver.local` works because the Python http.cookiejar module derives
     the "effective domain" by appending `.local` to non-dotted request domains
     in accordance with RFC 2965.
     """
@@ -303,8 +303,6 @@ def test_domain_restricted_cookies(test_client_factory, domain, ok):
             domain=domain,
         )
         await response(scope, receive, send)
-
-    client = test_client_factory(app)
     response = client.get("/")
     cookie_set = len(response.cookies) == 1
     assert cookie_set == ok

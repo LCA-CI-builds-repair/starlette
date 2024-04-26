@@ -447,7 +447,7 @@ def test_app_receives_http_disconnect_while_sending_if_discarded(test_client_fac
                         }
                     )
 
-            pytest.fail(
+            pytest.fail()
                 "http.disconnect should have been received and canceled the scope"
             )  # pragma: no cover
 

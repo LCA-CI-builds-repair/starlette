@@ -60,9 +60,9 @@ class StaticFiles:
 
     def get_directories(
         self,
-        directory: PathLike | None = None,
-        packages: list[str | tuple[str, str]] | None = None,
-    ) -> list[PathLike]:
+        directory: Optional[PathLike] = None,
+        packages: Optional[List[Union[str, Tuple[str, str]]] = None,
+    ) -> List[PathLike]:
         """
         Given `directory` and `packages` arguments, return a list of all the
         directories that should be used for serving static files from.

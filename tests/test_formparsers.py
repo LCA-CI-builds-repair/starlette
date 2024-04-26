@@ -88,17 +88,19 @@ async def app_with_headers(scope, receive, send):
 
 async def app_read_body(scope, receive, send):
     request = Request(scope, receive)
-    # Read bytes, to force request.stream() to return the already parsed body
-    await request.body()
-    data = await request.form()
-    output = {}
-    for key, value in data.items():
-        output[key] = value
-    await request.close()
+    try:
+        # Read bytes, to force request.stream() to return the already parsed body
+        await request.body()
+        data = await request.form()
+        output = {}
+        for key, value in data.items():
+            output[key] = value
+    except Exception as e:
+        output = {"error": str(e)}
+    finally:
+        await request.close()
     response = JSONResponse(output)
     await response(scope, receive, send)
-
-
 def make_app_max_parts(max_files: int = 1000, max_fields: int = 1000):
     async def app(scope, receive, send):
         request = Request(scope, receive)
