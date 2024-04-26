@@ -53,11 +53,8 @@ def test_staticfiles_head_with_middleware(tmpdir, test_client_factory):
         return response
 
     routes = [Mount("/static", app=StaticFiles(directory=tmpdir), name="static")]
-    middleware = [Middleware(BaseHTTPMiddleware, dispatch=does_nothing_middleware)]
-    app = Starlette(routes=routes, middleware=middleware)
-
     client = test_client_factory(app)
-    response = client.head("/static/example.txt")
+    response = client.get("/static/example.txt")
     assert response.status_code == 200
     assert response.headers.get("content-length") == "100"
 

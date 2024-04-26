@@ -335,8 +335,8 @@ class WebSocketRoute(BaseRoute):
             self.app = endpoint
 
         if middleware is not None:
-            for cls, options in reversed(middleware):
-                self.app = cls(app=self.app, **options)
+        for cls, options in reversed(middleware):
+            self.app = cls(app=self.app, **options)
 
         self.path_regex, self.path_format, self.param_convertors = compile_path(path)
 
@@ -395,18 +395,10 @@ class Mount(BaseRoute):
     ) -> None:
         assert path == "" or path.startswith("/"), "Routed paths must start with '/'"
         assert (
-            app is not None or routes is not None
-        ), "Either 'app=...', or 'routes=' must be specified"
-        self.path = path.rstrip("/")
-        if app is not None:
-            self._base_app: ASGIApp = app
-        else:
-            self._base_app = Router(routes=routes)
-        self.app = self._base_app
         if middleware is not None:
             for cls, options in reversed(middleware):
-                self.app = cls(app=self.app, **options)
-        self.name = name
+                self._base_app = cls(app=self._base_app, **options)
+        self.app = self._base_app
         self.path_regex, self.path_format, self.param_convertors = compile_path(
             self.path + "/{path:path}"
         )

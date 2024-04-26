@@ -25,10 +25,7 @@ class Starlette:
 
     * **debug** - Boolean indicating if debug tracebacks should be returned on errors.
     * **routes** - A list of routes to serve incoming HTTP and WebSocket requests.
-    * **middleware** - A list of middleware to run for every request. A starlette
-    application will always automatically include two middleware classes.
-    `ServerErrorMiddleware` is added as the very outermost middleware, to handle
-    any uncaught errors occurring anywhere in the entire stack.
+    * **middleware** - A list of middleware to run for every request. The starlette application automatically includes two middleware classes by default. `ServerErrorMiddleware` is added as the outermost middleware to handle any uncaught errors that may occur throughout the stack.
     `ExceptionMiddleware` is added as the very innermost middleware, to deal
     with handled exception cases occurring in the routing or endpoints.
     * **exception_handlers** - A mapping of either integer status codes,
@@ -64,15 +61,15 @@ class Starlette:
         ), "Use either 'lifespan' or 'on_startup'/'on_shutdown', not both."
 
         self.debug = debug
+        ), "Use either 'lifespan' or 'on_startup'/'on_shutdown', but not both."
+
+        self.debug = debug
         self.state = State()
         self.router = Router(
             routes, on_startup=on_startup, on_shutdown=on_shutdown, lifespan=lifespan
         )
         self.exception_handlers = (
             {} if exception_handlers is None else dict(exception_handlers)
-        )
-        self.user_middleware = [] if middleware is None else list(middleware)
-        self.middleware_stack: typing.Optional[ASGIApp] = None
 
     def build_middleware_stack(self) -> ASGIApp:
         debug = self.debug
@@ -88,19 +85,19 @@ class Starlette:
                 exception_handlers[key] = value
 
         middleware = (
+                exception_handlers[key] = value
+
+        middleware = (
             [Middleware(ServerErrorMiddleware, handler=error_handler, debug=debug)]
             + self.user_middleware
             + [
                 Middleware(
                     ExceptionMiddleware, handlers=exception_handlers, debug=debug
                 )
-            ]
+            ] if exception_handlers else []
         )
 
         app = self.router
-        for cls, options in reversed(middleware):
-            app = cls(app=app, **options)
-        return app
 
     @property
     def routes(self) -> typing.List[BaseRoute]:
@@ -125,9 +122,8 @@ class Starlette:
         self.router.host(host, app=app, name=name)  # pragma: no cover
 
     def add_middleware(self, middleware_class: type, **options: typing.Any) -> None:
-        if self.middleware_stack is not None:  # pragma: no cover
-            raise RuntimeError("Cannot add middleware after an application has started")
-        self.user_middleware.insert(0, Middleware(middleware_class, **options))
+    def add_middleware(self, middleware_class: type, **options: typing.Any) -> None:
+        self.router.add_middleware(middleware_class, **options)
 
     def add_exception_handler(
         self,

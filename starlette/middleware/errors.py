@@ -161,22 +161,6 @@ class ServerErrorMiddleware:
             await send(message)
 
         try:
-            await self.app(scope, receive, _send)
-        except Exception as exc:
-            request = Request(scope)
-            if self.debug:
-                # In debug mode, return traceback responses.
-                response = self.debug_response(request, exc)
-            elif self.handler is None:
-                # Use our default 500 error handler.
-                response = self.error_response(request, exc)
-            else:
-                # Use an installed 500 error handler.
-                if is_async_callable(self.handler):
-                    response = await self.handler(request, exc)
-                else:
-                    response = await run_in_threadpool(self.handler, request, exc)
-
             if not response_started:
                 await response(scope, receive, send)
 
@@ -238,12 +222,12 @@ class ServerErrorMiddleware:
                 is_collapsed = True
 
         # escape error class and text
-        error = (
-            f"{html.escape(traceback_obj.exc_type.__name__)}: "
-            f"{html.escape(str(traceback_obj))}"
-        )
+import traceback
 
-        return TEMPLATE.format(styles=STYLES, js=JS, error=error, exc_html=exc_html)
+    def generate_html(self, exc: Exception, limit: int = 7) -> str:
+        traceback_obj = traceback.TracebackException.from_exception(
+            exc, capture_locals=True
+        )
 
     def generate_plain_text(self, exc: Exception) -> str:
         return "".join(traceback.format_exception(type(exc), exc, exc.__traceback__))

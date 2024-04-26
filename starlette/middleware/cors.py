@@ -100,19 +100,8 @@ class CORSMiddleware:
             return True
 
         return origin in self.allow_origins
-
-    def preflight_response(self, request_headers: Headers) -> Response:
-        requested_origin = request_headers["origin"]
-        requested_method = request_headers["access-control-request-method"]
-        requested_headers = request_headers.get("access-control-request-headers")
-
-        headers = dict(self.preflight_headers)
-        failures = []
-
         if self.is_allowed_origin(origin=requested_origin):
             if self.preflight_explicit_allow_origin:
-                # The "else" case is already accounted for in self.preflight_headers
-                # and the value would be "*".
                 headers["Access-Control-Allow-Origin"] = requested_origin
         else:
             failures.append("origin")

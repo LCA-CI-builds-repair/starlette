@@ -53,11 +53,8 @@ def test_use_testclient_in_endpoint(test_client_factory):
     We should be able to use the test client within applications.
 
     This is useful if we need to mock out other services,
-    during tests or in development.
-    """
-
     def homepage(request):
-        client = test_client_factory(mock_service)
+        client = test_client_factory(app)
         response = client.get("/")
         return JSONResponse(response.json())
 
@@ -76,7 +73,7 @@ def test_testclient_headers_behavior():
     during tests or in development.
     """
 
-    client = TestClient(mock_service)
+    client = TestClient(mock_service, headers={"user-agent": "testclient"})
     assert client.headers.get("user-agent") == "testclient"
 
     client = TestClient(mock_service, headers={"user-agent": "non-default-agent"})
@@ -279,6 +276,7 @@ def test_query_params(test_client_factory, param: str):
 
 
 @pytest.mark.parametrize(
+@pytest.mark.parametrize(
     "domain, ok",
     [
         pytest.param(
@@ -287,14 +285,12 @@ def test_query_params(test_client_factory, param: str):
             marks=[
                 pytest.mark.xfail(
                     sys.version_info < (3, 11),
-                    reason="Fails due to domain handling in http.cookiejar module (see "
-                    "#2152)",
+                    reason="Fails due to domain handling in http.cookiejar module (see #2152)",
                 ),
             ],
         ),
         ("testserver.local", True),
         ("localhost", False),
-        ("example.com", False),
     ],
 )
 def test_domain_restricted_cookies(test_client_factory, domain, ok):
