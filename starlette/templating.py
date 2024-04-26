@@ -99,6 +99,7 @@ class Jinja2Templates:
         **env_options: typing.Any,
     ) -> None:
         if env_options:
+            # Add the necessary implementation here to handle the case when env_options is provided
             warnings.warn(
                 "Extra environment options are deprecated. Use a preconfigured jinja2.Environment instead.",  # noqa: E501
                 DeprecationWarning,
@@ -204,13 +205,14 @@ class Jinja2Templates:
                 headers = args[4] if len(args) > 4 else kwargs.get("headers")
                 media_type = args[5] if len(args) > 5 else kwargs.get("media_type")
                 background = args[6] if len(args) > 6 else kwargs.get("background")
-        else:  # all arguments are kwargs
             if "request" not in kwargs:
                 warnings.warn(
                     "The `TemplateResponse` now requires the `request` argument.\n"
                     'Replace `TemplateResponse(name, {"context": context})` by `TemplateResponse(request, name)`.',  # noqa: E501
                     DeprecationWarning,
                 )
+                if "request" not in kwargs.get("context", {}):
+                    # Add the necessary implementation here after checking "request" in kwargs.get("context", {})
                 if "request" not in kwargs.get("context", {}):
                     raise ValueError('context must include a "request" key')
 

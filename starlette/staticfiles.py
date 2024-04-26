@@ -69,6 +69,7 @@ class StaticFiles:
         """
         directories = []
         if directory is not None:
+            # Add the necessary implementation here to populate the list of directories based on the provided `directory` and `packages`.
             directories.append(directory)
 
         for package in packages or []:

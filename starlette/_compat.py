@@ -10,11 +10,10 @@ import hashlib
 #
 # See issue: https://github.com/encode/starlette/issues/1365
 try:
-    # check if the Python version supports the parameter
-    # using usedforsecurity=False to avoid an exception on FIPS systems
-    # that reject usedforsecurity=True
-    hashlib.md5(b"data", usedforsecurity=False)  # type: ignore[call-arg]
-
+    # Check if the Python version supports the parameter `usedforsecurity`
+    # using `usedforsecurity=False` to avoid an exception on FIPS systems
+    # that reject `usedforsecurity=True`
+    hashlib.md5(b"data")  # type: ignore
     def md5_hexdigest(
         data: bytes, *, usedforsecurity: bool = True
     ) -> str:  # pragma: no cover

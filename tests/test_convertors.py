@@ -3,10 +3,9 @@ from datetime import datetime
 import pytest
 
 from starlette import convertors
-from starlette.convertors import Convertor, register_url_convertor
+from starlette.convertors import convertors, register_url_convertor
 from starlette.responses import JSONResponse
 from starlette.routing import Route, Router
-
 
 @pytest.fixture(scope="module", autouse=True)
 def refresh_convertor_types():
