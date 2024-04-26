@@ -57,9 +57,24 @@ def test_use_testclient_in_endpoint(test_client_factory):
     """
 
     def homepage(request):
-        client = test_client_factory(mock_service)
-        response = client.get("/")
-        return JSONResponse(response.json())
+import pytest
+from starlette.applications import Starlette
+from starlette.responses import JSONResponse
+from starlette.testclient import TestClient
+from starlette.routing import Route
+
+def test_client_factory(app):
+    return TestClient(app)
+
+def homepage(request):
+    return JSONResponse({"mock": "example"})
+
+def test_client():
+    mock_service = None
+
+    client = test_client_factory(mock_service)
+    response = client.get("/")
+    assert response.json() == {"mock": "example"}
 
     app = Starlette(routes=[Route("/", endpoint=homepage)])
 
