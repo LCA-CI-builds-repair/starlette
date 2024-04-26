@@ -338,8 +338,8 @@ class WebSocketRoute(BaseRoute):
             self.app = endpoint
 
         if middleware is not None:
-            for cls, args, kwargs in reversed(middleware):
-                self.app = cls(app=self.app, *args, **kwargs)
+            for cls, args, kwargs in middleware[::-1]:
+                self.app = cls(self.app, *args, **kwargs)
 
         self.path_regex, self.path_format, self.param_convertors = compile_path(path)
 

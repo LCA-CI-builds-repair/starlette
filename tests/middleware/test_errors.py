@@ -1,77 +1,66 @@
 import pytest
-
 from starlette.applications import Starlette
 from starlette.background import BackgroundTask
 from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.responses import JSONResponse, Response
 from starlette.routing import Route
 
-
 def test_handler(test_client_factory):
-    async def app(scope, receive, send):
+    async def app_handler(scope, receive, send):
         raise RuntimeError("Something went wrong")
 
     def error_500(request, exc):
         return JSONResponse({"detail": "Server Error"}, status_code=500)
 
-    app = ServerErrorMiddleware(app, handler=error_500)
-    client = test_client_factory(app, raise_server_exceptions=False)
+    test_app = ServerErrorMiddleware(app_handler, error_response=error_500)
+    client = test_client_factory(test_app, raise_server_exceptions=False)
     response = client.get("/")
     assert response.status_code == 500
     assert response.json() == {"detail": "Server Error"}
 
-
 def test_debug_text(test_client_factory):
-    async def app(scope, receive, send):
+    async def app_debug_text(scope, receive, send):
         raise RuntimeError("Something went wrong")
 
-    app = ServerErrorMiddleware(app, debug=True)
-    client = test_client_factory(app, raise_server_exceptions=False)
+    test_app = ServerErrorMiddleware(app_debug_text, debug=True)
+    client = test_client_factory(test_app, raise_server_exceptions=False)
     response = client.get("/")
     assert response.status_code == 500
     assert response.headers["content-type"].startswith("text/plain")
     assert "RuntimeError: Something went wrong" in response.text
 
-
 def test_debug_html(test_client_factory):
-    async def app(scope, receive, send):
+    async def app_debug_html(scope, receive, send):
         raise RuntimeError("Something went wrong")
 
-    app = ServerErrorMiddleware(app, debug=True)
-    client = test_client_factory(app, raise_server_exceptions=False)
+    test_app = ServerErrorMiddleware(app_debug_html, debug=True)
+    client = test_client_factory(test_app, raise_server_exceptions=False)
     response = client.get("/", headers={"Accept": "text/html, */*"})
     assert response.status_code == 500
     assert response.headers["content-type"].startswith("text/html")
     assert "RuntimeError" in response.text
 
-
 def test_debug_after_response_sent(test_client_factory):
-    async def app(scope, receive, send):
+    async def app_after_response(scope, receive, send):
         response = Response(b"", status_code=204)
         await response(scope, receive, send)
         raise RuntimeError("Something went wrong")
 
-    app = ServerErrorMiddleware(app, debug=True)
-    client = test_client_factory(app)
+    test_app = ServerErrorMiddleware(app_after_response, debug=True)
+    client = test_client_factory(test_app)
     with pytest.raises(RuntimeError):
         client.get("/")
 
-
 def test_debug_not_http(test_client_factory):
-    """
-    DebugMiddleware should just pass through any non-http messages as-is.
-    """
-
-    async def app(scope, receive, send):
+    async def app_not_http(scope, receive, send):
         raise RuntimeError("Something went wrong")
 
-    app = ServerErrorMiddleware(app)
+    test_app = ServerErrorMiddleware(app_not_http)
 
     with pytest.raises(RuntimeError):
-        client = test_client_factory(app)
+        client = test_client_factory(test_app)
         with client.websocket_connect("/"):
             pass  # pragma: nocover
-
 
 def test_background_task(test_client_factory):
     accessed_error_handler = False
@@ -87,12 +76,12 @@ def test_background_task(test_client_factory):
         task = BackgroundTask(raise_exception)
         return Response(status_code=204, background=task)
 
-    app = Starlette(
+    test_app = Starlette(
         routes=[Route("/", endpoint=endpoint)],
         exception_handlers={Exception: error_handler},
     )
 
-    client = test_client_factory(app, raise_server_exceptions=False)
+    client = test_client_factory(test_app, raise_server_exceptions=False)
     response = client.get("/")
     assert response.status_code == 204
     assert accessed_error_handler

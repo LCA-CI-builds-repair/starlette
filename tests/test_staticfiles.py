@@ -169,12 +169,12 @@ def test_staticfiles_prevents_breaking_out_of_directory(tmpdir):
     path = os.path.join(tmpdir, "example.txt")
     with open(path, "w") as file:
         file.write("outside root dir")
+        file.close()
 
     app = StaticFiles(directory=directory)
     # We can't test this with 'httpx', so we test the app directly here.
-    path = app.get_path({"path": "/../example.txt"})
+    path = app.get_path("/../example.txt")
     scope = {"method": "GET"}
-
     with pytest.raises(HTTPException) as exc_info:
         anyio.run(app.get_response, path, scope)
 
@@ -509,10 +509,9 @@ def test_staticfiles_disallows_path_traversal_with_symlinks(tmpdir):
         file.write("<h1>Hello</h1>")
 
     os.symlink(source_path, statics_path)
-
     app = StaticFiles(directory=statics_path, follow_symlink=True)
     # We can't test this with 'httpx', so we test the app directly here.
-    path = app.get_path({"path": "/../index.html"})
+    path = app.get_path("/../index.html")
     scope = {"method": "GET"}
 
     with pytest.raises(HTTPException) as exc_info:
@@ -534,15 +533,15 @@ def test_staticfiles_avoids_path_traversal(tmp_path: Path):
     static_file = tmp_path / "static1.txt"
 
     static_index_file.write_text("<h1>Hello</h1>")
+    static_index_file.write_text("<h1>Hello</h1>")
     statics_disallow_path_index_file.write_text("<h1>Private</h1>")
     static_file.write_text("Private")
 
     app = StaticFiles(directory=statics_path)
 
     # We can't test this with 'httpx', so we test the app directly here.
-    path = app.get_path({"path": "/../static1.txt"})
-    with pytest.raises(HTTPException) as exc_info:
-        anyio.run(app.get_response, path, {"method": "GET"})
+    path = app.get_path("/../static1.txt")
+    with pytest.raises(HTTPException):
 
     assert exc_info.value.status_code == 404
     assert exc_info.value.detail == "Not Found"

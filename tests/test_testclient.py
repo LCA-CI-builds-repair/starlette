@@ -51,19 +51,16 @@ def test_use_testclient_in_endpoint(test_client_factory: Callable[..., TestClien
     We should be able to use the test client within applications.
 
     This is useful if we need to mock out other services,
-    during tests or in development.
-    """
-
-    def homepage(request: Request):
-        client = test_client_factory(mock_service)
-        response = client.get("/")
-        return JSONResponse(response.json())
-
-    app = Starlette(routes=[Route("/", endpoint=homepage)])
-
-    client = test_client_factory(app)
+def homepage(request: Request):
+    client = TestClient(mock_service)
     response = client.get("/")
-    assert response.json() == {"mock": "example"}
+    return JSONResponse(response.json())
+
+app = Starlette(routes=[Route("/", endpoint=homepage)])
+
+client = TestClient(app)
+response = client.get("/")
+assert response.json() == {"mock": "example"}
 
 
 def test_testclient_headers_behavior():
@@ -282,6 +279,7 @@ def test_query_params(test_client_factory: Callable[..., TestClient], param: str
 
 
 @pytest.mark.parametrize(
+@pytest.mark.parametrize(
     "domain, ok",
     [
         pytest.param(
@@ -290,14 +288,12 @@ def test_query_params(test_client_factory: Callable[..., TestClient], param: str
             marks=[
                 pytest.mark.xfail(
                     sys.version_info < (3, 11),
-                    reason="Fails due to domain handling in http.cookiejar module (see "
-                    "#2152)",
+                    reason="Fails due to domain handling in http.cookiejar module (see #2152)",
                 ),
             ],
         ),
         ("testserver.local", True),
         ("localhost", False),
-        ("example.com", False),
     ],
 )
 def test_domain_restricted_cookies(

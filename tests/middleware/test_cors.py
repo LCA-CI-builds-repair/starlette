@@ -1,9 +1,9 @@
 from starlette.applications import Starlette
+from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import PlainTextResponse
 from starlette.routing import Route
-
 
 def test_cors_allow_all(test_client_factory):
     def homepage(request):
@@ -15,8 +15,8 @@ def test_cors_allow_all(test_client_factory):
             Middleware(
                 CORSMiddleware,
                 allow_origins=["*"],
-                allow_headers=["*"],
                 allow_methods=["*"],
+                allow_headers=["*"],
                 expose_headers=["X-Status"],
                 allow_credentials=True,
             )
@@ -63,7 +63,6 @@ def test_cors_allow_all(test_client_factory):
     assert response.text == "Homepage"
     assert "access-control-allow-origin" not in response.headers
 
-
 def test_cors_allow_all_except_credentials(test_client_factory):
     def homepage(request):
         return PlainTextResponse("Homepage", status_code=200)
@@ -74,8 +73,8 @@ def test_cors_allow_all_except_credentials(test_client_factory):
             Middleware(
                 CORSMiddleware,
                 allow_origins=["*"],
-                allow_headers=["*"],
                 allow_methods=["*"],
+                allow_headers=["*"],
                 expose_headers=["X-Status"],
             )
         ],
@@ -96,8 +95,6 @@ def test_cors_allow_all_except_credentials(test_client_factory):
     assert response.headers["access-control-allow-headers"] == "X-Example"
     assert "access-control-allow-credentials" not in response.headers
     assert "vary" not in response.headers
-
-    # Test standard response
     headers = {"Origin": "https://example.org"}
     response = client.get("/", headers=headers)
     assert response.status_code == 200

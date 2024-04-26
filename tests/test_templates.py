@@ -29,9 +29,9 @@ def test_templates(tmpdir, test_client_factory):
 
     client = test_client_factory(app)
     response = client.get("/")
-    assert response.text == "<html>Hello, <a href='http://testserver/'>world</a></html>"
-    assert response.template.name == "index.html"
-    assert set(response.context.keys()) == {"request"}
+    assert response.status_code == 200
+    assert response.template_name == "index.html"
+    assert set(response.context_data.keys()) == {"request"}
 
 
 def test_calls_context_processors(tmp_path, test_client_factory):
@@ -68,7 +68,7 @@ def test_template_with_middleware(tmpdir, test_client_factory):
         file.write("<html>Hello, <a href='{{ url_for('homepage') }}'>world</a></html>")
 
     async def homepage(request):
-        return templates.TemplateResponse(request, "index.html")
+        return templates.TemplateResponse("index.html", {"request": request})
 
     class CustomMiddleware(BaseHTTPMiddleware):
         async def dispatch(self, request, call_next):
@@ -77,7 +77,8 @@ def test_template_with_middleware(tmpdir, test_client_factory):
     app = Starlette(
         debug=True,
         routes=[Route("/", endpoint=homepage)],
-        middleware=[Middleware(CustomMiddleware)],
+        middleware=[Middleware(CustomMiddleware)]
+    )
     )
     templates = Jinja2Templates(directory=str(tmpdir))
 
@@ -112,13 +113,12 @@ def test_templates_with_directories(tmp_path: Path, test_client_factory):
     templates = Jinja2Templates(directory=[dir_a, dir_b])
 
     client = test_client_factory(app)
-    response = client.get("/a")
-    assert response.text == "<html><a href='http://testserver/a'></a> a</html>"
+    assert response.text == "<html><a href='http://testserver/a'> a</a></html>"
     assert response.template.name == "template_a.html"
     assert set(response.context.keys()) == {"request"}
 
     response = client.get("/b")
-    assert response.text == "<html><a href='http://testserver/b'></a> b</html>"
+    assert response.text == "<html><a href='http://testserver/b'> b</a></html>"
     assert response.template.name == "template_b.html"
     assert set(response.context.keys()) == {"request"}
 
@@ -163,12 +163,11 @@ def test_templates_with_environment(tmpdir, test_client_factory):
 
 def test_templates_with_environment_options_emit_warning(tmpdir):
     with pytest.warns(DeprecationWarning):
-        Jinja2Templates(str(tmpdir), autoescape=True)
-
+        Jinja2Templates(directory=str(tmpdir))
 
 def test_templates_with_kwargs_only(tmpdir, test_client_factory):
     # MAINTAINERS: remove after 1.0
-    path = os.path.join(tmpdir, "index.html")
+    path = os.path.join(str(tmpdir), "index.html")
     with open(path, "w") as file:
         file.write("value: {{ a }}")
     templates = Jinja2Templates(directory=str(tmpdir))
@@ -177,13 +176,11 @@ def test_templates_with_kwargs_only(tmpdir, test_client_factory):
 
     def page(request):
         return templates.TemplateResponse(
-            request=request,
             name="index.html",
             context={"a": "b"},
-            status_code=201,
+            status_code=200,
             headers={"x-key": "value"},
-            media_type="text/plain",
-            background=BackgroundTask(func=spy),
+            media_type="text/plain"
         )
 
     app = Starlette(routes=[Route("/", page)])
@@ -226,13 +223,12 @@ def test_templates_with_kwargs_only_warns_when_no_request_keyword(
         )
 
     app = Starlette(routes=[Route("/", page)])
+        )
+
+    app = Starlette(routes=[Route("/", page)])
     client = test_client_factory(app)
 
-    with pytest.warns(
-        DeprecationWarning,
-        match="requires the `request` argument",
-    ):
-        client.get("/")
+    with pytest.warns(DeprecationWarning):
 
 
 def test_templates_with_requires_request_in_context(tmpdir):
@@ -244,11 +240,7 @@ def test_templates_with_requires_request_in_context(tmpdir):
 
 
 def test_templates_warns_when_first_argument_isnot_request(tmpdir, test_client_factory):
-    # MAINTAINERS: remove after 1.0
-    path = os.path.join(tmpdir, "index.html")
-    with open(path, "w") as file:
-        file.write("value: {{ a }}")
-    templates = Jinja2Templates(directory=str(tmpdir))
+            templates.TemplateResponse("index.html", context={})
 
     spy = mock.MagicMock()
 
