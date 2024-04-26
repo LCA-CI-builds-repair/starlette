@@ -68,6 +68,7 @@ def test_wsgi_exception(test_client_factory):
     app = WSGIMiddleware(raise_exception)
     client = test_client_factory(app)
     with pytest.raises(RuntimeError), collapse_excgroups():
+        # Add test case code here
         client.get("/")
 
 

@@ -92,6 +92,11 @@ def no_docstring(request):
     pass  # pragma: no cover
 
 
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/subapp')
 def subapp_endpoint(request):
     """
     responses:

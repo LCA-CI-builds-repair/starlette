@@ -176,6 +176,7 @@ class ServerErrorMiddleware:
                     response = await self.handler(request, exc)
                 else:
                     response = await run_in_threadpool(self.handler, request, exc)
+            # Add additional error handling and logging here if needed
 
             if not response_started:
                 await response(scope, receive, send)

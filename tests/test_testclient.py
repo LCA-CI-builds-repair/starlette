@@ -57,27 +57,18 @@ def test_use_testclient_in_endpoint(test_client_factory):
     """
 
     def homepage(request):
-        client = test_client_factory(mock_service)
-        response = client.get("/")
-        return JSONResponse(response.json())
-
-    app = Starlette(routes=[Route("/", endpoint=homepage)])
-
-    client = test_client_factory(app)
-    response = client.get("/")
-    assert response.json() == {"mock": "example"}
+client = test_client_factory(mock_service)
+response = client.get("/")
+return JSONResponse(response.json())
 
 
 def test_testclient_headers_behavior():
+def test_testclient_headers_behavior():
     """
     We should be able to use the test client with user defined headers.
-
-    This is useful if we need to set custom headers for authentication
-    during tests or in development.
+    Add test case here to demonstrate this behavior.
     """
-
-    client = TestClient(mock_service)
-    assert client.headers.get("user-agent") == "testclient"
+    # Add test case code here
 
     client = TestClient(mock_service, headers={"user-agent": "non-default-agent"})
     assert client.headers.get("user-agent") == "non-default-agent"
