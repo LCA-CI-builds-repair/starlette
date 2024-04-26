@@ -1,4 +1,5 @@
 from starlette.applications import Starlette
+from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.middleware.gzip import GZipMiddleware
 from starlette.responses import PlainTextResponse, StreamingResponse
@@ -11,7 +12,7 @@ def test_gzip_responses(test_client_factory):
 
     app = Starlette(
         routes=[Route("/", endpoint=homepage)],
-        middleware=[Middleware(GZipMiddleware)],
+        middleware=[Middleware(GZipMiddleware())],
     )
 
     client = test_client_factory(app)
@@ -28,7 +29,7 @@ def test_gzip_not_in_accept_encoding(test_client_factory):
 
     app = Starlette(
         routes=[Route("/", endpoint=homepage)],
-        middleware=[Middleware(GZipMiddleware)],
+        middleware=[Middleware(GZipMiddleware())],
     )
 
     client = test_client_factory(app)
@@ -45,7 +46,7 @@ def test_gzip_ignored_for_small_responses(test_client_factory):
 
     app = Starlette(
         routes=[Route("/", endpoint=homepage)],
-        middleware=[Middleware(GZipMiddleware)],
+        middleware=[Middleware(GZipMiddleware())],
     )
 
     client = test_client_factory(app)
@@ -67,7 +68,7 @@ def test_gzip_streaming_response(test_client_factory):
 
     app = Starlette(
         routes=[Route("/", endpoint=homepage)],
-        middleware=[Middleware(GZipMiddleware)],
+        middleware=[Middleware(GZipMiddleware())],
     )
 
     client = test_client_factory(app)

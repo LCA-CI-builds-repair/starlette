@@ -75,6 +75,8 @@ def test_custom_middleware(test_client_factory):
     assert response.headers["Custom-Header"] == "Example"
 
     with pytest.raises(Exception) as ctx:
+        # Add the necessary closing braces for the test case
+        pass
         response = client.get("/exc")
     assert str(ctx.value) == "Exc"
 
