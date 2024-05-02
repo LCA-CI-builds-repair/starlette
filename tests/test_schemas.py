@@ -126,13 +126,12 @@ app = Starlette(
         Host("sub.domain.com", app=Router(routes=[Mount("/subapp2", subapp)])),
     ]
 )
-
-
 def test_schema_generation():
     schema = schemas.get_schema(routes=app.routes)
     assert schema == {
         "openapi": "3.0.0",
         "info": {"title": "Example API", "version": "1.0"},
+    }
         "paths": {
             "/orgs": {
                 "get": {
@@ -203,6 +202,7 @@ def test_schema_generation():
 
 
 EXPECTED_SCHEMA = """
+EXPECTED_SCHEMA = """
 info:
   title: Example API
   version: '1.0'
@@ -214,14 +214,14 @@ paths:
         200:
           description: A list of organisations.
           examples:
-          - name: Foo Corp.
-          - name: Acme Ltd.
+            - name: Foo Corp.
+            - name: Acme Ltd.
     post:
       responses:
         200:
           description: An organisation.
           examples:
-            name: Foo Corp.
+            - name: Foo Corp.
   /regular-docstring-and-schema:
     get:
       responses:
@@ -243,24 +243,22 @@ paths:
         200:
           description: A list of users.
           examples:
-          - username: tom
-          - username: lucy
+            - username: tom
+            - username: lucy
     post:
       responses:
         200:
           description: A user.
           examples:
-            username: tom
+            - username: tom
   /users/{id}:
     get:
       responses:
         200:
           description: A user.
           examples:
-            username: tom
+            - username: tom
 """
-
-
 def test_schema_endpoint(test_client_factory):
     client = test_client_factory(app)
     response = client.get("/schema")

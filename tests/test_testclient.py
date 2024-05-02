@@ -63,8 +63,14 @@ def test_use_testclient_in_endpoint(test_client_factory):
 
     app = Starlette(routes=[Route("/", endpoint=homepage)])
 
+    # Create a test client using the test_client_factory function
     client = test_client_factory(app)
+    
+    # Make a GET request to the root endpoint
     response = client.get("/")
+    
+    # Check the response status code is 200 OK and the JSON content is {"mock": "example"}
+    assert response.status_code == 200
     assert response.json() == {"mock": "example"}
 
 
