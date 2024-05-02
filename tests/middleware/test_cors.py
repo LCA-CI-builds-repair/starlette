@@ -7,6 +7,21 @@ from starlette.routing import Route
 
 def test_cors_allow_all(test_client_factory):
     def homepage(request):
+        return PlainTextResponse("Welcome to the Homepage")
+
+    app = Starlette(
+        routes=[
+            Route("/", homepage),
+        ],
+        middleware=[
+            Middleware(CORSMiddleware, allow_origins=["*"]),
+        ]
+    )
+
+    with test_client_factory(app) as client:
+        response = client.get("/")
+        assert response.status_code == 200
+        assert response.text == "Welcome to the Homepage"
         return PlainTextResponse("Homepage", status_code=200)
 
     app = Starlette(

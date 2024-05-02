@@ -5,8 +5,6 @@ from starlette.background import BackgroundTask
 from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.responses import JSONResponse, Response
 from starlette.routing import Route
-
-
 def test_handler(test_client_factory):
     async def app(scope, receive, send):
         raise RuntimeError("Something went wrong")

@@ -7,6 +7,21 @@ from starlette.routing import Route
 
 def test_gzip_responses(test_client_factory):
     def homepage(request):
+        return PlainTextResponse("Welcome to the Homepage")
+
+    app = Starlette(
+        routes=[
+            Route("/", homepage),
+        ],
+        middleware=[
+            Middleware(GZipMiddleware),
+        ]
+    )
+
+    with test_client_factory(app) as client:
+        response = client.get("/")
+        assert response.status_code == 200
+        assert response.text == "Welcome to the Homepage"
         return PlainTextResponse("x" * 4000, status_code=200)
 
     app = Starlette(

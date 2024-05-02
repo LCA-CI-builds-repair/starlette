@@ -7,6 +7,20 @@ from starlette.routing import Route
 
 def test_https_redirect_middleware(test_client_factory):
     def homepage(request):
+        return PlainTextResponse("Welcome to the Homepage")
+
+    app = Starlette(
+        routes=[
+            Route("/", homepage),
+        ],
+        middleware=[
+            Middleware(HTTPSRedirectMiddleware),
+        ]
+    )
+
+    with test_client_factory(app) as client:
+        response = client.get("/", allow_redirects=False)
+        assert response.status_code == 307
         return PlainTextResponse("OK", status_code=200)
 
     app = Starlette(
