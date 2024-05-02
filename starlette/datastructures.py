@@ -371,9 +371,9 @@ class MultiDict(ImmutableMultiDict[typing.Any, typing.Any]):
 
     def update(
         self,
-        *args: MultiDict
+        *args: (MultiDict
         | typing.Mapping[typing.Any, typing.Any]
-        | list[tuple[typing.Any, typing.Any]],
+        | list[tuple[typing.Any, typing.Any]]),
         **kwargs: typing.Any,
     ) -> None:
         value = MultiDict(*args, **kwargs)
@@ -386,7 +386,6 @@ class QueryParams(ImmutableMultiDict[str, str]):
     """
     An immutable multidict.
     """
-
     def __init__(
         self,
         *args: ImmutableMultiDict[typing.Any, typing.Any]
@@ -490,9 +489,9 @@ class FormData(ImmutableMultiDict[str, typing.Union[UploadFile, str]]):
 
     def __init__(
         self,
-        *args: FormData
+        *args: (FormData
         | typing.Mapping[str, str | UploadFile]
-        | list[tuple[str, str | UploadFile]],
+        | list[tuple[str, str | UploadFile]]),
         **kwargs: str | UploadFile,
     ) -> None:
         super().__init__(*args, **kwargs)
@@ -501,7 +500,6 @@ class FormData(ImmutableMultiDict[str, typing.Union[UploadFile, str]]):
         for key, value in self.multi_items():
             if isinstance(value, UploadFile):
                 await value.close()
-
 
 class Headers(typing.Mapping[str, str]):
     """
