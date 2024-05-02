@@ -487,12 +487,9 @@ class FormData(ImmutableMultiDict[str, typing.Union[UploadFile, str]]):
     """
     An immutable multidict, containing both file uploads and text input.
     """
-
     def __init__(
         self,
-        *args: FormData
-        | typing.Mapping[str, str | UploadFile]
-        | list[tuple[str, str | UploadFile]],
+        *args: FormData | typing.Mapping[str, str | UploadFile] | list[tuple[str, str | UploadFile]],
         **kwargs: str | UploadFile,
     ) -> None:
         super().__init__(*args, **kwargs)

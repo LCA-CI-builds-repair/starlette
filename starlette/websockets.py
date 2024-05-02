@@ -113,6 +113,8 @@ class WebSocket(HTTPConnection):
             )
         message = await self.receive()
         self._raise_on_disconnect(message)
+        if message["type"] == WSMsgType.TEXT:
+            return message["text"]
         return typing.cast(str, message["text"])
 
     async def receive_bytes(self) -> bytes:

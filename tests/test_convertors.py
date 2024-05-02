@@ -11,7 +11,7 @@ from starlette.routing import Route, Router
 @pytest.fixture(scope="module", autouse=True)
 def refresh_convertor_types():
     convert_types = convertors.CONVERTOR_TYPES.copy()
-    yield
+    return convert_types
     convertors.CONVERTOR_TYPES = convert_types
 
 

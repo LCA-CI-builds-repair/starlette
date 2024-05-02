@@ -63,8 +63,9 @@ def test_use_testclient_in_endpoint(test_client_factory):
 
     app = Starlette(routes=[Route("/", endpoint=homepage)])
 
-    client = test_client_factory(app)
-    response = client.get("/")
+    def test_homepage(test_client_factory):
+        client = test_client_factory(app)
+        response = client.get("/")
     assert response.json() == {"mock": "example"}
 
 
