@@ -520,19 +520,18 @@ def test_middleware_stack_init(test_client_factory: Callable[[ASGIApp], httpx.Cl
 
     app = get_app()
 
-    with test_client_factory(app):
+    with test_client_factory(app) as client:
         pass
 
     assert SimpleInitializableMiddleware.counter == 1
 
-    test_client_factory(app).get("/foo")
+    client.get("/foo")
 
     assert SimpleInitializableMiddleware.counter == 1
 
     app = get_app()
 
-    test_client_factory(app).get("/foo")
-
+    client.get("/foo")
     assert SimpleInitializableMiddleware.counter == 2
 
 

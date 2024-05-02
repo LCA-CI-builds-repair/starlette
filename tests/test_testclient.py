@@ -54,7 +54,7 @@ def test_use_testclient_in_endpoint(test_client_factory: Callable[..., TestClien
     during tests or in development.
     """
 
-    def homepage(request: Request):
+    def homepage(request: Request) -> JSONResponse:
         client = test_client_factory(mock_service)
         response = client.get("/")
         return JSONResponse(response.json())

@@ -58,20 +58,15 @@ def cookie_parser(cookie_string: str) -> dict[str, str]:
     return cookie_dict
 
 
-class ClientDisconnect(Exception):
-    pass
-
-
 class HTTPConnection(typing.Mapping[str, typing.Any]):
     """
     A base class for incoming HTTP connections, that is used to provide
     any functionality that is common to both `Request` and `WebSocket`.
     """
 
-    def __init__(self, scope: Scope, receive: Receive | None = None) -> None:
+    def __init__(self, scope: dict[str, Any], receive: typing.Optional[Receive] = None) -> None:
         assert scope["type"] in ("http", "websocket")
         self.scope = scope
-
     def __getitem__(self, key: str) -> typing.Any:
         return self.scope[key]
 
