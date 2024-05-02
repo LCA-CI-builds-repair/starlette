@@ -285,6 +285,8 @@ def test_queryparams():
     assert QueryParams([("a", "123"), ("a", "456")]) == QueryParams("a=123&a=456")
     assert QueryParams({"a": "123", "b": "456"}) != "invalid"
 
+from your_module import QueryParams
+
     q = QueryParams([("a", "123"), ("a", "456")])
     assert QueryParams(q) == q
 

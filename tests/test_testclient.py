@@ -57,6 +57,11 @@ def test_use_testclient_in_endpoint(test_client_factory):
     """
 
     def homepage(request):
+from your_module import test_client_factory
+from starlette.responses import JSONResponse
+from starlette.applications import Starlette
+from starlette.routing import Route
+
         client = test_client_factory(mock_service)
         response = client.get("/")
         return JSONResponse(response.json())
