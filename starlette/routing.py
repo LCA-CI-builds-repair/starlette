@@ -337,7 +337,6 @@ class WebSocketRoute(BaseRoute):
         if middleware is not None:
             for cls, options in reversed(middleware):
                 self.app = cls(app=self.app, **options)
-
         self.path_regex, self.path_format, self.param_convertors = compile_path(path)
 
     def matches(self, scope: Scope) -> typing.Tuple[Match, Scope]:
