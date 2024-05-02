@@ -227,8 +227,8 @@ def test_multipart_request_multiple_files_with_headers(tmpdir, test_client_facto
                     ["x-custom", "f2"],
                     ["content-type", "text/plain"],
                 ],
-            },
-        }
+},
+}
 
 
 def test_multi_items(tmpdir, test_client_factory):

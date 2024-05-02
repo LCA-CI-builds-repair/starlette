@@ -254,13 +254,14 @@ class _TestClientTransport(httpx.BaseTransport):
         ]
 
         scope: dict[str, typing.Any]
+import typing
 
-        if scheme in {"ws", "wss"}:
-            subprotocol = request.headers.get("sec-websocket-protocol", None)
-            if subprotocol is None:
-                subprotocols: typing.Sequence[str] = []
-            else:
-                subprotocols = [value.strip() for value in subprotocol.split(",")]
+if scheme in {"ws", "wss"}:
+    subprotocol = request.headers.get("sec-websocket-protocol", None)
+    if subprotocol is None:
+        subprotocols: typing.Sequence[str] = []
+    else:
+        subprotocols = [value.strip() for value in subprotocol.split(",")]
             scope = {
                 "type": "websocket",
                 "path": unquote(path),
@@ -299,17 +300,17 @@ class _TestClientTransport(httpx.BaseTransport):
         raw_kwargs: dict[str, typing.Any] = {"stream": io.BytesIO()}
         template = None
         context = None
+async def receive() -> Message:
+    nonlocal request_complete
 
-        async def receive() -> Message:
-            nonlocal request_complete
+    if request_complete:
+        if not response_complete.is_set():
+            await response_complete.wait()
+        return {"type": "http.disconnect"}
 
-            if request_complete:
-                if not response_complete.is_set():
-                    await response_complete.wait()
-                return {"type": "http.disconnect"}
-
-            body = request.read()
-            if isinstance(body, str):
+    body = request.read()
+    if isinstance(body, str):
+        body_bytes: bytes = body.encode("utf-8")  # pragma: no cover
                 body_bytes: bytes = body.encode("utf-8")  # pragma: no cover
             elif body is None:
                 body_bytes = b""  # pragma: no cover
@@ -327,13 +328,13 @@ class _TestClientTransport(httpx.BaseTransport):
 
             request_complete = True
             return {"type": "http.request", "body": body_bytes}
+async def send(message: Message) -> None:
+    nonlocal raw_kwargs, response_started, template, context
 
-        async def send(message: Message) -> None:
-            nonlocal raw_kwargs, response_started, template, context
-
-            if message["type"] == "http.response.start":
-                assert (
-                    not response_started
+    if message["type"] == "http.response.start":
+        assert (
+            not response_started
+        ), 'Received multiple "http.response.start" messages.'
                 ), 'Received multiple "http.response.start" messages.'
                 raw_kwargs["status_code"] = message["status"]
                 raw_kwargs["headers"] = [
@@ -348,20 +349,20 @@ class _TestClientTransport(httpx.BaseTransport):
                 assert (
                     not response_complete.is_set()
                 ), 'Received "http.response.body" after response completed.'
-                body = message.get("body", b"")
-                more_body = message.get("more_body", False)
-                if request.method != "HEAD":
-                    raw_kwargs["stream"].write(body)
-                if not more_body:
-                    raw_kwargs["stream"].seek(0)
-                    response_complete.set()
-            elif message["type"] == "http.response.debug":
-                template = message["info"]["template"]
-                context = message["info"]["context"]
+more_body = message.get("more_body", False)
+if request.method != "HEAD":
+    raw_kwargs["stream"].write(body)
+if not more_body:
+    raw_kwargs["stream"].seek(0)
+    response_complete.set()
+elif message["type"] == "http.response.debug":
+    template = message["info"]["template"]
+    context = message["info"]["context"]
 
-        try:
-            with self.portal_factory() as portal:
-                response_complete = portal.call(anyio.Event)
+try:
+    with self.portal_factory() as portal:
+        response_complete = portal.call(anyio.Event)
+        portal.call(self.app, scope, receive, send)
                 portal.call(self.app, scope, receive, send)
         except BaseException as exc:
             if self.raise_server_exceptions:
@@ -379,13 +380,13 @@ class _TestClientTransport(httpx.BaseTransport):
         raw_kwargs["stream"] = httpx.ByteStream(raw_kwargs["stream"].read())
 
         response = httpx.Response(**raw_kwargs, request=request)
-        if template is not None:
-            response.template = template  # type: ignore[attr-defined]
-            response.context = context  # type: ignore[attr-defined]
-        return response
+response.template = template  # type: ignore[attr-defined]
+response.context = context  # type: ignore[attr-defined]
+return response
 
 
 class TestClient(httpx.Client):
+    __test__ = False
     __test__ = False
     task: Future[None]
     portal: anyio.abc.BlockingPortal | None = None

@@ -508,6 +508,9 @@ def test_request_send_push_promise_without_setting_send(test_client_factory):
     assert response.json() == {"json": "Send channel not available"}
 
 
+import pytest
+from typing import List
+
 @pytest.mark.parametrize(
     "messages",
     [
@@ -524,7 +527,6 @@ def test_request_send_push_promise_without_setting_send(test_client_factory):
 @pytest.mark.anyio
 async def test_request_rcv(messages: List[Message]) -> None:
     messages = messages.copy()
-
     async def rcv() -> Message:
         return {"type": "http.request", **messages.pop(0)}
 
