@@ -371,9 +371,9 @@ class MultiDict(ImmutableMultiDict[typing.Any, typing.Any]):
 
     def update(
         self,
-        *args: MultiDict
+        *args: (MultiDict
         | typing.Mapping[typing.Any, typing.Any]
-        | list[tuple[typing.Any, typing.Any]],
+        | list[tuple[typing.Any, typing.Any]]),
         **kwargs: typing.Any,
     ) -> None:
         value = MultiDict(*args, **kwargs)
@@ -386,7 +386,6 @@ class QueryParams(ImmutableMultiDict[str, str]):
     """
     An immutable multidict.
     """
-
     def __init__(
         self,
         *args: ImmutableMultiDict[typing.Any, typing.Any]
