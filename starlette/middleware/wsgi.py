@@ -131,7 +131,6 @@ class WSGIResponder:
                     "headers": headers,
                 },
             )
-
     def wsgi(
         self,
         environ: typing.Dict[str, typing.Any],

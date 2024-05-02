@@ -283,7 +283,6 @@ class _TestClientTransport(httpx.BaseTransport):
                 if not response_complete.is_set():
                     await response_complete.wait()
                 return {"type": "http.disconnect"}
-
             body = request.read()
             if isinstance(body, str):
                 body_bytes: bytes = body.encode("utf-8")  # pragma: no cover
