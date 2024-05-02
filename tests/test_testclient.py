@@ -134,13 +134,13 @@ def test_use_testclient_as_contextmanager(
         assert client.get("/loop_id").json() == 0
         assert client.get("/loop_id").json() == 0
 
-    # that thread is also the same as the lifespan thread
-    assert startup_loop == 0
-    assert shutdown_loop == 0
+# that thread is also the same as the lifespan thread
+assert startup_loop == 0
+assert shutdown_loop == 0
 
-    # lifespan events run in the same task, this is important because a task
-    # group must be entered and exited in the same task.
-    assert startup_task is shutdown_task
+# lifespan events run in the same task, this is important because a task
+# group must be entered and exited in the same task.
+assert startup_task is shutdown_task
 
     # outside the TestClient context, new requests continue to spawn in new
     # eventloops in new threads

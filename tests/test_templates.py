@@ -123,13 +123,13 @@ def test_templates_with_directories(tmp_path: Path, test_client_factory):
     assert set(response.context.keys()) == {"request"}
 
 
+# Add necessary imports if required
+
 def test_templates_require_directory_or_environment():
     with pytest.raises(
         AssertionError, match="either 'directory' or 'env' arguments must be passed"
     ):
         Jinja2Templates()  # type: ignore[call-overload]
-
-
 def test_templates_with_directory(tmpdir):
     path = os.path.join(tmpdir, "index.html")
     with open(path, "w") as file:
