@@ -221,7 +221,7 @@ async def test_run_background_tasks_even_if_client_disconnects():
     response_complete = anyio.Event()
     background_task_run = anyio.Event()
 
-    async def sleep_and_set():
+    async def sleep_and_set(background_task_run):
         # small delay to give BaseHTTPMiddleware a chance to cancel us
         # this is required to make the test fail prior to fixing the issue
         # so do not be surprised if you remove it and the test still passes
