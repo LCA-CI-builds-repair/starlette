@@ -238,8 +238,8 @@ class Route(BaseRoute):
             self.app = endpoint
 
         if middleware is not None:
-            for cls, options in reversed(middleware):
-                self.app = cls(app=self.app, **options)
+            for cls, args, kwargs in reversed(middleware):
+                self.app = cls(app=self.app, *args, **kwargs)
 
         if methods is None:
             self.methods = None
@@ -335,8 +335,8 @@ class WebSocketRoute(BaseRoute):
             self.app = endpoint
 
         if middleware is not None:
-            for cls, options in reversed(middleware):
-                self.app = cls(app=self.app, **options)
+            for cls, args, kwargs in reversed(middleware):
+                self.app = cls(app=self.app, *args, **kwargs)
 
         self.path_regex, self.path_format, self.param_convertors = compile_path(path)
 
@@ -404,8 +404,8 @@ class Mount(BaseRoute):
             self._base_app = Router(routes=routes)
         self.app = self._base_app
         if middleware is not None:
-            for cls, options in reversed(middleware):
-                self.app = cls(app=self.app, **options)
+            for cls, args, kwargs in reversed(middleware):
+                self.app = cls(app=self.app, *args, **kwargs)
         self.name = name
         self.path_regex, self.path_format, self.param_convertors = compile_path(
             self.path + "/{path:path}"
@@ -421,12 +421,9 @@ class Mount(BaseRoute):
             path = scope["path"]
             root_path = scope.get("route_root_path", scope.get("root_path", ""))
             route_path = scope.get("route_path", re.sub(r"^" + root_path, "", path))
-            mount_match = self.path_regex.match(route_path)
-            path_match = self.routes == [] or any(
-                [route.matches(scope)[0] == Match.FULL for route in self.routes]
-            )
-            if mount_match and path_match:
-                matched_params = mount_match.groupdict()
+            match = self.path_regex.match(route_path)
+            if match:
+                matched_params = match.groupdict()
                 for key, value in matched_params.items():
                     matched_params[key] = self.param_convertors[key].convert(value)
                 remaining_path = "/" + matched_params.pop("path")
@@ -675,8 +672,8 @@ class Router:
 
         self.middleware_stack = self.app
         if middleware:
-            for cls, options in reversed(middleware):
-                self.middleware_stack = cls(self.middleware_stack, **options)
+            for cls, args, kwargs in reversed(middleware):
+                self.middleware_stack = cls(self.middleware_stack, *args, **kwargs)
 
     async def not_found(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] == "websocket":
