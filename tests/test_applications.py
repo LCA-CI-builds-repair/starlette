@@ -141,6 +141,16 @@ def test_func_route(client):
     assert response.status_code == 200
     assert response.text == "Hello, world!"
 
+def test_mounted_users_route(client):
+    # Test the root of the `/users` route
+    response = client.get("/users/")
+    assert response.status_code == 200
+    assert response.text == "Hello, everyone!"
+
+    # Test a parameterized `/users/{username}` route
+    response = client.get("/users/tomchristie")
+    assert response.status_code == 200
+    assert response.text == "Hello, tomchristie!"
     response = client.head("/func")
     assert response.status_code == 200
     assert response.text == ""
