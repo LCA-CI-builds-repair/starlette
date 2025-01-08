@@ -172,7 +172,8 @@ def client(test_client_factory: typing.Callable[..., TestClient]):
 )
 def test_router(client: TestClient):
     response = client.get("/")
-    assert response.status_code == 200
+    assert response.status_code == 200  # Ensure `/users/` matches
+    assert response.text == "Hello, everyone!"
     assert response.text == "Hello, world"
 
     response = client.post("/")
