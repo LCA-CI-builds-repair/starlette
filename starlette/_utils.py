@@ -10,6 +10,7 @@ from starlette.types import Scope
 if sys.version_info >= (3, 10):  # pragma: no cover
     from typing import TypeGuard
 else:  # pragma: no cover
+    from typing import Union
     from typing_extensions import TypeGuard
 
 has_exceptiongroups = True
