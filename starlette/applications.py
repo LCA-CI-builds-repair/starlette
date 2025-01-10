@@ -76,10 +76,13 @@ class Starlette:
 
     def build_middleware_stack(self) -> ASGIApp:
         debug = self.debug
-        error_handler = None
+        error_handler: typing.Optional[ExceptionHandler] = None
         exception_handlers: typing.Dict[
             typing.Any, typing.Callable[[Request, Exception], Response]
-        ] = {}
+        ] = dict(self.exception_handlers)
+
+        if 500 not in exception_handlers:
+            exception_handlers[500] = error_500
 
         for key, value in self.exception_handlers.items():
             if key in (500, Exception):
