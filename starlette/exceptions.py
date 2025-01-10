@@ -6,7 +6,11 @@ __all__ = ("HTTPException", "WebSocketException")
 
 
 class HTTPException(Exception):
-    def __init__(
+    if sys.version_info >= (3, 10):  # pragma: no cover
+        def __init__(
+            self, status_code: int, detail: str | None = None, headers: dict[str, str] | None = None
+        ) -> None:
+    else:  # pragma: no cover
         self,
         status_code: int,
         detail: str | None = None,
@@ -27,7 +31,10 @@ class HTTPException(Exception):
 
 
 class WebSocketException(Exception):
-    def __init__(self, code: int, reason: str | None = None) -> None:
+    if sys.version_info >= (3, 10):  # pragma: no cover
+        def __init__(self, code: int, reason: str | None = None) -> None:
+    else:  # pragma: no cover
+        def __init__(self, code: int, reason: str = None) -> None:
         self.code = code
         self.reason = reason or ""
 
