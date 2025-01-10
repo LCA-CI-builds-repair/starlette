@@ -120,6 +120,8 @@ app = Starlette(
         WebSocketRoute("/ws-raise-custom", endpoint=websocket_raise_custom),
         Mount("/users", app=users),
         Host("{subdomain}.example.org", app=subdomain),
+        Route("/users/", endpoint=all_users_page),
+        Route("/users/{username}", endpoint=user_page),
     ],
     exception_handlers=exception_handlers,
     middleware=middleware,
