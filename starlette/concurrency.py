@@ -30,7 +30,7 @@ async def run_until_first_complete(*args: tuple[typing.Callable | dict]) -> None
             task_group.cancel_scope.cancel()
 
         for func, kwargs in args:
-            task_group.start_soon(run, functools.partial(func, **kwargs))
+            task_group.start_soon(run, functools.partial(func, **(kwargs or {})))
 
 
 async def run_in_threadpool(
