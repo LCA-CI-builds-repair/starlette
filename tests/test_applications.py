@@ -105,7 +105,7 @@ exception_handlers = {
     CustomWSException: custom_ws_exception_handler,
 }
 
-middleware = [
+_middleware = [
     Middleware(TrustedHostMiddleware, allowed_hosts=["testserver", "*.example.org"])
 ]
 
@@ -118,11 +118,11 @@ app = Starlette(
         WebSocketRoute("/ws", endpoint=websocket_endpoint),
         WebSocketRoute("/ws-raise-websocket", endpoint=websocket_raise_websocket),
         WebSocketRoute("/ws-raise-custom", endpoint=websocket_raise_custom),
-        Mount("/users", app=users),
+        Mount("/users", users),
         Host("{subdomain}.example.org", app=subdomain),
     ],
     exception_handlers=exception_handlers,
-    middleware=middleware,
+    middleware=_middleware,  # Added _ to avoid name conflict
 )
 
 
