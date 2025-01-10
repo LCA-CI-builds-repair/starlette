@@ -259,7 +259,11 @@ async def test_file_response_on_head_method(tmpdir: Path):
     async def receive() -> Message:  # type: ignore[empty-body]
         ...  # pragma: no cover
 
+    path = str(path)  # Convert Path to str for compatibility
+    
     async def send(message: Message) -> None:
+        if message["type"] == "http.request":
+            assert message["method"] == "GET"
         if message["type"] == "http.response.start":
             assert message["status"] == status.HTTP_200_OK
             headers = Headers(raw=message["headers"])
@@ -350,9 +354,10 @@ async def test_file_response_with_pathsend(tmpdir: Path):
             assert "content-disposition" in headers
             assert "last-modified" in headers
             assert "etag" in headers
-        elif message["type"] == "http.response.pathsend":
-            assert message["path"] == str(path)
-
+        elif message["type"] == "http.response.body":
+            assert message["body"] == b"<file content>" * 1000
+            assert message["more_body"] is False
+            
     # Since the TestClient doesn't support `pathsend`, we need to test this directly.
     await app(
         {"type": "http", "method": "get", "extensions": {"http.response.pathsend", {}}},
