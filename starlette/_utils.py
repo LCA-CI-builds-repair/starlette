@@ -38,7 +38,11 @@ def is_async_callable(obj: typing.Any) -> typing.Any:
         obj = obj.func
 
     return asyncio.iscoroutinefunction(obj) or (
-        callable(obj) and asyncio.iscoroutinefunction(obj.__call__)
+        callable(obj) and
+        (
+            asyncio.iscoroutinefunction(obj.__call__) or
+            getattr(obj.__call__, "__annotations__", {}).get("return") == typing.Awaitable[typing.Any]
+        )
     )
 
 
