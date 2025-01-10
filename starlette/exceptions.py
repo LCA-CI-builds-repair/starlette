@@ -6,12 +6,7 @@ __all__ = ("HTTPException", "WebSocketException")
 
 
 class HTTPException(Exception):
-    def __init__(
-        self,
-        status_code: int,
-        detail: str | None = None,
-        headers: dict[str, str] | None = None,
-    ) -> None:
+    def __init__(self, status_code: int, detail: str = None, headers: dict[str, str] = None) -> None:
         if detail is None:
             detail = http.HTTPStatus(status_code).phrase
         self.status_code = status_code
@@ -23,7 +18,7 @@ class HTTPException(Exception):
 
     def __repr__(self) -> str:
         class_name = self.__class__.__name__
-        return f"{class_name}(status_code={self.status_code!r}, detail={self.detail!r})"
+        return f"{class_name}(status_code={self.status_code!r}, detail={self.detail!r}, headers={self.headers!r})"
 
 
 class WebSocketException(Exception):
