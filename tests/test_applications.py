@@ -87,8 +87,8 @@ def custom_ws_exception_handler(websocket: WebSocket, exc: CustomWSException):
 
 users = Router(
     routes=[
-        Route("/", endpoint=all_users_page),
-        Route("/{username}", endpoint=user_page),
+        Route("/", endpoint=all_users_page, name="all_users"),
+        Route("/{username}", endpoint=user_page, name="user_page"),
     ]
 )
 
@@ -110,6 +110,9 @@ middleware = [
 ]
 
 app = Starlette(
+    routes=[
+        Route("/", endpoint=func_homepage, name="homepage"),
+        Mount("/users", app=users, name="users"),
     routes=[
         Route("/func", endpoint=func_homepage),
         Route("/async", endpoint=async_homepage),
