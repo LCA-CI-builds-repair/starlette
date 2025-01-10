@@ -141,6 +141,14 @@ def test_func_route(client):
     assert response.status_code == 200
     assert response.text == "Hello, world!"
 
+def test_users_routes(client):
+    response = client.get("/users/")
+    assert response.status_code == 200
+    assert response.text == "Hello, everyone!"
+
+    response = client.get("/users/tomchristie")
+    assert response.status_code == 200
+    assert response.text == "Hello, tomchristie!"
     response = client.head("/func")
     assert response.status_code == 200
     assert response.text == ""
