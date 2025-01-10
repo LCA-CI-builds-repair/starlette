@@ -74,6 +74,10 @@ class Starlette:
         self.user_middleware = [] if middleware is None else list(middleware)
         self.middleware_stack: typing.Optional[ASGIApp] = None
 
+    def mount(self, path: str, app: ASGIApp) -> None:
+        self.router.mount(path, app)
+        self.build_middleware_stack()
+
     def build_middleware_stack(self) -> ASGIApp:
         debug = self.debug
         error_handler = None
