@@ -75,7 +75,7 @@ class AwaitableOrContextManagerWrapper(typing.Generic[SupportsAsyncCloseType]):
         return self.entered
 
     async def __aexit__(self, *args: typing.Any) -> None | bool:
-        await self.entered.close()
+        await self.entered.close() # type: ignore[arg-type]
         return None
 
 
@@ -84,7 +84,7 @@ def collapse_excgroups() -> typing.Generator[None, None, None]:
     try:
         yield
     except BaseException as exc:
-        if has_exceptiongroups:
+        if has_exceptiongroups:  # type: ignore[unreachable]
             while isinstance(exc, BaseExceptionGroup) and len(exc.exceptions) == 1:
                 exc = exc.exceptions[0]  # pragma: no cover
 
