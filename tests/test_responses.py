@@ -260,6 +260,9 @@ async def test_file_response_on_head_method(tmpdir: Path):
         ...  # pragma: no cover
 
     async def send(message: Message) -> None:
+        if message["type"] == "http.response.start" and message["status"] == status.HTTP_200_OK:
+            headers = Headers(raw=message["headers"])
+            headers["content-length"] = str(len(content))
         if message["type"] == "http.response.start":
             assert message["status"] == status.HTTP_200_OK
             headers = Headers(raw=message["headers"])
@@ -355,8 +358,9 @@ async def test_file_response_with_pathsend(tmpdir: Path):
 
     # Since the TestClient doesn't support `pathsend`, we need to test this directly.
     await app(
-        {"type": "http", "method": "get", "extensions": {"http.response.pathsend", {}}},
+        {"type": "http", "method": "get"},
         receive,
+        {"type": "http", "method": "get", "extensions": {"http.response.pathsend", {}}},
         send,
     )
 
