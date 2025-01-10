@@ -57,7 +57,7 @@ class SupportsAsyncClose(typing.Protocol):
 
 
 SupportsAsyncCloseType = typing.TypeVar(
-    "SupportsAsyncCloseType", bound=SupportsAsyncClose, covariant=False
+    "SupportsAsyncCloseType", bound=SupportsAsyncClose
 )
 
 
