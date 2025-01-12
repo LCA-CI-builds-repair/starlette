@@ -87,6 +87,8 @@ class Starlette:
             else:
                 exception_handlers[key] = value
 
+        self.router.default = self.router
+
         middleware = (
             [Middleware(ServerErrorMiddleware, handler=error_handler, debug=debug)]
             + self.user_middleware
