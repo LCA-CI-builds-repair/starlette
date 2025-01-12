@@ -87,6 +87,19 @@ class Starlette:
             else:
                 exception_handlers[key] = value
 
+        middleware = [
+            Middleware(ServerErrorMiddleware, handler=error_handler, debug=debug),
+            *self.user_middleware,
+            Middleware(ExceptionMiddleware, handlers=exception_handlers, debug=debug),
+        ]
+
+        app = self.router
+        for cls, options in reversed([typing.cast(tuple, m) for m in middleware]):
+            app = cls(app=app, **options)
+        
+        self.middleware_stack = app
+        return app[key] = value
+
         middleware = (
             [Middleware(ServerErrorMiddleware, handler=error_handler, debug=debug)]
             + self.user_middleware
