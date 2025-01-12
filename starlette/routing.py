@@ -106,13 +106,17 @@ def replace_params(
     path: str,
     param_convertors: typing.Dict[str, Convertor[typing.Any]],
     path_params: typing.Dict[str, str],
-) -> typing.Tuple[str, typing.Dict[str, str]]:
+) -> str:
     for key, value in list(path_params.items()):
         if "{" + key + "}" in path:
             convertor = param_convertors[key]
             value = convertor.to_string(value)
             path = path.replace("{" + key + "}", value)
             path_params.pop(key)
+        elif key in param_convertors:
+            convertor = param_convertors[key]
+            value = convertor.to_string(value)
+            path = f"{path}/{value}" if not path.endswith('/') else f"{path}{value}"
     return path, path_params
 
 
