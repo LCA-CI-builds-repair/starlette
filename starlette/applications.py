@@ -86,6 +86,16 @@ class Starlette:
                 error_handler = value
             else:
                 exception_handlers[key] = value
+        middleware = (
+            [middleware(servererror_middleware, handler=error_handler, debug=debug)]
+            + self.user_middleware
+            + [
+                middleware(exceptionmiddleware, handlers=exception_handlers, debug=debug)
+            ]
+        )
+        for process_middleware in reversed(middleware):
+            app = process_middleware(app)
+        return app[key] = value
 
         middleware = (
             [Middleware(ServerErrorMiddleware, handler=error_handler, debug=debug)]
