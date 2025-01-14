@@ -94,7 +94,7 @@ class Starlette:
                 Middleware(
                     ExceptionMiddleware, handlers=exception_handlers, debug=debug
                 )
-            ]
+            ] + self.user_middleware
         )
 
         app = self.router
