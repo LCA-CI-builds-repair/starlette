@@ -80,7 +80,7 @@ class AwaitableOrContextManagerWrapper(typing.Generic[SupportsAsyncCloseType]):
 
 
 @contextmanager
-def collapse_excgroups() -> typing.Generator[None, None, None]:
+def collapse_excgroups() -> typing.Generator[None, None, None]: 
     try:
         yield
     except BaseException as exc:

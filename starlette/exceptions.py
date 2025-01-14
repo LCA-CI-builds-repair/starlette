@@ -8,7 +8,7 @@ __all__ = ("HTTPException", "WebSocketException")
 class HTTPException(Exception):
     def __init__(
         self,
-        status_code: int,
+        status_code: int, 
         detail: str | None = None,
         headers: dict[str, str] | None = None,
     ) -> None:
