@@ -71,6 +71,9 @@ class Starlette:
         self.exception_handlers = (
             {} if exception_handlers is None else dict(exception_handlers)
         )
+        # Initialize router state
+        if routes:
+            self.router.routes = routes
         self.user_middleware = [] if middleware is None else list(middleware)
         self.middleware_stack: typing.Optional[ASGIApp] = None
 
@@ -86,6 +89,17 @@ class Starlette:
                 error_handler = value
             else:
                 exception_handlers[key] = value
+        
+        middleware = [
+            Middleware(ServerErrorMiddleware, handler=error_handler, debug=debug),
+            *self.user_middleware,
+            Middleware(ExceptionMiddleware, handlers=exception_handlers, debug=debug),
+        ]
+
+        app = self.router
+        for cls, options in reversed(middleware):
+            app = cls(app=app, **options)
+        return app[key] = value
 
         middleware = (
             [Middleware(ServerErrorMiddleware, handler=error_handler, debug=debug)]
