@@ -105,15 +105,16 @@ def get_name(endpoint: typing.Callable[..., typing.Any]) -> str:
 def replace_params(
     path: str,
     param_convertors: typing.Dict[str, Convertor[typing.Any]],
-    path_params: typing.Dict[str, str],
+    path_params: typing.Dict[str, typing.Any],
 ) -> typing.Tuple[str, typing.Dict[str, str]]:
+    remaining_params = dict(path_params)
     for key, value in list(path_params.items()):
         if "{" + key + "}" in path:
             convertor = param_convertors[key]
             value = convertor.to_string(value)
             path = path.replace("{" + key + "}", value)
-            path_params.pop(key)
-    return path, path_params
+            remaining_params.pop(key)
+    return path, remaining_params, path_params
 
 
 # Match parameters in URL paths, eg. '{param}', and '{param:int}'
