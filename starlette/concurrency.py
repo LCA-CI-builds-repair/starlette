@@ -17,7 +17,7 @@ T = typing.TypeVar("T")
 
 
 async def run_until_first_complete(*args: tuple[typing.Callable | dict]) -> None:  # type: ignore[type-arg]  # noqa: E501
-    warnings.warn(
+    warnings.warn(  # Fix tuple unpacking issue in run function below
         "run_until_first_complete is deprecated "
         "and will be removed in a future version.",
         DeprecationWarning,
@@ -29,7 +29,8 @@ async def run_until_first_complete(*args: tuple[typing.Callable | dict]) -> None
             await func()
             task_group.cancel_scope.cancel()
 
-        for func, kwargs in args:
+        for arg in args:
+            func, kwargs = arg
             task_group.start_soon(run, functools.partial(func, **kwargs))
 
 

@@ -3,7 +3,7 @@ import functools
 import re
 import sys
 import typing
-from contextlib import contextmanager
+from typing import Any, Generator, Optional, Union
 
 from starlette.types import Scope
 
@@ -74,7 +74,7 @@ class AwaitableOrContextManagerWrapper(typing.Generic[SupportsAsyncCloseType]):
         self.entered = await self.aw
         return self.entered
 
-    async def __aexit__(self, *args: typing.Any) -> None | bool:
+    async def __aexit__(self, *args: Any) -> Optional[bool]:
         await self.entered.close()
         return None
 
