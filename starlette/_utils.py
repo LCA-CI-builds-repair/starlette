@@ -71,7 +71,9 @@ class AwaitableOrContextManagerWrapper(typing.Generic[SupportsAsyncCloseType]):
         return self.aw.__await__()
 
     async def __aenter__(self) -> SupportsAsyncCloseType:
-        self.entered = await self.aw
+        # Use async with statement to enter the context
+        async with self.aw as self.entered:
+            pass
         return self.entered
 
     async def __aexit__(self, *args: typing.Any) -> None | bool:
