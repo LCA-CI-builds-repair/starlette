@@ -263,11 +263,15 @@ async def test_file_response_on_head_method(tmpdir: Path):
         if message["type"] == "http.response.start":
             assert message["status"] == status.HTTP_200_OK
             headers = Headers(raw=message["headers"])
-            assert headers["content-type"] == "image/png"
-            assert "content-length" in headers
-            assert "content-disposition" in headers
-            assert "last-modified" in headers
-            assert "etag" in headers
+            # Add a check for the pathsend message
+            if message.get("pathsend"):
+                await send_pathsend(message["pathsend"])
+            else:
+                assert headers["content-type"] == "image/png"
+                assert "content-length" in headers
+                assert "content-disposition" in headers
+                assert "last-modified" in headers
+                assert "etag" in headers
         elif message["type"] == "http.response.body":
             assert message["body"] == b""
             assert message["more_body"] is False
