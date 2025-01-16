@@ -113,7 +113,40 @@ def replace_params(
             value = convertor.to_string(value)
             path = path.replace("{" + key + "}", value)
             path_params.pop(key)
-    return path, path_params
+    return path
+
+class Mount(BaseRoute):
+    def __init__(
+        self,
+        path: str,
+        app: ASGIApp,
+        name: str = None,
+    ) -> None:
+        self.path = path.rstrip("/")
+        self.app = app
+        self.name = name
+
+    async def handle(self, scope: Scope, receive: Receive, send: Send) -> None:
+        # Recreate the ASGI scope with the modified path
+        path = scope["path"]
+        root_path = scope.get("root_path", "")
+        scope = dict(scope)
+        scope["root_path"] = root_path + self.path
+        scope["path"] = path[len(self.path):]
+        await self.app(scope, receive, send)
+
+    def matches(self, scope: Scope) -> typing.Tuple[Match, Scope]:
+        path = scope["path"]
+        if not path.startswith(self.path):
+            return Match.NONE, {}
+        # Check if this is a full match or a partial match
+        remaining_path = path[len(self.path):]
+        if remaining_path and not remaining_path.startswith("/"):
+            return Match.NONE, {}
+        return (
+            Match.FULL if path == self.path or path == self.path + "/" else Match.PARTIAL,
+            {},
+        ), path_params
 
 
 # Match parameters in URL paths, eg. '{param}', and '{param:int}'
