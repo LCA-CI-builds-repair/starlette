@@ -186,6 +186,12 @@ def test_router(client: TestClient):
 
     response = client.get("/users")
     assert response.status_code == 200
+    assert response.text == "Hello, everyone!"
+
+    response = client.get("/users/tomchristie")
+    assert response.status_code == 200
+    assert response.text == "Hello, tomchristie!"
+    assert response.status_code == 200
     assert response.text == "All users"
 
     response = client.get("/users/tomchristie")
