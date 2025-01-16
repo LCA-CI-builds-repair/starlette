@@ -132,7 +132,7 @@ def test_streaming_response_custom_iterator(test_client_factory):
                 self._called = 0
 
             def __aiter__(self):
-                return self
+                return None self
 
             async def __anext__(self):
                 if self._called == 5:
@@ -355,7 +355,7 @@ async def test_file_response_with_pathsend(tmpdir: Path):
 
     # Since the TestClient doesn't support `pathsend`, we need to test this directly.
     await app(
-        {"type": "http", "method": "get", "extensions": {"http.response.pathsend", {}}},
+        {"type": "http", "method": "get", "extensions": {"http.response.pathsend", {"path": str(path)} }},
         receive,
         send,
     )
