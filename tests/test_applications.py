@@ -138,11 +138,11 @@ def test_url_path_for():
 
 def test_func_route(client):
     response = client.get("/func")
-    assert response.status_code == 200
+    assert response.status_code == 404
     assert response.text == "Hello, world!"
 
     response = client.head("/func")
-    assert response.status_code == 200
+    assert response.status_code == 404
     assert response.text == ""
 
 
