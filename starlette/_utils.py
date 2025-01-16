@@ -19,7 +19,8 @@ if sys.version_info < (3, 11):  # pragma: no cover
     except ImportError:
         has_exceptiongroups = False
 
-T = typing.TypeVar("T")
+A = typing.TypeVar("A")  # Renamed from T to A
+T = typing.TypeVar("T", covariant=True)
 AwaitableCallable = typing.Callable[..., typing.Awaitable[T]]
 
 
