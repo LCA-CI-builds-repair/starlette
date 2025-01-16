@@ -3,7 +3,7 @@ import functools
 import re
 import sys
 import typing
-from contextlib import contextmanager
+from contextlib import contextmanager 
 
 from starlette.types import Scope
 
@@ -84,6 +84,9 @@ def collapse_excgroups() -> typing.Generator[None, None, None]:
     try:
         yield
     except BaseException as exc:
+        if sys.version_info < (3, 10):
+            raise exc
+
         if has_exceptiongroups:
             while isinstance(exc, BaseExceptionGroup) and len(exc.exceptions) == 1:
                 exc = exc.exceptions[0]  # pragma: no cover
@@ -95,3 +98,4 @@ def get_route_path(scope: Scope) -> str:
     root_path = scope.get("root_path", "")
     route_path = re.sub(r"^" + root_path, "", scope["path"])
     return route_path
+
