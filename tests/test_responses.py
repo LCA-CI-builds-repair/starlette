@@ -353,7 +353,7 @@ async def test_file_response_with_pathsend(tmpdir: Path):
         elif message["type"] == "http.response.pathsend":
             assert message["path"] == str(path)
 
-    # Since the TestClient doesn't support `pathsend`, we need to test this directly.
+    # Since the TestClient doesn't support `pathsend` yet, we need to test this directly.
     await app(
         {"type": "http", "method": "get", "extensions": {"http.response.pathsend", {}}},
         receive,
