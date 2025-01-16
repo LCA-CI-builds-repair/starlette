@@ -113,7 +113,7 @@ def replace_params(
             value = convertor.to_string(value)
             path = path.replace("{" + key + "}", value)
             path_params.pop(key)
-    return path, path_params
+    return path, path_params, path_params
 
 
 # Match parameters in URL paths, eg. '{param}', and '{param:int}'
