@@ -141,6 +141,37 @@ def test_func_route(client):
     assert response.status_code == 200
     assert response.text == "Hello, world!"
 
+    response = client.put("/async")
+    assert response.status_code == 405
+    assert response.text == "method not allowed"
+    assert set(response.headers["allow"].split(", ")) == {"head", "get", "put"}
+    assert set(response.headers["allow"].split(", ")) == {"head", "get", "post", "put"}
+
+    response = client.head("/async")
+    assert response.status_code == 405
+    assert response.text == "method not allowed"
+    assert set(response.headers["allow"].split(", ")) == {"head", "get", "put"}
+    assert set(response.headers["allow"].split(", ")) == {"head", "get", "post", "put"}
+
+    response = client.post("/async")
+    assert response.status_code == 405
+    assert response.text == "method not allowed"
+    assert set(response.headers["allow"].split(", ")) == {"head", "get", "put"}
+    assert set(response.headers["allow"].split(", ")) == {"head", "get", "post", "put"}
+
+    response = client.delete("/async")
+    assert response.status_code == 405
+    assert response.text == "method not allowed"
+    assert set(response.headers["allow"].split(", ")) == {"head", "get", "put"}
+    assert set(response.headers["allow"].split(", ")) == {"head", "get", "post", "put"}
+
+    response = client.patch("/async")
+    assert response.status_code == 405
+    assert response.text == "method not allowed"
+    assert set(response.headers["allow"].split(", ")) == {"head", "get", "put"}
+    assert set(response.headers["allow"].split(", ")) == {"head", "get", "post", "put"}
+    assert response.text == "Hello, world!"
+
     response = client.head("/func")
     assert response.status_code == 200
     assert response.text == ""
