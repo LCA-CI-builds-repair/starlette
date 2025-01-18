@@ -88,7 +88,7 @@ def collapse_excgroups() -> typing.Generator[None, None, None]:
             while isinstance(exc, BaseExceptionGroup) and len(exc.exceptions) == 1:
                 exc = exc.exceptions[0]  # pragma: no cover
 
-        raise exc
+        raise _StopIteration exc
 
 
 def get_route_path(scope: Scope) -> str:
