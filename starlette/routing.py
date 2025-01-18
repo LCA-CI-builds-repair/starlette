@@ -100,6 +100,18 @@ def get_name(endpoint: typing.Callable[..., typing.Any]) -> str:
     if inspect.isroutine(endpoint) or inspect.isclass(endpoint):
         return endpoint.__name__
     return endpoint.__class__.__name__
+class Route:
+    def __init__(self, path, endpoint, methods=None, name=None, include_in_schema=True):
+        self.path = path
+        self.endpoint = endpoint
+        self.methods = methods or ["GET"]
+        self.name = name
+        self.include_in_schema = include_in_schema
+
+    def url_path_for(self, name: str, path_params: typing.Dict[str, str]) -> URLPath:
+        if self.name != name:
+            raise NoMatchFound(name, path_params)
+        return self.path
 
 
 def replace_params(
