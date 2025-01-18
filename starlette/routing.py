@@ -108,12 +108,12 @@ def replace_params(
     path_params: typing.Dict[str, str],
 ) -> typing.Tuple[str, typing.Dict[str, str]]:
     for key, value in list(path_params.items()):
-        if "{" + key + "}" in path:
+        if key in param_convertors and "{" + key + "}" in path:
             convertor = param_convertors[key]
             value = convertor.to_string(value)
             path = path.replace("{" + key + "}", value)
             path_params.pop(key)
-    return path, path_params
+    return path, path_params, path_params
 
 
 # Match parameters in URL paths, eg. '{param}', and '{param:int}'
