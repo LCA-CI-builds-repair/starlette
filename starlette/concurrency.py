@@ -34,7 +34,7 @@ async def run_until_first_complete(*args: tuple[typing.Callable | dict]) -> None
 
 
 async def run_in_threadpool(
-    func: typing.Callable[P, T], *args: P.args, **kwargs: P.kwargs
+    func: typing.Callable[P, T], *args: typing.Tuple[P.args], **kwargs: typing.Dict[str, P.kwargs]
 ) -> T:
     if kwargs:  # pragma: no cover
         # run_sync doesn't accept 'kwargs', so bind them in here
