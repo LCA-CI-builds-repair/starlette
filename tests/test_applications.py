@@ -118,7 +118,7 @@ app = Starlette(
         WebSocketRoute("/ws", endpoint=websocket_endpoint),
         WebSocketRoute("/ws-raise-websocket", endpoint=websocket_raise_websocket),
         WebSocketRoute("/ws-raise-custom", endpoint=websocket_raise_custom),
-        Mount("/users", app=users),
+        Mount("/users/", app=users),  # Ensure the router is mounted at '/users/'
         Host("{subdomain}.example.org", app=subdomain),
     ],
     exception_handlers=exception_handlers,
