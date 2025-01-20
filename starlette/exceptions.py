@@ -28,6 +28,7 @@ class HTTPException(Exception):
 
 class WebSocketException(Exception):
     def __init__(self, code: int, reason: str | None = None) -> None:
+    def __init__(self, code: int, reason: typing.Optional[str] = None) -> None:
         self.code = code
         self.reason = reason or ""
 
@@ -57,4 +58,5 @@ def __getattr__(name: str) -> typing.Any:  # pragma: no cover
 
 
 def __dir__() -> list[str]:
+def __dir__() -> typing.List[str]:
     return sorted(list(__all__) + [__deprecated__])  # pragma: no cover
