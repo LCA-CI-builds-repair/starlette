@@ -33,7 +33,8 @@ def is_async_callable(obj: typing.Any) -> TypeGuard[AwaitableCallable[typing.Any
     ...
 
 
-def is_async_callable(obj: typing.Any) -> typing.Any:
+from typing import Union
+def is_async_callable(obj: Union[AwaitableCallable[T], typing.Any]) -> Union[AwaitableCallable[typing.Any], typing.Any]:
     while isinstance(obj, functools.partial):
         obj = obj.func
 
