@@ -5,12 +5,13 @@ import warnings
 __all__ = ("HTTPException", "WebSocketException")
 
 
+from typing import Dict, List, Union
 class HTTPException(Exception):
     def __init__(
         self,
         status_code: int,
-        detail: str | None = None,
-        headers: dict[str, str] | None = None,
+        detail: Union[str, None] = None,
+        headers: Union[Dict[str, str], None] = None,
     ) -> None:
         if detail is None:
             detail = http.HTTPStatus(status_code).phrase
@@ -28,6 +29,7 @@ class HTTPException(Exception):
 
 class WebSocketException(Exception):
     def __init__(self, code: int, reason: str | None = None) -> None:
+        reason: Union[str, None] = reason
         self.code = code
         self.reason = reason or ""
 
