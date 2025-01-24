@@ -8,6 +8,20 @@ from starlette.middleware import Middleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.errors import ServerErrorMiddleware
 from starlette.middleware.exceptions import ExceptionMiddleware
+from starlette.routing import Router, Mount, Route
+from starlette.responses import JSONResponse
+async def users_endpoint(request):
+    return JSONResponse({"users": ["tomchristie", "otheruser"]})
+async def user_detail_endpoint(request):
+    username = request.path_params['username']
+    return JSONResponse({"user": username})
+routes = [
+    Mount("/users", routes=[
+        Route("/", endpoint=users_endpoint),
+        Route("/{username}", endpoint=user_detail_endpoint),
+    ]),
+]
+app = Router(routes=routes)
 from starlette.requests import Request
 from starlette.responses import Response
 from starlette.routing import BaseRoute, Router

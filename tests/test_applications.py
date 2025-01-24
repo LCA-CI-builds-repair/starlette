@@ -4,6 +4,31 @@ from typing import Any, AsyncIterator, Callable
 
 import anyio
 import httpx
+import starlette
+from starlette.testclient import TestClient
+from starlette.routing import Router, Mount, Route
+from starlette.responses import JSONResponse
+async def users_endpoint(request):
+    return JSONResponse({"users": ["tomchristie", "otheruser"]})
+async def user_detail_endpoint(request):
+    username = request.path_params['username']
+    return JSONResponse({"user": username})
+routes = [
+    Mount("/users", routes=[
+        Route("/", endpoint=users_endpoint),
+        Route("/{username}", endpoint=user_detail_endpoint),
+    ]),
+]
+app = Router(routes=routes)
+client = TestClient(app)
+def test_mounted_route():
+    response = client.get("/users/")
+    assert response.status_code == 200
+    assert response.json() == {"users": ["tomchristie", "otheruser"]}
+def test_mounted_route_path_params():
+    response = client.get("/users/tomchristie")
+    assert response.status_code == 200
+    assert response.json() == {"user": "tomchristie"}
 import pytest
 
 from starlette import status
