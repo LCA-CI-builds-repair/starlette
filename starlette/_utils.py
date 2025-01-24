@@ -2,7 +2,7 @@ import asyncio
 import functools
 import re
 import sys
-import typing
+from typing import Union
 from contextlib import contextmanager
 
 from starlette.types import Scope

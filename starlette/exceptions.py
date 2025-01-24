@@ -1,5 +1,5 @@
 import http
-import typing
+from typing import Union, Dict, List
 import warnings
 
 __all__ = ("HTTPException", "WebSocketException")
