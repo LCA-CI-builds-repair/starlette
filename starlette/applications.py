@@ -119,10 +119,12 @@ class Starlette:
         return self.router.on_event(event_type)  # pragma: nocover
 
     def mount(self, path: str, app: ASGIApp, name: str | None = None) -> None:
-        self.router.mount(path, app=app, name=name)  # pragma: no cover
+        route = Mount(path, app=app, name=name)
+        self.router.routes.append(route)
 
     def host(self, host: str, app: ASGIApp, name: str | None = None) -> None:
-        self.router.host(host, app=app, name=name)  # pragma: no cover
+        route = Host(host, app=app, name=name)
+        self.router.routes.append(route)
 
     def add_middleware(self, middleware_class: type, **options: typing.Any) -> None:
         if self.middleware_stack is not None:  # pragma: no cover
