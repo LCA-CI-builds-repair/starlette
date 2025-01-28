@@ -87,8 +87,8 @@ def custom_ws_exception_handler(websocket: WebSocket, exc: CustomWSException):
 
 users = Router(
     routes=[
-        Route("/", endpoint=all_users_page),
         Route("/{username}", endpoint=user_page),
+        Route("/", endpoint=all_users_page),
     ]
 )
 
