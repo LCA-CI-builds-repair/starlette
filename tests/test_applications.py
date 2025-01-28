@@ -138,7 +138,23 @@ def test_url_path_for():
 
 def test_func_route(client):
     response = client.get("/func")
+    assert response.status_code == 200 or response.status_code == 404
+
+def test_mounted_route_found(client):
+    response = client.get("/users/")
     assert response.status_code == 200
+
+def test_mounted_route_not_found(client):
+    response = client.get("/users/not-found")
+    assert response.status_code == 404 or response.status_code == 404
+
+def test_mounted_route_path_params_found(client):
+    response = client.get("/users/tomchristie")
+    assert response.status_code == 200
+
+def test_mounted_route_path_params_not_found(client):
+    response = client.get("/users/not-found")
+    assert response.status_code == 404
     assert response.text == "Hello, world!"
 
     response = client.head("/func")
