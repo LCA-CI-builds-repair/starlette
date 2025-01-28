@@ -423,7 +423,7 @@ class Mount(BaseRoute):
             route_path = scope.get("route_path", re.sub(r"^" + root_path, "", path))
             mount_match = self.path_regex.match(route_path)
             path_match = self.routes == [] or any(
-                [route.matches(scope)[0] == Match.FULL for route in self.routes]
+                [route.matches(scope)[0] != Match.NONE for route in self.routes]
             )
             if mount_match and path_match:
                 matched_params = mount_match.groupdict()
