@@ -104,7 +104,7 @@ class Starlette:
 
     @property
     def routes(self) -> typing.List[BaseRoute]:
-        return self.router.routes
+        return getattr(self.router, "routes", [])
 
     def url_path_for(self, name: str, /, **path_params: typing.Any) -> URLPath:
         return self.router.url_path_for(name, **path_params)
@@ -119,7 +119,9 @@ class Starlette:
         return self.router.on_event(event_type)  # pragma: nocover
 
     def mount(self, path: str, app: ASGIApp, name: str | None = None) -> None:
-        self.router.mount(path, app=app, name=name)  # pragma: no cover
+        route = Mount(path, app=app, name=name)
+        self.middleware_stack = None  # Reset the middleware stack
+        self.routes.append(route)
 
     def host(self, host: str, app: ASGIApp, name: str | None = None) -> None:
         self.router.host(host, app=app, name=name)  # pragma: no cover
