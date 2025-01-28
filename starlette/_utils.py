@@ -8,7 +8,7 @@ from contextlib import contextmanager
 from starlette.types import Scope
 
 if sys.version_info >= (3, 10):  # pragma: no cover
-    from typing import TypeGuard
+    from typing import TypeGuard, Union
 else:  # pragma: no cover
     from typing_extensions import TypeGuard
 
