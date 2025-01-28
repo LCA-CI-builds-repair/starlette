@@ -6,6 +6,7 @@ import typing
 from contextlib import contextmanager
 
 from starlette.types import Scope
+from typing import Union, Dict, List
 
 if sys.version_info >= (3, 10):  # pragma: no cover
     from typing import TypeGuard
