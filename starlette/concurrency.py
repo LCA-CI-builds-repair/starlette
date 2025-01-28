@@ -30,6 +30,9 @@ async def run_until_first_complete(*args: tuple[typing.Callable | dict]) -> None
             task_group.cancel_scope.cancel()
 
         for func, kwargs in args:
+            if isinstance(func, dict):
+            task_group.start_soon(run, functools.partial(func['func'], **kwargs))
+        else:
             task_group.start_soon(run, functools.partial(func, **kwargs))
 
 
