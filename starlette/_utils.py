@@ -45,7 +45,7 @@ def is_async_callable(obj: typing.Any) -> typing.Any:
 T_co = typing.TypeVar("T_co", covariant=True)
 
 
-class AwaitableOrContextManager(
+class AwaitableOrContextManager(typing.Generic[T_co],
     typing.Awaitable[T_co], typing.AsyncContextManager[T_co], typing.Protocol[T_co]
 ):
     ...

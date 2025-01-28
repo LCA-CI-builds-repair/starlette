@@ -10,13 +10,13 @@ class HTTPException(Exception):
         self,
         status_code: int,
         detail: str | None = None,
-        headers: dict[str, str] | None = None,
+        headers: typing.dict[str, str] | None = None,
     ) -> None:
         if detail is None:
             detail = http.HTTPStatus(status_code).phrase
         self.status_code = status_code
         self.detail = detail
-        self.headers = headers
+        self.headers = headers or {}
 
     def __str__(self) -> str:
         return f"{self.status_code}: {self.detail}"
@@ -27,7 +27,7 @@ class HTTPException(Exception):
 
 
 class WebSocketException(Exception):
-    def __init__(self, code: int, reason: str | None = None) -> None:
+    def __init__(self, code: int, reason: str = "") -> None:
         self.code = code
         self.reason = reason or ""
 
@@ -57,4 +57,4 @@ def __getattr__(name: str) -> typing.Any:  # pragma: no cover
 
 
 def __dir__() -> list[str]:
-    return sorted(list(__all__) + [__deprecated__])  # pragma: no cover
+    return sorted(__all__ + [__deprecated__])  # pragma: no cover
