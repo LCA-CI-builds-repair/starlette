@@ -16,7 +16,7 @@ P = ParamSpec("P")
 T = typing.TypeVar("T")
 
 
-async def run_until_first_complete(*args: tuple[typing.Callable | dict]) -> None:  # type: ignore[type-arg]  # noqa: E501
+async def run_until_first_complete(*args: typing.Tuple[typing.Union[typing.Callable, dict], ...]) -> None:  # type: ignore[type-arg]  # noqa: E501
     warnings.warn(
         "run_until_first_complete is deprecated "
         "and will be removed in a future version.",
@@ -26,7 +26,7 @@ async def run_until_first_complete(*args: tuple[typing.Callable | dict]) -> None
     async with anyio.create_task_group() as task_group:
 
         async def run(func: typing.Callable[[], typing.Coroutine]) -> None:  # type: ignore[type-arg]  # noqa: E501
-            await func()
+            result = await func()  # Unpack the awaited result
             task_group.cancel_scope.cancel()
 
         for func, kwargs in args:
