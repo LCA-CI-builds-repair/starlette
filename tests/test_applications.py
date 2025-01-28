@@ -159,13 +159,13 @@ def test_class_route(client):
 
 
 def test_mounted_route(client):
-    response = client.get("/users/")
+    response = client.get("/users")
     assert response.status_code == 200
     assert response.text == "Hello, everyone!"
 
 
 def test_mounted_route_path_params(client):
-    response = client.get("/users/tomchristie")
+    response = client.get("/users/tomchristie/")
     assert response.status_code == 200
     assert response.text == "Hello, tomchristie!"
 
