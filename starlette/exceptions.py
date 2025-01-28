@@ -28,6 +28,7 @@ class HTTPException(Exception):
 
 class WebSocketException(Exception):
     def __init__(self, code: int, reason: str | None = None) -> None:
+    def __init__(self, code: int, reason: typing.Optional[str] = None) -> None:
         self.code = code
         self.reason = reason or ""
 
