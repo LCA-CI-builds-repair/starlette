@@ -75,7 +75,7 @@ class AwaitableOrContextManagerWrapper(typing.Generic[SupportsAsyncCloseType]):
         return self.entered
 
     async def __aexit__(self, *args: typing.Any) -> None | bool:
-        await self.entered.close()
+        await self.entered.close()  # type: ignore[no-untyped-call]
         return None
 
 
