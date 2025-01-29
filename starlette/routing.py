@@ -405,7 +405,7 @@ class Mount(BaseRoute):
         self.app = self._base_app
         if middleware is not None:
             for cls, options in reversed(middleware):
-                self.app = cls(app=self.app, **options)
+                self.app = cls(self.app, **options)
         self.name = name
         self.path_regex, self.path_format, self.param_convertors = compile_path(
             self.path + "/{path:path}"
