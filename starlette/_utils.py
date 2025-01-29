@@ -53,7 +53,7 @@ class AwaitableOrContextManager(
 
 class SupportsAsyncClose(typing.Protocol):
     async def close(self) -> None:
-        ...  # pragma: no cover
+        ...
 
 
 SupportsAsyncCloseType = typing.TypeVar(

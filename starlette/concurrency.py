@@ -27,7 +27,7 @@ async def run_until_first_complete(*args: tuple[typing.Callable | dict]) -> None
 
         async def run(func: typing.Callable[[], typing.Coroutine]) -> None:  # type: ignore[type-arg]  # noqa: E501
             await func()
-            task_group.cancel_scope.cancel()
+            await task_group.cancel_scope.cancel()
 
         for func, kwargs in args:
             task_group.start_soon(run, functools.partial(func, **kwargs))
