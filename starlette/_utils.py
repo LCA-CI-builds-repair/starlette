@@ -5,7 +5,7 @@ import sys
 import typing
 from contextlib import contextmanager
 
-from starlette.types import Scope
+from starlette.types import Receive, Scope, Send
 
 if sys.version_info >= (3, 10):  # pragma: no cover
     from typing import TypeGuard
@@ -20,6 +20,12 @@ if sys.version_info < (3, 11):  # pragma: no cover
         has_exceptiongroups = False
 
 T = typing.TypeVar("T")
+if sys.version_info >= (3, 10):
+    _Union = typing.Union
+else:
+    from typing_extensions import Union as _Union
+
+AwaitableOrContextManager = _Union[typing.Awaitable[SupportsAsyncCloseType], typing.AsyncContextManager[SupportsAsyncCloseType]]
 AwaitableCallable = typing.Callable[..., typing.Awaitable[T]]
 
 
@@ -56,9 +62,9 @@ class SupportsAsyncClose(typing.Protocol):
         ...  # pragma: no cover
 
 
-SupportsAsyncCloseType = typing.TypeVar(
-    "SupportsAsyncCloseType", bound=SupportsAsyncClose, covariant=False
-)
+SupportsAsyncCloseType = typing.TypeVar("SupportsAsyncCloseType", bound=SupportsAsyncClose, covariant=True)
+
+AnyAwaitableOrContextManager = _Union[typing.Awaitable[T_co], typing.AsyncContextManager[T_co]]
 
 
 class AwaitableOrContextManagerWrapper(typing.Generic[SupportsAsyncCloseType]):
@@ -74,8 +80,14 @@ class AwaitableOrContextManagerWrapper(typing.Generic[SupportsAsyncCloseType]):
         self.entered = await self.aw
         return self.entered
 
-    async def __aexit__(self, *args: typing.Any) -> None | bool:
-        await self.entered.close()
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: typing.Any | None,
+    ) -> None | bool:
+        if self.entered is not None:
+            await self.entered.close()  # pragma: no cover
         return None
 
 
