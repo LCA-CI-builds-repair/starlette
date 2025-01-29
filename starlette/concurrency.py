@@ -25,7 +25,7 @@ async def run_until_first_complete(*args: tuple[typing.Callable | dict]) -> None
 
     async with anyio.create_task_group() as task_group:
 
-        async def run(func: typing.Callable[[], typing.Coroutine]) -> None:  # type: ignore[type-arg]  # noqa: E501
+        async def run(func: typing.Callable[[], typing.Coroutine[typing.Any, typing.Any, None]]) -> None:
             await func()
             task_group.cancel_scope.cancel()
 
