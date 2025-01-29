@@ -418,9 +418,14 @@ class Mount(BaseRoute):
     def matches(self, scope: Scope) -> typing.Tuple[Match, Scope]:
         path_params: "typing.Dict[str, typing.Any]"
         if scope["type"] in ("http", "websocket"):
-            path = scope["path"]
             root_path = scope.get("route_root_path", scope.get("root_path", ""))
-            route_path = scope.get("route_path", re.sub(r"^" + root_path, "", path))
+            path = scope["path"]
+            if root_path:
+                if not path.startswith(root_path):
+                    return Match.NONE, {}
+                path = path[len(root_path):]
+            route_path = scope.get("route_path", path)
+            
             mount_match = self.path_regex.match(route_path)
             path_match = self.routes == [] or any(
                 [route.matches(scope)[0] == Match.FULL for route in self.routes]
