@@ -10,7 +10,7 @@ class HTTPException(Exception):
         self,
         status_code: int,
         detail: str | None = None,
-        headers: dict[str, str] | None = None,
+        headers: typing.Mapping[str, str] | None = None,
     ) -> None:
         if detail is None:
             detail = http.HTTPStatus(status_code).phrase
@@ -57,4 +57,4 @@ def __getattr__(name: str) -> typing.Any:  # pragma: no cover
 
 
 def __dir__() -> list[str]:
-    return sorted(list(__all__) + [__deprecated__])  # pragma: no cover
+    return sorted(__all__ + [__deprecated__])  # pragma: no cover
