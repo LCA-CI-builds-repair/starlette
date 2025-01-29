@@ -410,7 +410,7 @@ class Mount(BaseRoute):
         self.path_regex, self.path_format, self.param_convertors = compile_path(
             self.path + "/{path:path}"
         )
-
+        self.path_regex = re.compile(self.path_regex.pattern.rstrip("/") + "?$")
     @property
     def routes(self) -> typing.List[BaseRoute]:
         return getattr(self._base_app, "routes", [])
