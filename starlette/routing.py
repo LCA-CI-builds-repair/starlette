@@ -418,28 +418,36 @@ class Mount(BaseRoute):
     def matches(self, scope: Scope) -> typing.Tuple[Match, Scope]:
         path_params: "typing.Dict[str, typing.Any]"
         if scope["type"] in ("http", "websocket"):
-            path = scope["path"]
             root_path = scope.get("route_root_path", scope.get("root_path", ""))
-            route_path = scope.get("route_path", re.sub(r"^" + root_path, "", path))
-            mount_match = self.path_regex.match(route_path)
-            path_match = self.routes == [] or any(
-                [route.matches(scope)[0] == Match.FULL for route in self.routes]
-            )
+            path = scope.get("route_path", re.sub(r"^" + root_path, "", scope["path"]))
+            mount_match = self.path_regex.match(path)
+
             if mount_match and path_match:
                 matched_params = mount_match.groupdict()
                 for key, value in matched_params.items():
                     matched_params[key] = self.param_convertors[key].convert(value)
-                remaining_path = "/" + matched_params.pop("path")
-                matched_path = route_path[: -len(remaining_path)]
+                remaining_path = "/" + matched_params.pop("path", "")
+                matched_path = path[: -len(remaining_path)]
                 path_params = dict(scope.get("path_params", {}))
                 path_params.update(matched_params)
                 root_path = scope.get("root_path", "")
                 child_scope = {
                     "path_params": path_params,
+                    "root_path": root_path + matched_path,
                     "route_root_path": root_path + matched_path,
                     "route_path": remaining_path,
                     "endpoint": self.app,
                 }
+                if self.routes:
+                    # Check if any child routes match
+                    for route in self.routes:
+                        match, child_match_scope = route.matches(child_scope)
+                        if match == Match.FULL:
+                            child_scope.update(child_match_scope)
+                            return Match.FULL, child_scope
+                        elif match == Match.PARTIAL:
+                            child_scope.update(child_match_scope)
+                            return Match.PARTIAL, child_scope
                 return Match.FULL, child_scope
         return Match.NONE, {}
 
