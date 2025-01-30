@@ -469,8 +469,13 @@ class Mount(BaseRoute):
             for route in self.routes or []:
                 try:
                     url = route.url_path_for(remaining_name, **remaining_params)
+                    path_prefix = path_prefix.rstrip("/")
+                    if url.path:
+                        url = url.replace(path=path_prefix + url.path) 
+                    else:
+                        url = url.replace(path=path_prefix)
                     return URLPath(
-                        path=path_prefix.rstrip("/") + str(url), protocol=url.protocol
+                        path=str(url), protocol=url.protocol
                     )
                 except NoMatchFound:
                     pass
