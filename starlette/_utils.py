@@ -24,12 +24,12 @@ AwaitableCallable = typing.Callable[..., typing.Awaitable[T]]
 
 
 @typing.overload
-def is_async_callable(obj: AwaitableCallable[T]) -> TypeGuard[AwaitableCallable[T]]:
+def is_async_callable(obj: AwaitableCallable[T]) -> TypeGuard[typing.Callable[..., typing.Awaitable[T]]]:
     ...
 
 
 @typing.overload
-def is_async_callable(obj: typing.Any) -> TypeGuard[AwaitableCallable[typing.Any]]:
+def is_async_callable(obj: typing.Any) -> TypeGuard[typing.Callable[..., typing.Awaitable[typing.Any]]]:
     ...
 
 
