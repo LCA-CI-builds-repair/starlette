@@ -20,13 +20,12 @@ async def run_until_first_complete(*args: tuple[typing.Callable | dict]) -> None
     warnings.warn(
         "run_until_first_complete is deprecated "
         "and will be removed in a future version.",
-        DeprecationWarning,
+        DeprecationWarning, 
     )
-
     async with anyio.create_task_group() as task_group:
-
-        async def run(func: typing.Callable[[], typing.Coroutine]) -> None:  # type: ignore[type-arg]  # noqa: E501
-            await func()
+        async def run(func_with_kwargs: tuple[typing.Callable, dict]) -> None:
+            func, kwargs = func_with_kwargs
+            await func(**kwargs)
             task_group.cancel_scope.cancel()
 
         for func, kwargs in args:
