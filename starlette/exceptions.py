@@ -10,7 +10,7 @@ class HTTPException(Exception):
         self,
         status_code: int,
         detail: str | None = None,
-        headers: dict[str, str] | None = None,
+        headers: typing.Dict[str, str] | None = None,
     ) -> None:
         if detail is None:
             detail = http.HTTPStatus(status_code).phrase
@@ -56,5 +56,5 @@ def __getattr__(name: str) -> typing.Any:  # pragma: no cover
     raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 
 
-def __dir__() -> list[str]:
+def __dir__() -> typing.List[str]:
     return sorted(list(__all__) + [__deprecated__])  # pragma: no cover
