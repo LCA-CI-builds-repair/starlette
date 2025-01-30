@@ -24,7 +24,7 @@ AwaitableCallable = typing.Callable[..., typing.Awaitable[T]]
 
 
 @typing.overload
-def is_async_callable(obj: AwaitableCallable[T]) -> TypeGuard[AwaitableCallable[T]]:
+def is_async_callable(obj: AwaitableCallable[T]) -> typing.TypeGuard[AwaitableCallable[T]]:
     ...
 
 
