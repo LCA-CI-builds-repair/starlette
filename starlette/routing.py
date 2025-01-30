@@ -397,7 +397,7 @@ class Mount(BaseRoute):
         assert (
             app is not None or routes is not None
         ), "Either 'app=...', or 'routes=' must be specified"
-        self.path = path.rstrip("/")
+        self.path = path
         if app is not None:
             self._base_app: ASGIApp = app
         else:
